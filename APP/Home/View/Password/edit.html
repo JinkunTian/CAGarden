@@ -53,7 +53,7 @@
 function func_add_addition(){
     var trObj=document.createElement("tr");
     trObj.id=new Date().getTime();
-    trObj.innerHTML="<td><input type='hidden' name='key_id[]' value='A'/><input name='key_name[]' required /></td><td > : </td><td><input name='key_value[]' required /></td><td><input type='button' value='添加' class='addButton' onclick='func_add_addition()'><input type='button'value='删除' class='delButton' onclick='func_del(this)'></td>";
+    trObj.innerHTML="<td><input type='hidden' name='key_id[]' value='A'/><input name='key_name[]' required /></td><td > : </td><td><input name='key_value[]' required /></td><td><input type='button' value='添加' class='addButton' onclick='func_add_addition()'><input type='button'value='删除' class='delButton' onclick='func_del_addition(this)'></td>";
     document.getElementById("tb").appendChild(trObj);
 }
 function func_del_addition(obj){
