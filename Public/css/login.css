@@ -1,0 +1,319 @@
+reset*/
+html {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #333333;
+    direction: ltr;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+fieldset, img {
+    border: 0 none;
+}
+address, caption, cite, code, dfn, em, strong, th, var, optgroup {
+    font-style: inherit;
+    font-weight: inherit;
+}
+del, ins {
+    text-decoration: none;
+}
+li {
+    list-style: none outside none;
+}
+caption, th {
+    text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+q:before, q:after {
+    content: "";
+}
+abbr, acronym {
+    border: 0 none;
+    font-variant: normal;
+}
+sup {
+    vertical-align: baseline;
+}
+sub {
+    vertical-align: baseline;
+}
+legend {
+    color: #000000;
+}
+input, button, textarea, select, optgroup, option {
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+}
+input, button, textarea, select {
+}
+article, aside, dialog, figure, footer, header, hgroup, menu, nav, section, time, mark, audio, video, details, summary {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+}
+article, aside, dialog, figure, footer, header, hgroup, nav, section, figcaption, details, summary {
+    display: block;
+}
+nav ul {
+    list-style: none outside none;
+}
+blockquote, q {
+    quotes: none;
+}
+mark {
+    background-color: #FFFF99;
+    color: #000000;
+    font-style: italic;
+    font-weight: bold;
+}
+details:not([open]) > *:not(summary) {
+    display: none;
+}
+html {
+    height: 100%;
+}
+body {
+    font-family: 微软雅黑,Tahoma,Verdana,STHeiTi,simsun,sans-serif;
+    font-size: 9pt;
+    height: 100%;
+}
+strong {
+    font-weight: bold;
+}
+em {
+    font-style: italic;
+}
+
+p {
+    line-height: 1.4em;
+}
+label select, label input, label textarea {
+    vertical-align: middle;
+}
+button, input[type="button"] {
+    background-color: #005EAC;
+    border-color: #B8D4E8 #114680 #114680 #B8D4E8;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+button:disabled, input[type="button"]:disabled {
+    background-color: #F0F0F0;
+    border-color: #D7D7D7 #808285 #808285 #D7D7D7;
+    border-style: solid;
+    border-width: 1px;
+    color: #CCCCCC;
+}
+input[type="text"], input[type="password"] {
+    border: 1px solid #BDC7D8;
+    padding: 0.4ex;
+    width: 120px;
+}
+select {
+    border: 1px solid #BDC7D8;
+    height: 22px;
+    line-height: 1.1;
+    padding: 1px;
+}
+p img, li img, dd img {
+    vertical-align: middle;
+}
+button img {
+    margin: 0;
+    vertical-align: middle;
+}
+a:link, a:visited {
+    text-decoration: none;
+}
+.clearfix:after {
+    clear: both;
+    content: " ";
+    display: block;
+}
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}
+.clearfix {
+    display: block;
+}
+/*reset end*/
+/*清除浮动*/
+.clearfix{
+    *zoom:1
+}
+.clearfix:after{
+    content:"\20";
+    display:block;
+    clear:both;
+}
+/*清除浮动end*/
+/*登录界面*/
+.login-content-box{
+    width: 100%;
+    height: 100%;
+    background: url(img/login.jpg) no-repeat;
+    background-size: 100%;
+}
+.login-input-box {
+    width: 370px;
+    height: 330px;
+    border-radius: 5px;
+    background: #fff;
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    margin-left: -185px;
+    box-shadow: 1px 1px 8px #686868;
+    filter:alpha(opacity=96);  /*支持 IE 浏览器*/
+    -moz-opacity:0.96; /*支持 FireFox 浏览器*/
+    opacity:0.96;  /*支持 Chrome, Opera, Safari 等浏览器*/
+}
+.login-logo {
+    height: 60px;
+    /*border-bottom: 1px solid #C9C9C9;*/
+    margin-bottom: 20px;
+}
+.login-input-name input, .login-input-password input {
+    width: 198px;
+    height: 28px;
+    padding: 5px 10px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border: 1px solid #B8B8B8;
+    float: left;
+    border-left: 0px;
+    outline: none;
+}
+.login-input-name input:hover, .login-input-password input:hover {
+    border: 1px solid #0FC072;
+    border-left: 0px;
+    box-shadow: inset 0 0px 3px rgba(63, 63, 63, 0.38);
+    -moz-box-shadow: inset 0 0px 3px rgba(63, 63, 63, 0.38);
+    -webkit-box-shadow: inset 0 0px 3px rgba(63, 63, 63, 0.38);
+}
+.login-btn-box {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+}
+.login-input{
+    width: 260px;
+    margin: 0 auto;
+}
+.login-btn-box .subpost{
+    width: 260px;
+    height: 40px;
+    background: #0FC072;
+    border: 0;
+    color: #fff;
+    border-radius: 2px;
+    margin-top: 30px;
+}
+.login-p{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 2px;
+}
+.login-p a{
+    color: #e8e8e8;
+}
+.login-p a:hover{
+    color: #ccc;
+}
+.login-user{
+    height: 40px;
+    width: 260px;
+    margin-bottom: 20px;
+}
+.login-user-span{
+    width: 40px;
+    height: 40px;
+    float: left;
+    font-size: 28px;
+    text-align: center;
+    background: #0FC072;
+    line-height: 37px;
+    color: #FFF;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+.login-title{
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #0FC072;
+    margin-top: 10px;
+    text-align: center;
+}
+.login-title h1{
+    margin-bottom: 10px;
+}
+.gt_widget{
+    margin-top: -40px;
+}
+
+@media(max-width: 1250px){
+    .login-input-box{
+        top: 80px;
+    }
+}
+@media(max-width: 1050px){
+    .login-input-box{
+        top: 50px;
+    }
+}
+@media(max-width: 720px){
+    .login-content-box{
+        background: url(img/login_l.jpg) no-repeat;
+        /*background-size: 260%;*/
+    }
+    .login-input-box{
+        top:15%;
+        border: 1px solid #F0F0F0;
+        box-shadow: 0px 0px 0px #fff;
+    }
+}
+@media(max-width: 410px){
+    .login-input-box{
+        width: 300px;
+        margin-left: -150px;
+        border: 1px solid #F0F0F0;
+        box-shadow: 0px 0px 0px #fff;
+    }
+    .login-content-box{
+        background: url(img/login_l2.jpg) no-repeat;
+    }
+}
+@media(max-width: 310px){
+    .login-input-box{
+        width: 280px;
+        margin-left: -140px;
+        border: 1px solid #F0F0F0;
+        box-shadow: 0px 0px 0px #fff;
+    }
+}

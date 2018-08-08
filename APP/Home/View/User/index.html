@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>我的资料</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+            <h1 class="center-h1"><i class="fa fa-user"></i>修改资料</h1>
+            <div class="vip-content">
+                <form action="{:U('/Home/User/datapost')}"  enctype="multipart/form-data" method="post">
+                    <foreach name="user_data" item="v">
+                        <div class="vip-txt-box">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">工号：</td>
+                                    <td class="vip-input">{$v.username}</td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">姓名：</td>
+                                    <td class="vip-input"><input type="text" name="truename" value="{$v.truename}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">电话：</td>
+                                    <td class="vip-input"><input type="text" name="tel" value="{$v.tel}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">QQ：</td>
+                                    <td class="vip-input"><input type="text" name="qq" value="{$v.qq}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">邮箱：</td>
+                                    <td class="vip-input"><input type="text" name="email" value="{$v.email}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">部门：</td>
+                                    <td class="vip-input"><input type="text" name="major" value="{$v.major}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">职位：</td>
+                                    <td class="vip-input"><input type="text" name="position" value="{$v.position}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">住址：</td>
+                                    <td class="vip-input"><input type="text" name="address" value="{$v.address}" required/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="vip-img-box">
+                            <span class="vip-img">
+                                <img src="__PUBLIC__{$v.img}" alt="">
+                                <input type="file" name="img" class="file-btn"/>
+                                <span class="span-btn"><i class="fa fa-cloud-upload"></i>上传</span>
+                            </span>
+                        </div>
+                        <div class="vip-text">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">签名：</td>
+                                    <td class="vip-input"><textarea name="flag" required>{$v.flag}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <input type="hidden" name="uid" value="{$v.uid}"/>
+                                    <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </foreach>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title><empty name='edit'>新建<else/>编辑</empty>项目</title>
+
+
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />    
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/tinymce/tinymce.min.js"></script>
+    <style type="text/css">
+    
+    .managersBox {
+        position: absolute;
+        left: 120px;
+        margin: 0px 0px 0px 0px;
+        width: 200px;
+        background-color: #fdfdfd;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border: 1px solid #e7e7e7; 
+        color: #333;
+    }
+    
+    .managersList {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    .managersList li {
+        
+        margin: 0px 0px 3px 0px;
+        padding: 3px;
+        cursor: pointer;
+    }
+    
+    .managersList li:hover {
+        background-color: #659CD8;
+    }
+</style>
+</head>
+<body>
+<script type="text/javascript">
+function manager_add(thisValue){
+    if(document.getElementById('manager_'+thisValue[0])){
+        alert('用户已加入该项目！');
+    }else{
+        var trObj=document.createElement("tr");
+        trObj.id='manager_'+thisValue[0];
+        trObj.innerHTML=" \
+        <td class=\"edit-project-user\">\
+            <label  name='username'>"+thisValue[1]+"</label>\
+            <input type=\"hidden\" name=\"managers_uids[]\" value=\""+thisValue[0]+"\" />\
+        </td>\
+        <td class=\"edit-project-user\"><label  name='major'>"+thisValue[2]+"</label></td>\
+        <td class=\"edit-project-user\"><input type='button'value='删除' onclick=\"user_del(this,'managers_table')\"></td>";
+
+        document.getElementById("managers_table").appendChild(trObj);
+
+        member_label=document.getElementById("manager_table_head")  //查找元素
+        member_label.innerHTML="<td>用户</td><td>部门</td>\
+                                        <td >操作</td>";
+        HideElement('ManagerBox');
+        HideElement('ManagerList');
+    }
+    
+}
+function user_add(thisValue){
+    if(document.getElementById('user_'+thisValue[0])){
+        alert('用户已加入该项目！');
+    }else{
+        var trObj=document.createElement("tr");
+        trObj.id='user_'+thisValue[0];
+        trObj.innerHTML=" \
+        <td class=\"edit-project-user\">\
+            <label  name='username'>"+thisValue[1]+"</label>\
+            <input type=\"hidden\" name=\"members_uids[]\" value=\""+thisValue[0]+"\" />\
+        </td>\
+        <td class=\"edit-project-user\"><label  name='major'>"+thisValue[2]+"</label></td>\
+        <td class=\"edit-project-user\"><input type='button'value='删除' onclick=\"user_del(this,'members_table')\"></td>";
+
+        document.getElementById("members_table").appendChild(trObj);
+
+        member_label=document.getElementById("members_table_head")  //查找元素
+        member_label.innerHTML="<td>用户</td><td>部门</td>\
+                                        <td >操作</td>";
+        HideElement('MamberBox');
+        HideElement('MamberList');
+    }
+    
+}
+function user_del(obj,table_id){
+    var trId=obj.parentNode.parentNode.id;
+    var trObj=document.getElementById(trId);
+    document.getElementById(table_id).removeChild(trObj);
+}
+
+
+
+function HideElement(id){
+    var Element=document.getElementById(id);
+    Element.style='display:none';
+}
+
+function ShowElement(id){
+    var Element=document.getElementById(id);
+    Element.style='display';
+}
+
+function userlookup(inputString,BoxId,ListId,call_func) {
+    if(inputString.length == 0) {;
+        HideElement(BoxId);
+    } else {
+        $.post("{:U('/Home/User/AddUserHelp/')}", {queryString: ""+inputString+"",call_func: ""+call_func+""}, function(data){
+            if(data.length >0) {
+                UserList=document.getElementById(ListId);
+                UserList.innerHTML=data;
+                ShowElement(ListId);
+                UserBox=document.getElementById(BoxId);
+                UserBox.style='display';
+            }
+        });
+    }
+} 
+    
+function managerfill(thisValue) {
+    $('#managersinputString').val(thisValue);
+     if(thisValue[0].length>0)
+     {
+        manager_add(thisValue);
+        InputBox=document.getElementById('managersinputString');
+        InputBox.value='';
+        member_label=document.getElementById("manager_status")  //查找元素
+        member_label.innerHTML="";
+     }
+}
+function userfill(thisValue) {
+    $('#usersinputString').val(thisValue);
+     if(thisValue[0].length>0)
+     {
+        user_add(thisValue);
+        InputBox=document.getElementById('usersinputString');
+        InputBox.value='';
+        member_label=document.getElementById("user_status")  //查找元素
+        member_label.innerHTML="";
+     }
+}
+    function managerclear(BoxId,ListId){
+}
+</script>
+<script type="text/javascript">
+    var AddLogUrl = "{:U('/Home/Index/addlog')}";
+    function del_pro(){
+        if(confirm("确定要删除吗？该操作会删除本项目以及所有子项目！")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="cgx-txt">
+        <h1><i class="fa fa-pencil"></i><empty name='edit'>新建<else/>编辑</empty>项目</h1>
+        <div class="xrz-box">
+        <form action="{:U('/Home/Index/save_project')}" method="post">
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">项目名称:</label>
+                    <input type="text" name="pr_name" value="{:isset($projects['pr_name'])?$projects['pr_name']:''}" required/>
+                </div>
+                <input type="hidden" name="pr_id" value="{:isset($projects['pr_id'])?$projects['pr_id']:''}"/>
+                <if condition="$projects['pr_id'] eq '1'">  <!-- 设置父项目 -->
+                    <input type="hidden" name="pr_pid" value="0">
+                    <input type="hidden" name="pr_status" value="1">
+                <else />
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">父项目:</label>
+                        <select name=pr_pid>
+                            <foreach name='all_project' item='v'>
+                                <if condition="$v['pr_id'] eq $projects['pr_pid']">
+                                    <option value ="{$v.pr_id}" selected="selected">{$v.pr_name}</option>
+                                <else />
+                                    <option value ="{$v.pr_id}">{$v.pr_name}</option>
+                                </if>
+                            </foreach>
+                        </select>
+                    </div>
+                    <div class="xrz-input-box"> <!-- 项目状态 -->
+                        <label id="xrz-tit">项目状态:</label>
+                        <select name='pr_status'>
+                            <if condition="$projects['pr_status'] eq '1' ">
+                                <option value ="1" selected="selected">正常</option>
+                            <else />
+                                <option value ="1">正常</option>
+                            </if>
+                            <if condition="$projects['pr_status'] eq '3' ">
+                                <option value ="3" selected="selected">停用</option>
+                            <else />
+                                <option value ="3">停用</option>
+                            </if>
+                        </select>
+                    </div>
+                </if>
+                <div class="blog-text txt-srk"> <!-- 项目摘要 -->
+                    <label id="xrz-tit">项目摘要:</label>
+                    <textarea name="pr_biref" style="height:80px" required>{$projects.pr_biref}</textarea>
+                </div>
+                <div class="blog-text txt-srk"> <!-- 项目详情 -->
+                    <label id="xrz-tit">项目详情:</label>
+                    <textarea name="pr_info" style="height:150px" required>{$projects.pr_info}</textarea>
+                </div>
+                <if condition="$projects['pr_id'] neq '1'"> <!-- 添加管理及成员 -->
+                    
+                    <div> <!-- 添加项目管理员 -->
+                        <div class="blog-text txt-srk">
+                            <label id="xrz-tit">添加管理:</label>   <!-- 添加项目管理员 -->
+                            <input type="text" size="30" value="" id="managersinputString" onkeyup="userlookup(this.value,'ManagerBox','ManagerList','manager');"/>
+                        </div>
+                        <div class="managersBox" id="ManagerBox" style="display: none;">    <!-- 用户提示框 -->
+                            <div class="managersList" id="ManagerList">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="blog-text txt-srk"> <!-- 项目管理员 -->
+                            <label id="xrz-tit">项目管理员:</label>
+                            <label id="manager_status" class="edit-project-user-label">
+                                <empty name="projects.pr_muser">暂无项目管理员</empty>
+                            </label>
+                            
+                            <table class="edit-project-user">
+                                <thead>
+                                    <tr id="manager_table_head">
+                                        <notempty name="projects.pr_muser">
+                                            <td >用户</td>
+                                            <td >部门</td>
+                                            <td >操作</td>
+                                        </notempty>
+                                    </tr>
+                                </thead>
+                                    <tbody id="managers_table">
+                                        <notempty name="managers">
+                                            <foreach name='managers' item='v'>
+                                                <tr id="manager_{$v.uid}">
+                                                    <input type="hidden" name="managers_uids[]" value="{$v.uid}" />
+                                                    <td class="edit-project-user">
+                                                        <label  name="username">{$v.truename}</label>    
+                                                    </td>
+                                                    <td class="edit-project-user"><label  name="major">{$v.major}</label></td>
+                                                    <td class="edit-project-user"><input type="button"value="删除" onclick="user_del(this,'managers_table')"></td>
+                                                </tr>
+                                            </foreach>
+                                        </notempty>
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div> <!-- 添加项目成员 -->
+                        <div class="blog-text txt-srk">
+                            <label id="xrz-tit">添加成员:</label>   <!-- 添加项目成员 -->
+                            <input type="text" size="30" value="" id="usersinputString" onkeyup="userlookup(this.value,'MamberBox','MamberList','user');"/>
+                        </div>
+                        <div class="managersBox" id="MamberBox" style="display: none;">    <!-- 用户提示框 -->
+                            <div class="managersList" id="MamberList">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="blog-text txt-srk"> <!-- 项目管理员 -->
+                            <label id="xrz-tit">项目成员:</label>
+                            <label id="user_status" class="edit-project-user-label">
+                                <empty name="projects.pr_members">暂无项目成员</empty>
+                            </label>
+                            
+                            <table class="edit-project-user">
+                                <thead>
+                                    <tr id="members_table_head">
+                                        <notempty name="projects.pr_members">
+                                            <td >用户</td>
+                                            <td >部门</td>
+                                            <td >操作</td>
+                                        </notempty>
+                                    </tr>
+                                </thead>
+                                    <tbody id="members_table">
+                                        <notempty name="members">
+                                            <foreach name='members' item='v'>
+                                                <tr id="user_{$v.uid}">
+                                                    <input type="hidden" name="members_uids[]" value="{$v.uid}" />
+                                                    <td class="edit-project-user">
+                                                        <label  name="username">{$v.truename}</label>    
+                                                    </td>
+                                                    <td class="edit-project-user"><label  name="major">{$v.major}</label></td>
+                                                    <td class="edit-project-user"><input type="button"value="删除" onclick="user_del(this,'members_table')"></td>
+                                                </tr>
+                                            </foreach>
+                                        </notempty>
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </if>
+                <notempty name='edit'>  <!-- 删除项目 -->
+                    <if condition="$projects['pr_id'] neq '1'">
+                        <div class="blog-text txt-srk">
+                            <label id="xrz-tit">其他操作:</label>
+                            <i class='fa fa-trash'></i><a href="{:U('/Home/Index/dell_project',array('pr_pid' => $projects['pr_pid'],'pr_id'=>$projects['pr_id']))}" onclick='return del_pro();'>删除项目</a>
+                        </div>
+                    </if>
+                </notempty>
+                <notempty name='edit'>
+                    <input type="hidden" name="edit" value="true"/>
+                <else />
+                    <input type="hidden" name="add" value="true"/>
+                </notempty>
+                <div class="btn-div">
+                    <input type="submit" class="btn-box" id="submit-button" value="保存项目"/>
+                </div>
+        </div>
+        </form>
+        </div>
+    </div>
+<script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

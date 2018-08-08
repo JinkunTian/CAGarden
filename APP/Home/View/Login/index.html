@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+	<!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/main.css"/> -->
+</head>
+<body>
+	<div class="login-content-box">
+		<div class="login-input-box">
+			<div class="login-logo">
+				<div class="login-title">
+				<h1>登 录</h1>
+				</div>
+			</div>
+			<div class="login-input">
+				<form method="POST" action="{:U('/Home/Login/login')}" class="login-input-name">
+					<!-- <label for="user">账号</label> -->
+					<div class="login-user">
+						<span class="login-user-span">
+							<i class="fa fa-user"></i>
+						</span>
+					<input type="text" name="username" id="user" placeholder="请输入用户名" required>
+					</div>
+					<!-- <label for="psw">密码</label> -->
+					<div class="login-user">
+						<span class="login-user-span">
+							<i class="fa fa-lock"></i>
+						</span>
+						<input type="password" name="password" id="psw" placeholder="请输入密码" required>
+					</div>
+				<div class="login-yz">
+					<!-- <img src="{:U('Admin/Login/verify')}" id="code" onClick="this.src='{:U(GROUP_NAME .'/Login/verify')}'"/> -->
+						<!-- <script async defer type="text/javascript" src="http://api.geetest.com/get.php?gt=79a0de78ff8d19b06f5ada4e35c3480d"></script> -->
+						<!-- <script async defer type="text/javascript" src="http://api.geetest.com/get.php?gt=79a0de78ff8d19b06f5ada4e35c3480d&product=embed"></script> -->
+                  
+                  
+                  	<!--
+						<script async defer type="text/javascript" src="http://api.geetest.com/get.php?gt=79a0de78ff8d19b06f5ada4e35c3480d&product=popup&popupbtnid=submit-button"></script>   -->
+                  
+					<!-- <input type="text" name="verify" id="yz" placeholder="验证码" required> -->
+				</div>
+				<div class="login-btn-box">
+				<input type="submit" class="subpost" id="submit-button" value="登&nbsp;&nbsp;录">
+				</div>
+
+				</form>
+
+			</div>
+			<p class='login-p'><a href="https://blog.tianjintech.com">&copy; TianjinTech</a></p>
+		</div>
+	</div>
+</body>
+</html>

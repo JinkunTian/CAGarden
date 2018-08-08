@@ -1,0 +1,58 @@
+ *{
+    margin:0px;
+    padding:0px;
+    font-family:微软雅黑,Arial,Verdana;
+}
+   #wrapper{
+      width:460px;
+      height:200px;
+/*      background:#FAFAFA;
+      border:1px solid #F8F8F8;*/
+      position:absolute;top:40%;
+      left:50%;
+      margin-top:-100px;
+      margin-left:-230px;
+      border-radius:5px;
+      /*box-shadow: 1px 1px 8px #AFAFAF;*/
+      word-wrap: break-word;
+  }
+   #wrapper .left{
+      width: 200px;
+      float: left;
+      height: 200px;
+   }
+   #wrapper .left img{
+      margin-top: 50px;
+      margin-left: 90px;
+   }
+   #wrapper .right{
+      float: left;
+      width: 260px;
+      height: 200px;
+   }
+   p.msg-title{
+      width:230px;
+      height:30px;
+      line-height:30px;
+      margin-left:23px;
+      color:#2E99D4;
+      margin-top:70px;
+      font:16px 微软雅黑,Arial,Verdana;
+      font-weight:bold;
+  }
+   p.message{
+      width:210px;
+      height:30px;
+      line-height:30px;
+      margin-left:23px;
+      color:#5C5C5C;
+      font:14px 微软雅黑,Arial,Verdana;
+  }
+   p.error{
+      width:210px;
+      height:30px;
+      line-height:30px;
+      margin-left:23px;
+      color:#5C5C5C;
+      font:14px 微软雅黑,Arial,Verdana;
+  }
