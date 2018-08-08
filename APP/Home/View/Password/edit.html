@@ -299,7 +299,13 @@ function userfill(thisValue) {
                             </table>
                         </div>
                     </div>
-
+					<div class="blog-text txt-srk">
+	                    <eq name="password.group_members_access" value="1">
+	                        <input type="checkbox" name="group_members_access" id="group_members_access" value="1" checked="checked" />允许项目成员查看
+	                    <else/>
+	                        <input type="checkbox" name="group_members_access" id="group_members_access" value="1"  />允许项目成员查看
+	                    </eq>
+                	</div>
                     <div> <!-- 授权用户查看权限 -->
                         <div class="blog-text txt-srk">
                             <label id="xrz-tit">授权查看:</label>   <!-- 授权用户查看权限 -->
