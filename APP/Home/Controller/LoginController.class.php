@@ -36,7 +36,7 @@ class LoginController extends Controller {
             session('username',$user['username']);
             session('logintime',date('Y-m-d H:i:s',$user['last_login']));
             session('loginip',$user['last_ip']);
-            session('admin',$user['user_classify']);
+            session('admin',$user['type']);
             session('name',$user['truename']);
 
             $this->redirect('/Home/Index');

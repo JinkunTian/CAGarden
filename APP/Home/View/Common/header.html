@@ -29,7 +29,7 @@
                         <li><a href="{:U('/Home/User/changgepwd')}">修改密码</a></li>
                 </ul>
             </li>
-            <if condition="session('admin') neq '0'">
+            <if condition="session('admin') eq '2'">
                 <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<b class="caret"></b></a>
                     <ul class="dropdown-menu depth_0">
                         <li><a href="{:U('/Home/User/adduser')}">添加用户</a></li>
