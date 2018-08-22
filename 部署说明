@@ -1,0 +1,5 @@
+部署说明
+网站基于ThinkPHP编写，网址中隐藏了index.php入口文件，
+请确保你的Web服务器支持伪静态功能并将其开启！如果不能
+正常使用伪静态功能，可将APP/Common/Conf/config.php中
+的'URL_MODEL' => '2',注释掉即可。
