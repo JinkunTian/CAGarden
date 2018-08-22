@@ -1,0 +1,19 @@
+AppointmentController.class.php
+	AppointmentView
+	AppointmentCommentView
+BlackBoardControl.class.php
+	BlackBoardView
+	CommentView
+DistributeController.class.php
+	MyDistPassView
+MsgController
+	MsgView
+PersonalController.class.php
+	DistributePasswordsView
+RecruitController.class
+	RecruitView
+	RecruitCommentView
+UserController
+	UserView
+IndexControl
+	LogsView

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>编辑维修记录 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+<style type="text/css">
+    
+.managersBox {
+    position: absolute;
+    left: 120px;
+    margin: 0px 0px 0px 0px;
+    width: 200px;
+    background-color: #fdfdfd;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border: 1px solid #e7e7e7; 
+    color: #333;
+}
+
+.managersList {
+    margin: 0px;
+    padding: 0px;
+}
+
+.managersList li {
+    
+    margin: 0px 0px 3px 0px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.managersList li:hover {
+    background-color: #659CD8;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript">
+
+function user_del(obj){
+    Lable=document.getElementById('shift_to_uname');
+    Lable.innerHTML='';
+
+    $('#shift_to_uname').hide();
+    $('#usersinputString').show();
+
+    PostShift=document.getElementById('shift_to_id');
+    PostShift.value="";
+}
+function userlookup(inputString,BoxId,ListId,call_func) {
+    if(inputString.length == 0) {;
+        HideElement(BoxId);
+    } else {
+        $.post("{:U('/Garden/User/AddUserHelp/')}", {queryString: ""+inputString+"",call_func: ""+call_func+""}, function(data){
+            if(data.length >0) {
+                UserList=document.getElementById(ListId);
+                UserList.innerHTML=data;
+                $('#MamberBox').show();
+                $('#MamberList').show();
+            }
+        });
+    }
+}
+function userfill(thisValue) {
+    $('#usersinputString').val(thisValue);
+     if(thisValue[0].length>0)
+     {
+        if(document.getElementById('user_'+thisValue[0])){
+            alert(thisValue[1]+'已参与过维修！');
+            InputBox=document.getElementById('usersinputString');
+            InputBox.value='';
+            $('#MamberBox').hide();
+            $('#MamberList').hide();
+        }else{
+
+            InputBox=document.getElementById('usersinputString');
+            InputBox.value='';
+
+            $('#usersinputString').hide();
+            $('#MamberBox').hide();
+            $('#MamberList').hide();
+
+            Lable=document.getElementById('shift_to_uname');
+            Lable.innerHTML='移交给 '+thisValue[1]+ ' 处理 <a href="#" onclick="user_del()"><i class="fa fa-trash"></i>取消</a>';
+            $('#shift_to_uname').show();
+
+            PostShift=document.getElementById('shift_to_id');
+            PostShift.value=thisValue[0];
+        }
+     }
+}
+function del(){
+    if(confirm("确定要删除吗？该操作会删除本项目以及所有子项目！")){
+        return true;
+    }else{
+        return false;
+    }
+}
+</script>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="cgx-txt">
+                <h1>编辑维修记录</h1>
+                <div class="xrz-box">
+                    <form action="{:U('/Garden/Appointment/save')}" method="post">
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">姓名：{$appointment.guest_name}</label>
+                        <input type="hidden" name="guest_name" value="{$appointment.guest_name}" readonly="readonly" />
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">电话：{$appointment.guest_mobile}</label>
+                        <input type="hidden" name="guest_mobile" value="{$appointment.guest_mobile}" readonly="readonly" />
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">QQ  ：{$appointment.guest_qq}</label>
+                        <input type="hidden" name="guest_qq" value="{$appointment.guest_qq}" readonly="readonly" />
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">时间：{:date_format(date_create($v['addtime']),"Y-m-d H:i")}</label>
+                        <input type="hidden" name="addtime" value="{$appointment.addtime|date='Y-m-d H:i', ###}" readonly="readonly" />
+                    </div>
+                    <div class="xrz-input-box"> <!-- 项目状态 -->
+                        <label id="xrz-tit" style="margin-right:-5px">状态：</label>
+                        <select name='status' style="width: 128px">
+                            <if condition="$appointment['status'] eq '1' ">
+                                <option value ="1" selected="selected">已预约</option>
+                                <option value ="2">处理中</option>
+                                <option value ="3">已处理</option>
+                                <option value ="4">已取消</option>
+                            <elseif condition="$appointment['status'] eq '2' "/>
+                                <option value ="1">已预约</option>
+                                <option value ="2" selected="selected">处理中</option>
+                                <option value ="3">已处理</option>
+                                <option value ="4">已取消</option>
+                            <elseif condition="$appointment['status'] eq '3' "/>
+                                <option value ="1">已预约</option>
+                                <option value ="2">处理中</option>
+                                <option value ="3" selected="selected">已处理</option>
+                                <option value ="4">已取消</option>
+                            <elseif condition="$appointment['status'] eq '4' "/>
+                                <option value ="4" selected="selected">已取消</option>
+                            </if>
+                        </select>
+                    </div>
+                    <notempty name="appointment.fixer_name">
+                        <div class="xrz-input-box">
+                            <label id="xrz-tit">维修：
+                                <notempty name="shift">
+                                    <foreach name="shift" item="j">
+                                        <a href="{:U('/Garden/User/look',array('uid'=>$j['uid']))}" target="_blank" id="user_{$j.uid}"> <i class="fa fa-user"> </i>{$j.truename} </a>移交给 
+                                    </foreach>
+                                </notempty>
+                                <a href="{:U('/Garden/User/look',array('uid'=>$appointment['fixer_id']))}" target="_blank" id="user_{$appointment.fixer_id}"> <i class="fa fa-user"></i>{$appointment.fixer_name} </a>处理
+                            </label>
+                        </div>
+                        <if condition="$shift_count lt 3">
+                            <if condition="$appointment['status'] neq '4'">
+                                <div class="blog-text txt-srk">
+                                    <label id="xrz-tit" ">移交维修: </label>  <!-- 添加项目成员 -->
+                                    <label id="shift_to_uname" style="display: none;"></label>
+                                    <input type="hidden" name="shift_to_id" id="shift_to_id" value="">
+                                    <input type="text" style="display" value="" id="usersinputString" onkeyup="userlookup(this.value,'MamberBox','MamberList','user');"/>
+                                </div>
+                                <div class="managersBox" id="MamberBox" style="display: none;">    <!-- 用户提示框 -->
+                                    <div class="managersList" id="MamberList">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                            </if>
+                        </if>
+                    </notempty>
+
+                    <if condition="$appointment['status'] eq '4'">
+                        <div class="blog-text txt-srk">
+                            <label id="xrz-tit">其他操作:</label>
+                            <i class='fa fa-trash'></i><a href="{:U('/Garden/Appointment/del',array('aid' => $appointment['aid']))}" onclick='return del();'>删除记录</a>
+                        </div>
+                    </if>
+
+                    <div class="blog-text txt-srk"> <!-- 故障描述 -->
+                        <label id="xrz-tit">故障描述:</label>
+                        <textarea name="issues" style="height:80px" readonly="readonly">{$appointment.issues}</textarea>
+                    </div>
+                    <div class="blog-text txt-srk"> <!-- 故障描述 -->
+                        <label id="xrz-tit">处理结果:</label>
+                        <if condition="$appointment['status'] eq '4' ">
+                            <textarea name="result" style="height:80px" readonly="readonly" >{$appointment.result}</textarea>
+                        <else />
+                            <textarea name="result" style="height:80px" required="required" >{$appointment.result}</textarea>
+                        </if>
+                    </div>
+                </div>
+                <if condition="$appointment['status'] neq '4' ">
+                    <div class="btn-div">
+                        <input type="hidden" name="aid" value="{$appointment.aid}">
+                        <input type="submit" class="btn-box" id="submit-button" value="保存"/>
+                    </div>
+                </if>
+                </form>
+                <br><br>
+                <notempty name='comments'>
+                    <h1>收到的评价</h1>
+                    <foreach name='comments' item='v' key='i'>
+                        <li>
+                            <div class="rzck-txt-box">
+                                <h2>{$v.guest_name}</h2>
+                                <p>{$v.comment}</p>
+                                <div align="right">
+                                        <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
+                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d H:i")}
+                                </div>
+                            </div>
+                        </li>
+                    </foreach>
+                </notempty>
+        </div>
+    </div> 
+    <div style="height: 100px"></div>  
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>预约管理 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+	<link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+	<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+	<div class="container">
+	<include file='Common:header'/>
+		<div id="info"></div>
+		<div class="cgx-txt">
+			<h1 ><i class="fa fa-users"></i>所有预约</h1>
+			<div class="xrz-box">
+				<table width="100%" class="edit-project-user td">
+					<thead>
+						<tr>
+							<td>姓名</td>
+							<td>学号</td>
+							<td>电话</td>
+							<td>QQ</td>
+							<td>电脑型号</td>
+							<td>故障信息</td>
+							<td>状态</td>
+							<td>维修</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody>
+						<foreach name="appointments" item="v">
+							<tr>
+								<td>{$v.guest_name}</td>
+								<td>{$v.guest_number}</td>
+								<td>{$v.guest_mobile}</td>
+								<td>{$v.guest_qq}</td>
+								<td>{$v.model}</td>
+								<td>{$v.issues}</td>
+								<td>
+									<switch name="v.status">
+										<case value="1"><font color="red">已预约</font></case>
+										<case value="2"><font color="red">处理中</font></case>
+										<case value="3">已处理</case>
+										<case value="4"><font color="red">已取消</font></case>
+									</switch>
+								</td>
+								<td>{$v.fixer_name}</td>
+								<td><a href="{:U('/Garden/AppointmentManage/edit',array('aid'=>$v['aid']))}" target="_blank">编辑</td>
+							</tr>
+						</foreach>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="msg-page">
+				<div class="page">{$page}</div>
+			</div>
+		</div>
+	</div>
+<script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

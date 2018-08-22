@@ -1,0 +1,54 @@
+<nav class="navbar navbar-default equinav navlist clearfix" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <!-- <span class="navbar-brand"><a href="{:U('/Garden/Index/index')}"><i class="fa fa-pencil-square"></i></a></span> -->
+    </div>
+    <div class="collapse navbar-collapse">
+    <div class="nav-zoom">
+        <ul class="nav navbar-nav">
+            <li><a class="first-list" href="{:U('/Garden/')}">项目</a></li>
+            <li><a class="first-list" href="{:U('/Garden/Personal/')}">我的</a></li>
+            <li><a href="{:U('/Garden/BlackBoard/')}">小黑板</a></li>
+            <li><a href="{:U('/Garden/Msg/')}">碎语</a></li>
+            
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">义修<b class="caret"></b></a>
+                <ul class="dropdown-menu depth_0">
+                    <li><a href="{:U('/Garden/Appointment/')}">预约记录</a></li>
+                    <li><a href="{:U('/Garden/Appointment/my')}">我的维修</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">新建<b class="caret"></b></a>
+                <ul class="dropdown-menu depth_0">
+                    <li><a href="{:U('/Garden/Index/editproject')}">新建项目</a></li>
+                    <li><a href="{:U('/Garden/BlackBoard/add')}">新建公告</a></li>
+                    <li><a href="{:U('/Garden/Password/edit')}">新建项目密码</a></li>
+                    <li><a href="{:U('/Garden/Personal/edit')}">新建私人密码</a></li>
+                </ul>
+            </li>                    
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<b class="caret"></b></a>
+                <ul class="dropdown-menu depth_0">
+                        <li><a href="{:U('/Garden/User/')}">修改资料</a></li>
+                        <li><a href="{:U('/Garden/User/changgepwd')}">修改密码</a></li>
+                        <li><a href="{:U('/Garden/Index/logout')}">退出登录</a></li>
+                </ul>
+            </li>
+            <if condition="session('admin') eq '2'">
+                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<b class="caret"></b></a>
+                    <ul class="dropdown-menu depth_0">
+                        <li><a href="{:U('/Garden/Distribute/')}">发布密码</a></li> 
+                        <li><a href="{:U('/Garden/UserManage/')}">用户管理</a></li>
+                        <li><a href="{:U('/Garden/AppointmentManage/')}">义修管理</a></li>
+                        <li><a href="{:U('/Garden/Recruit/')}">纳新管理</a></li> 
+                    </ul>
+                </li>
+            </if>
+        </ul>
+        <span class="nav-r-user"><?php echo session('name'); ?>，欢迎你！<a href="{:U('/Garden/Index/logout')}">退出登录</a></span>
+    </div>
+    </div><!-- /.navbar-collapse -->
+</nav>

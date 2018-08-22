@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>{$look.title} - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+    var AddComUrl = "{:U('/Garden/BlackBoard/addcom')}";
+
+ function del(){
+    if(confirm("确定要删除吗？")){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+</script>
+    <div class="container">
+            <include file='Common:header'/>
+                <div id="info"></div>
+        <div class="look-blog cgx-txt clearfix">
+            <h1 class="center-h1">
+                {$look.title}
+            </h1>
+                <p class="look-blog-ico">
+                <span><i class="fa fa-user"></i><a href="{:U('/Garden/User/look',array('uid'=>$look['author_id']))}">{$look.truename}</a></span>
+                <span class="blog-box-ico"><i class="fa fa-eye"></i>{$look.visits}</span>
+                <span class="blog-box-ico"><i class="fa fa-clock-o"></i>{:date_format(date_create($look['addtime']),"Y-m-d")}</span>
+                </p>
+            <div class="rzck-txt-box">
+                <p>{:htmlspecialchars_decode($look['content'])}</p>
+            </div>
+            <if condition="$ALLOW_BLACKBOARD_COMMENT eq true">
+
+                <!-- 开启或关闭评论系统 -->
+                <div class="comment-box clearfix" style="margin-top:23px">
+                <ul>
+                <foreach name='comment' item='v'>
+                    <li class="comment">
+                        <span class="comment-user">
+                            <a href="{:U('/Garden/User/look', array('uid' => $v['uid']))}">
+                            <img src="__PUBLIC__{$v.img}" alt="{$v.name}" width="50px" height="50px">
+                            <p>{$v.name}</p>
+                            </a>
+                        </span>
+                        <p class="comment-content">{$v.content}
+                            <span>
+                                <if condition="session('id') eq $v['uid']">
+                                <a href="{:U('/Garden/BlackBoard/delcom', array('id' => $v['id']))}" onclick='return del();'><i class='fa fa-trash'></i></a>
+                                </if>
+                                <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d H:i:s")}
+                            </span>
+                        </p>
+                    </li>
+                </foreach>
+                        <div class="msg-page">
+                            <div class="page">{$page}</div>
+                        </div>
+                </ul>
+
+                        <div class="txt-srk">
+                            <textarea name="content" required></textarea>
+                            <input type="hidden" name="Sbid" value="{$look.id}"/>
+                        </div>
+                            <input type="submit" class="rzck-btn-box" id="AddComBnt" id="submit-button" value="提&nbsp;&nbsp;交">
+
+                </div>
+            </if>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

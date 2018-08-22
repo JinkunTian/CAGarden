@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title><empty name='edit'>新建<else/>编辑</empty>纳新 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/autosize.js'></script>
+</head>
+<body>
+
+    <div class="container">
+            <include file='Common:header'/>
+        <div class="cgx-txt">
+                <h1><i class="fa fa-pencil"></i><empty name='edit'>新建<else/>编辑</empty>纳新</h1>
+                <br>
+        <div class="xrz-box">
+        <empty name='edit'>
+            <form action="{:U('/Garden/Recruit/save')}" method="post">
+                <input type="hidden" name="add" value="1">
+        <else />
+            <form action="{:U('/Garden/Recruit/save')}" method="post">
+                <input type="hidden" name="edit" value="1">
+                <input type="hidden" name="gid" value="{$recruit.gid}">
+        </empty>
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">纳新名称:</label>
+                    <input type="text" name="gname" value="{:isset($recruit['gname'])?$recruit['gname']:''}" required/>
+                </div>
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">年度:</label>
+                    <input type="text" name="year" value="{:isset($recruit['year'])?$recruit['year']:''}" required />
+                </div>
+                <div class="blog-text txt-srk">
+                    <label id="xrz-tit">成功提交后的提示信息:</label>
+                </div>
+                <div class="blog-text txt-srk">
+                    <textarea name="message">{:isset($recruit['message'])?$recruit['message']:''}</textarea>
+                    <div class="btn-div">
+                        <input type="submit" class="btn-box" id="back-button" value="保存">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    autosize(document.querySelectorAll('textarea'));
+</script>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

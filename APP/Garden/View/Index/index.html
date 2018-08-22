@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>项目信息 - {:C('SITE_NAME')}后花园</title>
+    <link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+    var AddLogUrl = "{:U('/Garden/Index/addlog')}";
+    function del(){
+        if(confirm("确定要删除吗？")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+<div class="container">
+    <include file='Common:header'/>
+    <div id="info"></div>
+    <div class="cgx-txt">
+        <h3>
+            <empty name='isroot'>
+                <if condition="$pr_p_info['pr_id'] neq '1'">
+                    <a href="{:U('/Garden/Index/index')}" title="主项目">/.../</a>
+                </if>       
+                <a href="{:U('/Garden/Index/index',array('pr_id'=>$pr_p_info['pr_id']))}" title="{$pr_p_info['pr_name']}">{$pr_p_info['pr_name']}</a>/
+            </empty>
+                {$main_project.pr_name}<br>
+        </h3>
+<!--         项目详情           -->
+        <h1>
+            <i class="fa fa-newspaper-o"></i>项目详情
+            <if condition="$main_project.manage_right_check eq true">
+                <span class="sha-add">
+                    <a href="{:U('/Garden/Index/editproject',array('pr_id'=>$main_project['pr_id']))}" title="编辑项目"><i class="fa fa-pencil"></i></a>
+                </span>
+            </if>
+        </h1>
+        <empty name="main_project.pr_info">
+            <li>
+                <div class="rzck-txt-box">
+                    <p>暂未填写项目详情</p>
+                </div>
+            </li>
+        <else/>
+        <div class="rzck-txt-box">
+            <p>{:str_replace('\r\n','<br>',$main_project['pr_info'])}</p>
+        </div>
+        </empty>
+<!--         成员信息           -->
+        <empty name='isroot'>
+                <h1>项目成员<br></h1>
+                <div class="blog-user">
+                <foreach name='main_project.musers' item='v'>
+                    <span  class="randcolor"><a href="{:U('/Garden/User/look',array('uid'=>$v['uid']))}" target="_blank"><i class="fa fa-user"></i><eq name='v.truename' value=''>未知用户<else/>{$v.truename}</eq></a></span>
+                </foreach>
+                <foreach name='members' item='v'>
+                    <span  class="randcolor"><a href="{:U('/Garden/User/look',array('uid'=>$v['uid']))}" target="_blank"><eq name='v.truename' value=''>未知用户<else/>{$v.truename}</eq></a></span>
+                </foreach>
+                </div>
+        </empty>
+<!--         子项目信息           -->
+        <h1><i class="fa fa-list"></i>子项目&nbsp;&nbsp;<span class="sha-add"><a href="{:U('/Garden/Index/editproject',array('pr_pid'=>$main_project['pr_id']))}" title="添加子项目" target="_blank"><i class="fa fa-plus"></i></a></span></h1> 
+        <empty name='sub_projects'>
+            <div class="rzck-txt-box">
+                <p>暂无子项目，点击上方“+”符号以添加新项目！</p>
+            </div>
+        </empty> 
+        <div class="cgx-sbox">
+            <ul class="cgx-txt-box clearfix">
+                <foreach name='sub_projects' item='v' key='i'>
+                    <li>
+                        <div class="cgx-sbox-top">                            
+                            <a href="{:U('/Garden/Index/index', array('pr_id' => $v['pr_id']))}">
+                                <h1>{$v.pr_name}</h1>
+                                <p align="center">{$v.pr_brief}</p>
+                            </a>
+                        </div>
+                        <div class="cgx-sbox-bottom">
+                            <p>
+                            <span>
+                                <i class="fa fa-user"></i><eq name='v.cuser_name' value=''>未知用户<else/><a href="{:U('/Garden/User/look',array('uid'=>$v['pr_cuser']))}" target="_blank">{$v.cuser_name}</a>
+                                </eq>创建
+                            </span>
+                            <span>
+                                <i class="fa fa-user"></i><eq name='v.muser_info.truename' value=''>未知用户<else/><a href="{:U('/Garden/User/look',array('uid'=>$v['muser_info']['uid']))}" target="_blank">{$v.muser_info.truename}</a>
+                                </eq>管理
+                            </span>
+                            <if condition="$v.right eq true">
+                                <span><a href="{:U('/Garden/Index/editproject', array('pr_id' => $v['pr_id']))}"><i class="fa fa-pencil"></i>编辑</a></span>
+                            </if>
+                            </p>
+                        </div>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+        <empty name='isroot'>
+            <h1><i class="fa fa-key"></i>项目密码<span class="sha-add"><a href="{:U('/Garden/Password/edit',array('pr_id'=>$main_project['pr_id']))}" title="添加密码" target="_blank"><i class="fa fa-plus"></i></a></span></h1> 
+            <empty name='password'>
+                <li>
+                    <div class="rzck-txt-box">
+                        <p>暂无密码，点击上方“+”符号以添加新密码！</p>
+                    </div>
+                </li>
+            </empty>
+            <div class="cgx-sbox">
+                <ul class="cgx-txt-box clearfix">
+                <foreach name='password' item='v' key='i'>
+                    <li>
+                        <div class="cgx-sbox-top">                            
+                            <a href="{:U('/Garden/Password/view', array('pw_id' => $v['pw_id']))}">
+                                <h1>{$v.pw_name}</h1>
+                                <notempty name="v.pw_brief">
+                                    <p align="center">{$v.pw_brief}</p>
+                                <else />
+                                    <p align="lift">&nbsp;&nbsp;用户：########<br>&nbsp;&nbsp;密码：########</p>
+                                </notempty>
+                            </a>
+                        </div>
+                        <div class="cgx-sbox-bottom">
+                            <p>
+                            <span>
+                                <i class="fa fa-user"></i><eq name='v.cuser_name' value=''>未知用户<else/><a href="{:U('/Garden/User/look',array('uid'=>$v['pw_cuser']))}" target="_blank">{$v.cuser_name} </a>
+                                </eq>创建  
+                            </span> 
+                            <span>
+                                <i class="fa fa-user"></i><eq name='v.muser_info.truename' value=''>未知用户<else/><a href="{:U('/Garden/User/look',array('uid'=>$v['muser_info']['uid']))}" target="_blank">{$v.muser_info.truename}</a>
+                                </eq> 管理
+                            </span>
+                            <if condition="$v.right eq true">
+                                <span><a href="{:U('/Garden/Password/edit', array('pw_id' => $v['pw_id']))}"><i class="fa fa-pencil"></i>编辑</a></span>
+                            </if>
+                            </p>
+                        </div>
+                    </li>
+                </foreach>
+                </ul>
+            </div>
+        </empty>
+        <empty name='isroot'>
+            <h1><i class="fa fa-calendar"></i>项目日志<br></h1>
+            <empty name='logs_info'>
+                <li>
+                    <div class="rzck-txt-box">
+                        <p>暂无日志</p>
+                    </div>
+                </li>
+            </empty>
+            <foreach name='logs_info' item='v' key='i'>
+                <li>
+                    <div class="rzck-txt-box">
+                        <h2><a href="{:U('/Garden/User/look',array('uid' => $v['log_cuser']))}">{$v.truename}</a></h2>
+                        <p>{$v.log_info}</p>
+                        <div align="right">
+                            <if condition="session('id') eq $v['log_cuser']">
+                                <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
+                            </if>
+                            <i class="fa fa-clock-o"></i>{:date_format(date_create($v['log_ctime']),"Y-m-d H:i")}
+                        </div>
+                    </div>
+                </li>
+            </foreach>
+            <div class="msg-edit">
+                <h3>添加日志</h3>
+                <textarea name="content"  cols="20" wrap="hard" required></textarea>
+                <input type="hidden" name="prid" value="{$main_project['pr_id']}"/>
+                <input type="submit" class="msg-btn" id="AddLogBnt" id="submit-button" value="提&nbsp;&nbsp;交">
+            </div>
+        </empty>
+    </div>
+</div>
+<br><br><br>
+<script type="">
+    function geturl(){
+        var text_obj = document.getElementById("page_url");
+        var url = "/Garden/Index/index/p/"+text_obj.value;
+        window.location.href=url;
+    }
+</script>
+   
+</body>
+</html>

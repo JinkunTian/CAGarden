@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>纳新管理 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+
+<div class="container">
+    <include file='Common:header'/>
+    <div id="info"></div>
+    <div class="cgx-txt">
+        <h1><i class="fa fa-list-ul"></i>纳新管理<span class="sha-add"><a href="{:U('/Garden/Recruit/edit')}" title="添加私人密码" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+        <empty name='recruits'>
+            <li>
+                <div class="rzck-txt-box">
+                    <p>暂是没有纳新项目，点击上方“+”符号以添加纳新！</p>
+                </div>
+            </li>
+        <else />
+            <div class="cgx-sbox">
+                <ul class="cgx-txt-box clearfix">
+                <foreach name='recruits' item='v'>
+                    <li>
+                        <div class="cgx-sbox-top">                            
+                            <a href="{:U('/Garden/Recruit/listRecruit', array('grade' => $v['gid']))}">
+                                <h1>{$v.year}纳新</h1>
+                                <p align="center">{$v.gname}</p>
+                            </a>
+                        </div>
+                        <div class="cgx-sbox-bottom">
+                            <p>
+                                <span><a href="{:U('/Garden/Recruit/edit', array('gid' => $v['gid']))}"><i class="fa fa-pencil"></i>编辑</a></span>
+                            </p>
+                        </div>
+                    </li>
+                </foreach>
+                </ul>
+            </div>
+        </empty>
+    </div>
+</div>
+<br><br><br>
+<script type="">
+    function geturl(){
+        var text_obj = document.getElementById("page_url");
+        var url = "/Garden/Index/index/p/"+text_obj.value;
+        window.location.href=url;
+    }
+</script>
+   
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>碎语 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+    var AddMsgUrl = "{:U('/Garden/Msg/addmsg')}";
+    function del(){
+        if(confirm("确定要删除吗？")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+</script>
+    <div class="container">
+    <include file='Common:header'/>
+        <div id="info"></div>
+        <div class="cgx-txt">
+            <h1>
+                <i class="fa fa-quote-right"></i>碎语
+            </h1>
+            <div class="msg-box">
+                <notempty name="msg">
+                    <ul>
+                    <foreach name='msg' item='v'>
+                        <li class="msg">
+                            <span class="msg-user">
+                                <a href="{:U('/Garden/User/look', array('uid' => $v['uid']))}">
+                                <img src="__PUBLIC__{$v.img}" alt="{$v.truename}" width="50px" height="50px">
+                                <p>{$v.truename}</p>
+                                </a>
+                            </span>
+                            <p class="msg-content">
+                                {$v.content}
+                                <span>
+                                <if condition="session('id') eq $v['uid']">
+                                <a href="{:U('/Garden/Msg/del', array('id' => $v['id']))}" onclick='return del();'><i class='fa fa-trash'></i></a>
+                                </if>
+                                <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d")}
+                                </span>
+                            </p>
+                        </li>
+                    </foreach>
+                    </ul>
+                    <else />
+                    暂时还没有消息，快添加吧！
+                </notempty>
+                <div class="msg-page">
+                    <div class="page">{$page}</div>
+                </div>
+            </div>
+            <div class="msg-edit">
+                    <textarea name="content"  cols="20" wrap="hard" required></textarea>
+                    <input type="submit" class="msg-btn" id="AddMsgBnt" id="submit-button" value="提&nbsp;&nbsp;交">
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

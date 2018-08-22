@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>修改密码 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+            <include file='Common:header'/>
+        <div class="cgx-txt">
+                <div class="alt-psw-box">
+                <h1 class="center-h1"><i class="fa fa-lock"></i>修改密码</h1>
+                <form action="{:U('/Garden/User/pwdpost')}" method="post">
+                    <input type="password" name="password" id="password" placeholder="请输入老密码" required>
+                    <input type="password" name="newpws" id="newpws" placeholder="请输入新密码" required>
+                    <input type="password" name="newpwss" id="newpwss" placeholder="请确认新密码" required>
+                    <input type="submit" class="psw-btn" id="submit-button" value="确&nbsp;&nbsp;定">
+                </form>
+                </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

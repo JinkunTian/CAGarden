@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>用户管理 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+	<link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+	<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+	<div class="container">
+	<include file='Common:header'/>
+		<div id="info"></div>
+		<div class="cgx-txt">
+			<h1 ><i class="fa fa-users"></i>所有用户<span class="sha-add"><a href="{:U('/Garden/UserManage/adduser')}" title="添加用户" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+			<div class="xrz-box">
+				<table width="100%" class="edit-project-user td">
+					<thead>
+						<tr>
+							<td>姓名</td>
+							<td>权限</td>
+							<td>用户名/工号</td>
+							<td>电话</td>
+							<td>QQ</td>
+							<td>部门</td>
+							<td>职位</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody>
+						<foreach name="users" item="v">
+							<tr>
+								<td>{$v.truename}</td>
+								<td>{$v.type}</td>
+								<td>{$v.username}</td>
+								<td>{$v.mobile}</td>
+								<td>{$v.qq}</td>
+								<td>{$v.dname}</td>
+								<td>{$v.position}</td>
+								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">编辑</td>
+							</tr>
+						</foreach>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="msg-page">
+				<div class="page">{$page}</div>
+			</div>
+		</div>
+	</div>
+<script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>
