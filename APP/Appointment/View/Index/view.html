@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>查看维修记录 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+    <script type="text/javascript">
+        var AddAppointmentComUrl = "{:U('/Appointment/Index/addcomment')}";
+    </script>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+                <h1>查看维修记录</h1>
+                <div class="xrz-box">
+
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">时间：</label>{:date_format(date_create($appointment['edittime']),"Y-m-d H:i")}
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">状态：</label>
+                        <if condition="$appointment['status'] eq '1'">已预约
+                        <elseif condition="$appointment['status'] eq '2'" />处理中
+                        <elseif condition="$appointment['status'] eq '3'" />已处理
+                        <elseif condition="$appointment['status'] eq '4'" />已取消
+                        </if>
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">维修：</label>
+                        <empty name='appointment.fixer_name'>暂时无人负责处理<else/>由 {$appointment.fixer_name} 处理</empty>
+                    </div>
+
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">故障描述：</label>
+                        <empty name='appointment.issues'>没有填写故障信息<else/>{$appointment.issues}</empty>
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">处理结果：</label>
+                        <empty name='appointment.result'>暂时没有处理结果<else/>{$appointment.result}</empty>
+                    </div>
+                </div>
+
+                <notempty name='appointment.fixer_name'>
+                    <h1>请给本次帮助你的{$appointment.fixer_name}同学一个评价</h1>
+                    <foreach name='comments' item='v' key='i'>
+                        <li>
+                            <div class="rzck-txt-box">
+                                <h2>{$v.guest_name}</h2>
+                                <p>{$v.comment}</p>
+                                <div align="right">
+                                        <a href="{:U('/Appointment/Index/delcomment', array('cid' => $v['cid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
+                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d H:i")}
+                                </div>
+                            </div>
+                        </li>
+                    </foreach>
+                    <div class="msg-edit">
+                        <h3>添加评价</h3>
+                        <textarea name="content"  cols="20" wrap="hard" required></textarea>
+                        <input type="hidden" name="aid" value="{$appointment.aid}"/>
+                        <input type="hidden" name="fixer_id" value="{$appointment.fixer_id}"/>
+                        <input type="submit" class="msg-btn" id="AddAppointmentComBnt" id="submit-button" value="提&nbsp;&nbsp;交">
+                    </div>
+                </notempty>
+            <foreach name='comments' item='v'>
+            </foreach>
+        </div>
+    </div>
+    <div style="height: 50px"></div>   
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

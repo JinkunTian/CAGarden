@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>我的预约记录 - {:C('SITE_NAME')}</title>
+    <link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+    var AddLogUrl = "{:U('/Appointment/Index/addcomment')}";
+    function del(){
+        if(confirm("确定要取消吗？")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+<div class="container">
+    <include file='Common:header'/>
+    <div id="info"></div>
+    <div class="cgx-txt">
+        <h1><i class="fa fa-list"></i>我的预约<span class="sha-add"><a href="{:U('/Appointment/Index/addAppointment')}" title="预约维修" target="_blank"><i class="fa fa-plus"></i></a></span></h1> 
+        <empty name='appointments'>
+            <div class="rzck-txt-box">
+                <p>暂无预约维修，点击上方“+”符号以预约维修！</p>
+            </div>
+        </empty> 
+        <div class="cgx-sbox">
+            <ul class="cgx-txt-box clearfix">
+                <foreach name='appointments' item='v' key='i'>
+                    <li>
+                        <div class="cgx-sbox-top">                            
+                            <a href="{:U('/Appointment/Index/view', array('aid' => $v['aid']))}">
+                                <h1>{$v.model}</h1>
+                                <p align="center">
+                                    <if condition="$v['status'] eq '1'">【已预约】
+                                        <elseif condition="$v['status'] eq '2'" />【处理中】
+                                        <elseif condition="$v['status'] eq '3'" />【已处理】
+                                        <elseif condition="$v['status'] eq '4'" />【已取消】
+                                    </if>{$v.issues}
+                                </p>
+
+                            </a>
+                        </div>
+                        <div class="cgx-sbox-bottom">
+                            <p>
+                            <span>
+                                
+                            </span><i class="fa fa-clock-o"></i>于{:date_format(date_create($v['addtime']),"Y-m-d")}预约
+                            <span>
+                                <if condition="$v['status'] eq '1'"><a href="{:U('/Appointment/Index/cancelAppointment', array('aid' => $v['aid']))}" onclick='return del();'><i class="fa fa-trash"></i>取消</a>
+                                </if></span>
+                            </p>
+                        </div>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+    </div>
+</div>
+<br><br><br>
+</body>
+</html>

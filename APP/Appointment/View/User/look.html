@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title><foreach name='look' item='v'>{$v.truename}</foreach>的个人资料 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+            <foreach name='look' item='v'>
+                <h1 class="center-h1"><i class="fa fa-user"></i>{$v.truename}的个人资料</h1>
+                <div class="vip-content">
+                    <div class="vip-txt-box">
+                        <table>
+                            <tr>
+                                <td class="vip-title">工号：</td>
+                                <td class="vip-input">{$v.username}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">姓名：</td>
+                                <td class="vip-input">{$v.truename}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">电话：</td>
+                                <td class="vip-input">{$v.tel}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">QQ：</td>
+                                <td class="vip-input">{$v.qq}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">邮箱：</td>
+                                <td class="vip-input">{$v.email}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">部门：</td>
+                                <td class="vip-input">{$v.major}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">职位：</td>
+                                <td class="vip-input">{$v.position}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">住址：</td>
+                                <td class="vip-input">{$v.address}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="vip-img-box">
+                        <span class="vip-img">
+                            <img src="__PUBLIC__{$v.img}" alt="">
+                        </span>
+                    </div>
+                    <div class="vip-text">
+                        <table>
+                            <tr>
+                                <td class="vip-title">签名：</td>
+                                <td class="vip-input">{$v.flag}</td>
+                            </tr>
+                 
+                        </table>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+    </div>   
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

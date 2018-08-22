@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>预约维修 - {:C('SITE_NAME')}</title>
+
+	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />    
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type="text/javascript" src="__PUBLIC__/plugins/tinymce/tinymce.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="cgx-txt">
+        <h1><i class="fa fa-pencil"></i><empty name='edit'>预约维修</h1>
+        <div class="xrz-box">
+        <form action="{:U('/Appointment/Index/addpost')}" method="post">
+            <div class="xrz-input-box">
+                <p id="xrz-tit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欢迎来到计算机协会预约维修电脑！在您提交预约后会有我们的成员通过QQ或电话的方式与您联系，请您务必保证您的个人资料中的联系方式是正确的！修改联系信息在个人中心<a href="{:U('/Appointment/User/')}" target="_blank"> 【 <i class="fa fa-link"></i>个人资料】</a>中修改。</p>
+                
+            </div>
+            <div class="xrz-input-box">
+                <label id="xrz-tit">电脑型号:</label>
+                <input type="text" name="model" placeholder="请填写你的电脑型号" required/>
+            </div>
+            <div class="blog-text txt-srk"> <!-- 项目摘要 -->
+                <label id="xrz-tit">故障信息:</label>
+                <textarea name="issues" style="height:180px" placeholder="请填写故障信息"  required></textarea>
+            </div>
+            <div class="btn-div">
+                <input type="submit" class="btn-box" id="submit-button" value="提交预约"/>
+            </div>
+        </div>
+        </form>
+        </div>
+    </div>
+    <div style="height: 50px"></div>
+<script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

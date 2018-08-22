@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>我的资料 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+            <h1 class="center-h1"><i class="fa fa-user"></i>修改资料</h1>
+            <div class="appointment-content">
+                <form action="{:U('/Appointment/User/datapost')}"  enctype="multipart/form-data" method="post">
+                    <foreach name="user_data" item="v">
+                        <div class="vip-txt-box">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">学号：</td>
+                                    <td class="vip-input">{$v.number}</td>
+                                    <input type="hidden" name="number" value="{$v.number}"/>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">姓名：</td>
+                                    <td class="vip-input"><input style="width: auto;" type="text" name="truename" value="{$v.truename}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">电话：</td>
+                                    <td class="vip-input"><input style="width: auto;" type="text" name="mobile" value="{$v.mobile}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">QQ：</td>
+                                    <td class="vip-input"><input style="width: auto;" type="text" name="qq" value="{$v.qq}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">邮箱：</td>
+                                    <td class="vip-input"><input style="width: auto;" type="text" name="email" value="{$v.email}" required/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">专业：</td>
+                                    <td class="vip-input">
+                                        <select name="major">
+                                            <foreach name="majors" item="z">
+                                                <if condition="$z['mid'] eq $v['major']">
+                                                    <option value ="{$z.mid}" selected="selected">{$z.mname}</option>
+                                                <else />
+                                                    <option value ="{$z.mid}">{$z.mname}</option>
+                                                </if>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                </tr>
+                               <!--  <tr>
+                                    <td class="vip-title">寝室：</td>
+                                    <td class="vip-input"><input type="text" name="room" value="{$v.room}" required/></td>
+                                </tr> -->
+                                <tr></tr>
+                                <tr>
+                                    <td></td>
+                                    <input type="hidden" name="guest_id" value="{$v.guest_id}"/>
+                                    <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </foreach>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="height: 90px"></div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>
