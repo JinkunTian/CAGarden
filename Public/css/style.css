@@ -149,6 +149,39 @@ a{
 	border-radius: 6px;
 	margin-top: 20px;
 }
+.recruit-content{
+	box-shadow: 1px 1px 6px #EAEAEA;
+	min-height: 640px;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 30px;
+	background: #FDFDFD;
+	border: 1px solid #EDEDED;
+	border-radius: 6px;
+	margin-top: 20px;
+}
+.appointment-content{
+	box-shadow: 1px 1px 6px #EAEAEA;
+	min-height: 400px;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 30px;
+	background: #FDFDFD;
+	border: 1px solid #EDEDED;
+	border-radius: 6px;
+	margin-top: 20px;
+}
+.new_guest-content{
+	box-shadow: 1px 1px 6px #EAEAEA;
+	min-height: 540px;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 30px;
+	background: #FDFDFD;
+	border: 1px solid #EDEDED;
+	border-radius: 6px;
+	margin-top: 20px;
+}
 .vip-txt-box{
 	width: 70%;
 	float: left;
@@ -201,7 +234,7 @@ a{
 	border-radius: 3px;
 }
 .vip-text table .vip-title{
-	width: 50px;
+	width: 100px;
 	display: block;
 	height: 100px;
 	line-height: 100px;

@@ -76,8 +76,8 @@
                 content.focus();
                 return;
             }
-           $("#AddMsgBnt").val("正在处理...");
-           $("#AddMsgBnt").attr("disabled", "disabled");
+           $("#AddLogBnt").val("正在处理...");
+           $("#AddLogBnt").attr("disabled", "disabled");
         $.post(AddLogUrl, {prid:prid.val(),content:content.val()}, function(data){
             if (data.status) {
                 $('#info').show();
@@ -88,15 +88,77 @@
                 $('#info').show();
                 $('#info').html(data.info);
                 setTimeout("$('#info').hide()", 2000 );
-                $("#AddMsgBnt").removeAttr("disabled");
-                $("#AddMsgBnt").val("提  交");
+                $("#AddLogBnt").removeAttr("disabled");
+                $("#AddLogBnt").val("提  交");
             };
 
         },'json');
 
     });
 
+    //预约评价
+    $(".cgx-txt").delegate("#AddAppointmentComBnt","click",function() {
+            var aid = $('input[name=aid]');
+            var fixer_id = $('input[name=fixer_id]');
+            var content = $('textarea[name=content]');
+            if (content.val()=='') {
+                $('#info').show();
+                $('#info').html('<i class="fa fa-remove"></i> 内容不能为空!');
+                setTimeout("$('#info').hide()", 2000 );
+                content.focus();
+                return;
+            }
+           $("#AddAppointmentComBnt").val("正在处理...");
+           $("#AddAppointmentComBnt").attr("disabled", "disabled");
+        $.post(AddAppointmentComUrl, {aid:aid.val(),fixer_id:fixer_id.val(),content:content.val()}, function(data){
+            if (data.status) {
+                $('#info').show();
+                $('#info').html(data.info);
+                setTimeout("$('#info').hide()", 2000 );
+                $(".cgx-txt").load(location.href+" .cgx-txt");
+            }else{
+                $('#info').show();
+                $('#info').html(data.info);
+                setTimeout("$('#info').hide()", 2000 );
+                $("#AddAppointmentComBnt").removeAttr("disabled");
+                $("#AddAppointmentComBnt").val("提  交");
+            };
 
+        },'json');
+
+    });
+
+    //纳新面试
+    $(".vip-main").delegate("#AddRecruitCommBnt","click",function() {
+            //console.log('ok');
+            var recruit_id = $('input[name=recruit_id]');
+            var content = $('textarea[name=content]');
+            if (content.val()=='') {
+                $('#info').show();
+                $('#info').html('<i class="fa fa-remove"></i> 内容不能为空!');
+                setTimeout("$('#info').hide()", 2000 );
+                content.focus();
+                return;
+            }
+           $("#AddRecruitCommBnt").val("正在处理...");
+           $("#AddRecruitCommBnt").attr("disabled", "disabled");
+        $.post(AddRecruitCommUrl, {recruit_id:recruit_id.val(),content:content.val()}, function(data){
+            if (data.status) {
+                $('#info').show();
+                $('#info').html(data.info);
+                setTimeout("$('#info').hide()", 2000 );
+                $(".cgx-txt").load(location.href+" .cgx-txt");
+            }else{
+                $('#info').show();
+                $('#info').html(data.info);
+                setTimeout("$('#info').hide()", 2000 );
+                $("#AddRecruitCommBnt").removeAttr("disabled");
+                $("#AddRecruitCommBnt").val("提  交");
+            };
+
+        },'json');
+
+    });
 
 
 
