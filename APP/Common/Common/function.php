@@ -1,16 +1,36 @@
 <?php
+    function project_manage_right_check_by_pr_id($pr_id){
+        $uid=intval(session('id'));
+        $project=D('ProjectView')->where(array('pr_id'=>$pr_id))->find();
+        $project['manage_right_check']=false;
+
+        if($project['pr_cuser']==$uid){
+            $project['manage_right_check']=true;
+        }else{
+            $members_id=explode(':',$project['pr_muser']);
+            $len=count($members_id);
+            for ($i=0; $i < $len; $i++) {
+                if($members_id[$i]==$uid){
+                    $project['manage_right_check']=true;
+                    break;
+                }
+            }
+        }
+
+        return $project;
+    }
     function password_manage_right_check($pw_id){
         $my_uid=intval(session('id'));
         $result=false;
-        $password=M('public_password')->where(array('pw_id'=>$pw_id))->find();
+        $password=M('garden_public_password')->where(array('pw_id'=>$pw_id))->find();
         if($password){
-            $public_password=M('public_password');
+            $public_password=M('garden_public_password');
             $where['_string']='pw_id="'.$pw_id.'" AND ( (pw_muser like "%:'.$my_uid.':%") OR (pw_cuser = "'.$my_uid.'"))';
             $password_right=$public_password->where($where)->find();
             if($password_right){
                 $result=$password_right;
             }else{
-                $project=M('projects');
+                $project=M('garden_projects');
                 $where['_string']='pr_id="'.$password['pw_prid'].'" AND ( (pr_muser like "%:'.$my_uid.':%") OR (pr_cuser = "'.$my_uid.'"))';
                 $project_right=$project->where($where)->find();
                 if($project_right){
@@ -23,40 +43,59 @@
     function password_access_right_check($pw_id){
         $my_uid=intval(session('id'));
         $result=false;
-        if($temp=password_manage_right_check($pw_id)){
+        $temp=M('garden_public_password')->where(array('pw_id'=>$pw_id))->find();
+        /**
+         * 判断密码是否公开
+         */
+        if($temp['open_access']=='1'){
             $result=$temp;
-        }else{
-            $public_password=M('public_password');
+        }
+        /**
+         * 判断是否开放项目成员访问权限
+         */
+        elseif($temp['group_members_access']=='1'){
+            $project=M('garden_projects');
+            $where['_string']='pr_id="'.$temp['pw_prid'].'" AND (pr_members like "%:'.$my_uid.':%")';
+            $project_right=$project->where($where)->find();
+            if($project_right){
+                $result=$temp;
+            }
+        }
+        /**
+         * 判断是否有管理权限
+         */
+        elseif($manage=password_manage_right_check($pw_id)){
+                $result=$manage;
+        }
+        /**
+         * 判断是否有指定访问权限
+         */
+        else{
             $where['_string']='pw_id="'.$pw_id.'" AND (pw_right like "%:'.$my_uid.':%")';
-            $related_passwords=$public_password->where($where)->find();
+            $related_passwords=M('garden_public_password')->where($where)->find();
             if($related_passwords){
                 $result=$related_passwords;
-            }else{
-                $temp=M('public_password')->where(array('pw_id'=>$pw_id))->find();
-                if($temp['group_members_access']=='1'){
-                    $project=M('projects');
-                    $where['_string']='pr_id="'.$temp['pw_prid'].'" AND (pr_members like "%:'.$my_uid.':%")';
-                    $project_right=$project->where($where)->find();
-                    if($project_right){
-                        $result=$temp;
-                    }
-                }
             }
         }
     	return $result;
     }
     function explode_members($str){
-    	$members_id=explode(':',$str);
+
+        $members=false;
+        $members_id=explode(':',$str);
+
         if($len=count($members_id)) {
-        	$z=0;
+
+            $z=0;
             for ($i=0; $i < $len; $i++) {
                 if($members_id[$i]>0){
-                    $members[$z++]=M('users')->where(array('uid'=>$members_id[$i]))->find();
+                    $members[$z++]=D('UserView')->where(array('uid'=>$members_id[$i]))->find();
                 }
             }
         }else{
             $members=false;
         }
+
         return $members;
     }
     function get_addition_password($pw_id){
@@ -85,7 +124,7 @@
         return $addition;
     }
     function isadmin(){
-        $info=M('users')->where(array('uid'=>intval(session('id'))))->find();
+        $info=M('garden_users')->where(array('uid'=>intval(session('id'))))->find();
         if($info['type']=='2'){
             return true;
         }else{
