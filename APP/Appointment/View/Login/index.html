@@ -51,7 +51,7 @@
 		</div>
 	</div>
 	<if condition="$ENABLE_GEETEST eq true">
-        <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+		<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
         <script src="__PUBLIC__/js/gt.js"></script>
         <script>
             var handlerEmbed = function (captchaObj) {
@@ -84,6 +84,7 @@
                     // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
                     initGeetest({
                     	width: '198px',
+						https: true,
                         gt: data.gt,
                         challenge: data.challenge,
                         new_captcha: data.new_captcha,
