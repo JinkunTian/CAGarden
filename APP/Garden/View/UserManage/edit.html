@@ -25,18 +25,21 @@
                     <foreach name="user_data" item="v">
                         <div class="vip-txt-box">
                             <table>
+                                <!----设置一个随机变量加在input name属性中，防止浏览器自动填充--->
+								<input type="hidden" name="random" value="{$random}">
                                 <tr>
                                     <td class="vip-title">工号：</td>
                                     <td class="vip-input">{$v.username}</td>
+                                    <input type="hidden" name="uid" value="{$v.uid}"/>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td class="vip-input"><input type="text" name="truename" value="{$v.truename}" required/></td>
+                                    <td class="vip-input"><input type="text" name="truename_{$random}" value="{$v.truename}" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">权限：</td>
                                     <td class="vip-input">
-                                        <select name="type">
+                                        <select name="type_{$random}">
                                                 <if condition="$v['type'] eq '2' ">
                                                     <option value ="1" >用户</option>
                                                     <option value ="2" selected="selected">管理员</option>
@@ -49,20 +52,20 @@
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
-                                    <td class="vip-input"><input type="text" name="mobile" value="{$v.mobile}" required/></td>
+                                    <td class="vip-input"><input type="text" name="mobile_{$random}" value="{$v.mobile}" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">QQ：</td>
-                                    <td class="vip-input"><input type="text" name="qq" value="{$v.qq}" required/></td>
+                                    <td class="vip-input"><input type="text" name="qq_{$random}" value="{$v.qq}" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">邮箱：</td>
-                                    <td class="vip-input"><input type="text" name="email" value="{$v.email}" required/></td>
+                                    <td class="vip-input"><input type="text" name="email_{$random}" value="{$v.email}" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">专业：</td>
                                     <td class="vip-input">
-                                        <select name="major">
+                                        <select name="major_{$random}">
                                             <foreach name="majors" item="z">
                                                 <if condition="$z['mid'] eq $v['major']">
                                                     <option value ="{$z.mid}" selected="selected">{$z.mname}</option>
@@ -76,7 +79,7 @@
                                 <tr>
                                     <td class="vip-title">部门：</td>
                                     <td class="vip-input">
-                                        <select name="dep">
+                                        <select name="dep_{$random}">
                                             <foreach name="departments" item="z">
                                                 <if condition="$z['did'] eq $v['dep']">
                                                     <option value ="{$z.did}" selected="selected">{$z.dname}</option>
@@ -89,14 +92,12 @@
                                 </tr>
                                 <tr>
                                     <td class="vip-title">职位：</td>
-                                    <td class="vip-input"><input type="text" name="position" value="{$v.position}" required/></td>
+                                    <td class="vip-input"><input type="text" name="position_{$random}" value="{$v.position}" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">密码：</td>
                                     <td class="vip-input">
-										<!----防止浏览器自动填充--->
-										<input type="hidden" name="password_id" value="{$password_id}">
-										<input type="text" name="{$password_id}" value="" placeholder="留空则不修改密码" />
+										<input type="text" name="password_{$random}" value="" placeholder="留空则不修改密码" />
 									</td>
                                 </tr> 
                             </table>
@@ -112,11 +113,10 @@
                             <table>
                                 <tr>
                                     <td class="vip-title">签名：</td>
-                                    <td class="vip-input"><textarea name="flag" required>{$v.flag}</textarea></td>
+                                    <td class="vip-input"><textarea name="flag_{$random}" required>{$v.flag}</textarea></td>
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <input type="hidden" name="uid" value="{$v.uid}"/>
                                     <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
                                 </tr>
                             </table>

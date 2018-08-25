@@ -35,6 +35,8 @@ class UserManageController extends AdminController {
                     $users[$i]['type']='用户';
                 }elseif($users[$i]['type']=='2'){
                     $users[$i]['type']='管理员';
+                }else{
+                    $users[$i]['type']='未知';
                 }
             }
         }
@@ -51,7 +53,7 @@ class UserManageController extends AdminController {
         
         $map['status'] = array('gt',0);
 
-        $this->password_id=md5(time());
+        $this->random=md5(time());
         $this->departments=M('common_departments')->where($map)->select();
         $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
         $this->user_data = D('UserView')->where(array('uid'=>$id))->select();
@@ -67,14 +69,15 @@ class UserManageController extends AdminController {
          * 基础信息
          */
         $data = array(
-                'truename' => I('truename'),
-                'mobile' => I('mobile'),
-                'qq' => I('qq'),
-                'email' => I('email'),
-                'major' => I('major'),
-                'dep' => I('dep'),
-                'position' => I('position'),
-                'flag' => I('flag'),
+                'truename' => I('truename_'.I('random')),
+                'type' => I('type_'.I('random')),
+                'mobile' => I('mobile_'.I('random')),
+                'qq' => I('qq_'.I('random')),
+                'email' => I('email_'.I('random')),
+                'major' => I('major_'.I('random')),
+                'dep' => I('dep_'.I('random')),
+                'position' =>I('position_'.I('random')),
+                'flag' => I('flag_'.I('random')),
             );
         /**
          * 上传头像
@@ -100,11 +103,11 @@ class UserManageController extends AdminController {
         /**
          * 判断是否有重设密码
          */
-        $password_id=I('password_id');
+        $password_id='password_'.I('random');
 
         if(!(I($password_id)==''||I($password_id)=='留空则不修改密码')){
             $data['salt']=md5(time());
-            $password = I('password','','md5');
+            $password = I($password_id,'','md5');
             $data['password']=md5($data['salt'].$password);
         }
         /**
