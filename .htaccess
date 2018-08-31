@@ -4,5 +4,10 @@
 
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+  
+  #For PHP 5.5 
+  #RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+  
+  #For PHP 5.6 or Higher
+  RewriteRule ^(.*)$ index.php [L,E=PATH_INFO:$1]
 </IfModule>
