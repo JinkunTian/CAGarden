@@ -108,6 +108,7 @@ class RecruitController extends AdminController {
                 'email' => $recruit['email'],
                 'major' => $recruit['major'],
                 'position' => '新成员',
+                'dep' =>  $recruit['dep'],
                 'flag' => $recruit['flag'],
                 'status' => '1',
                 'type' => '1',
