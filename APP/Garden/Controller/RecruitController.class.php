@@ -44,6 +44,7 @@ class RecruitController extends AdminController {
                     'gname' => I('gname'),
                     'year' => I('year'),
                     'message'=>I('message'),
+                    'status'=>I('status'),
                 );
                 $result=M('recruit_grade')->save($data);
             }else{
@@ -51,6 +52,7 @@ class RecruitController extends AdminController {
                     'gname' => I('gname'),
                     'year' => I('year'),
                     'message'=>I('message'),
+                    
                 );
                 $result=M('recruit_grade')->add($data);
             }
@@ -74,6 +76,12 @@ class RecruitController extends AdminController {
         if(!$recruit){
             $this->error('找不到对象');
         }
+        if($recruit['status']!='0'){
+        	$garden_info=M('garden_users')->where(array('username' => $recruit['number']))->find();
+
+        	$recruit['recruited_dep']=M('common_departments')->where(array('did' => $garden_info['dep']))->find();
+        }
+        
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
 
         $commentView=D('RecruitCommentView');
@@ -90,9 +98,9 @@ class RecruitController extends AdminController {
      */
     public function recive(){
         
-        $recruit = M('recruit')->where(array('recruit_id'=>I('recruit_id')))->find();var_dump($recruit);
+        $recruit = M('recruit')->where(array('recruit_id'=>I('recruit_id')))->find();
         if($recruit['status']=='0'){
-            $recruit['dep']=I('dep'); 
+            //$recruit['dep']=I('dep'); 
             $recruit['status']='1';/*    更新纳新数据库状态   */
             $change=M('recruit')->save($recruit);
             $newuser = array(
@@ -108,7 +116,7 @@ class RecruitController extends AdminController {
                 'email' => $recruit['email'],
                 'major' => $recruit['major'],
                 'position' => '新成员',
-                'dep' =>  $recruit['dep'],
+                'dep' =>  I('dep'),
                 'flag' => $recruit['flag'],
                 'status' => '1',
                 'type' => '1',

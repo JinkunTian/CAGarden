@@ -40,6 +40,25 @@
                     <label id="xrz-tit">年度:</label>
                     <input type="text" name="year" value="{:isset($recruit['year'])?$recruit['year']:''}" required />
                 </div>
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">纳新控制:</label>
+                    
+                    <notempty name="recruit['status']">
+                        <select name=status>
+                            <if condition="$recruit['status'] eq 1"><option value ="1" selected="selected">开放报名</option><else /><option value ="1">开放报名</option></if>
+                            <if condition="$recruit['status'] eq 2"><option value ="2" selected="selected">禁止报名</option><else /><option value ="2">禁止报名</option></if> 
+                            <if condition="$recruit['status'] eq 3"><option value ="3" selected="selected">开放面试</option><else /><option value ="3">开放面试</option></if> 
+                            <if condition="$recruit['status'] eq 4"><option value ="4" selected="selected">纳新结束</option><else /><option value ="4">纳新结束</option></if>                     
+                        </select>
+                    <else />
+                        <select name=status>
+                            <option value ="1">开放报名</option>
+                            <option value ="2">禁止报名</option>
+                            <option value ="3">开放面试</option>
+                            <option value ="4">纳新结束</option>
+                        </select>
+                    </notempty>
+                </div>
                 <div class="blog-text txt-srk">
                     <label id="xrz-tit">成功提交后的提示信息:</label>
                 </div>

@@ -64,12 +64,12 @@ function del(){
                 </div>
                 <notempty name="recruit.github">
                     <div class="xrz-input-box">
-                        <label id="xrz-tit">GitHub： <a href="{$recruit.github}" target="_blank">{$recruit.github}</a></label>
+                        <label id="xrz-tit">GitHub：{$recruit.github}</label>
                     </div>
                 </notempty>
                 <notempty name="recruit.website">
                     <div class="xrz-input-box">
-                        <label id="xrz-tit">网站： <a href="{$recruit.website}" target="_blank">{$recruit.website}</a></label>
+                        <label id="xrz-tit">网站：{$recruit.website}</label>
                     </div>
                 </notempty>
                 <div class="xrz-input-box">
@@ -79,26 +79,31 @@ function del(){
             </div>
             <h1>纳新操作</h1>
             <div class="msg-box">
-                <if condition="$recruit['status'] neq '1'">
-                <form action="{:U('/Garden/Recruit/recive')}" method="post">
-                    <table>
-                        <tr>
-                            <td class="vip-title">接受申请并纳新到：</td>
-                            <td class="vip-input">
-                                <input type="hidden" name="recruit_id" value="{$recruit.recruit_id}">
-                                <select name=dep>
-                                    <foreach name='departments' item='v'>
-                                            <option value ="{$v.did}">{$v.dname}</option>
-                                    </foreach>
-                                </select>
-                            </td>
-                            <td> <input type="submit" name="submit" value="确定"></td>
-                        </tr>
-                    </table>
-                </form>
-                <else />
-                     <label id="xrz-tit">已纳新到 {$recruit.dname}</label>
-                </if>
+                
+                    <if condition="$recruit['status'] neq '1'">
+                    	<if condition="$recruit['grade_status'] eq '3'">
+		                    <form action="{:U('/Garden/Recruit/recive')}" method="post">
+		                        <table>
+		                            <tr>
+		                                <td class="vip-title">接受申请并纳新到：</td>
+		                                <td class="vip-input">
+		                                    <input type="hidden" name="recruit_id" value="{$recruit.recruit_id}">
+		                                    <select name=dep>
+		                                        <foreach name='departments' item='v'>
+		                                                <option value ="{$v.did}">{$v.dname}</option>
+		                                        </foreach>
+		                                    </select>
+		                                </td>
+		                                <td> <input type="submit" name="submit" value="确定"></td>
+		                            </tr>
+		                        </table>
+		                    </form>
+		                <else />
+		                	<label>暂未开放纳新操作！</label>
+		            	</if>
+                    <else />
+                         <label id="xrz-tit">已纳新到 {$recruit.recruited_dep.dname}</label>
+                    </if>
             </div>
             <if condition="$recruit['status'] eq '1'">
                 <notempty name="comments">
@@ -124,7 +129,7 @@ function del(){
                                 <if condition="session('id') eq $v['uid']">
                                 <a href="{:U('/Garden/Recruit/delcomment', array('cid' => $v['cid']))}" onclick='return del();'><i class='fa fa-trash'></i></a>
                                 </if>
-                                <i class="fa fa-clock-o"></i>{$v.addtime|date='Y-m-d H:i', ###}
+                                <i class="fa fa-clock-o"></i>{$v.addtime}
                                 </span>
                             </p>
                         </li>
