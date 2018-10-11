@@ -10,7 +10,7 @@ class LoginController extends Controller {
 
         //登陆信息判断
     public function login() {
-        if (!IS_POST) halt('页面不存在');
+        if (!IS_POST) die('页面不存在');
 
         //行为验证码
         if(C('ENABLE_GEETEST')){
