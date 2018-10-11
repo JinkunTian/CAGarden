@@ -51,30 +51,30 @@
             $result=$temp;
         }
         /**
-         * 判断是否开放项目成员访问权限
-         */
-        elseif($temp['group_members_access']=='1'){
-            $project=M('garden_projects');
-            $where['_string']='pr_id="'.$temp['pw_prid'].'" AND (pr_members like "%:'.$my_uid.':%")';
-            $project_right=$project->where($where)->find();
-            if($project_right){
-                $result=$temp;
-            }
-        }
-        /**
          * 判断是否有管理权限
          */
         elseif($manage=password_manage_right_check($pw_id)){
                 $result=$manage;
         }
         /**
-         * 判断是否有指定访问权限
+         * 判断是否开放项目成员访问权限
          */
-        else{
-            $where['_string']='pw_id="'.$pw_id.'" AND (pw_right like "%:'.$my_uid.':%")';
-            $related_passwords=M('garden_public_password')->where($where)->find();
-            if($related_passwords){
-                $result=$related_passwords;
+        elseif(($temp['group_members_access']=='1')||($temp['pw_right'])){
+            $project=M('garden_projects');
+            $where['_string']='pr_id="'.$temp['pw_prid'].'" AND (pr_members like "%:'.$my_uid.':%")';
+            $project_right=$project->where($where)->find();
+            if($project_right){
+                $result=$temp;
+            }
+            /**
+             * 判断是否有指定访问权限
+             */
+            else{
+                $where['_string']='pw_id="'.$pw_id.'" AND (pw_right like "%:'.$my_uid.':%")';
+                $related_passwords=M('garden_public_password')->where($where)->find();
+                if($related_passwords){
+                    $result=$related_passwords;
+                }
             }
         }
     	return $result;
