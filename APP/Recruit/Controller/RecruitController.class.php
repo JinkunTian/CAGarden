@@ -15,12 +15,17 @@ class RecruitController extends Controller {
     public function index(){
         if(isset($_GET['grade'])){
             $Recruit=M('recruit_grade')->where(array('gid'=>I('grade')))->find();
-            if(!$Recruit){
-                $this->error('对应年度的纳新不存在！');
-            }
         }else{
             $Recruit=M('recruit_grade')->order(array('gid'=>'desc'))->find();
         }
+
+        if(!$Recruit){
+                $this->error('对应年度的纳新不存在！');
+            }else{
+                if($Recruit['status']!='1'){
+                    $this->error('当前纳新已经关闭了！');
+                }
+            }
 
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
@@ -28,7 +33,7 @@ class RecruitController extends Controller {
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->assign('departments',$departments);
         $this->assign('majors',$majors);
-    	$this->assign('recruit_name',$Recruit['gname']);
+        $this->assign('recruit_name',$Recruit['gname']);
         $this->assign('grade',$Recruit['gid']);
         $this->display();
     }
@@ -87,8 +92,12 @@ class RecruitController extends Controller {
              * 基础信息
              */
             $data = array(
+                //'number' => session('newmember_xh'),
+                //'truename' => session('newmember_xm'),
+                //'college' => session('newmember_xy'),
                 'number' => I('number'),
                 'truename' => I('truename'),
+                'college' => I('college'),
                 'mobile' => I('mobile'),
                 'qq' => I('qq'),
                 'email' => I('email'),
@@ -122,7 +131,9 @@ class RecruitController extends Controller {
                     //上传失败，显示失败信息
                     $this->error($upload->getError());
                 }
-            }
+            }else{
+			$this->error("请上传头像");
+		}
 
             /**
              * 检查用户是否存在
@@ -136,7 +147,7 @@ class RecruitController extends Controller {
                 $data['password']=md5($data['salt'].$password);
                 $result=M('recruit')->add($data);
                 if ($result) {
-                    $this->success('添加用户成功！',U('/Recruit/Recruit/message/'));
+                    $this->success('提交成功！',U('/Recruit/Recruit/message/'));
                 }else{
                     $this->error('添加失败！');
                 }
