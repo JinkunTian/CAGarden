@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html>
+<!--
+
+求个前端大神
+-->
+<html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
-    <meta content="yes" name="apple-mobile-web-app-capable" />
-    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
-    <meta content="telephone=no" name="format-detection" />
-    <title>欢迎加入我们！</title>
-  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
-    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>欢迎加入我们！</title>
+<!--头像传输-->
+<script src="__PUBLIC__/Head/head/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Head/css/bootstrap.min.css">
+<link href="__PUBLIC__/Head/head/cropper.min.css" rel="stylesheet">
+<link href="__PUBLIC__/Head/head/sitelogo.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Head/css/font-awesome.min.css">
+<script src="__PUBLIC__/Head/head/bootstrap.min.js"></script>
+<script src="__PUBLIC__/Head/head/cropper.js"></script>
+<script src="__PUBLIC__/Head/head/sitelogo.js"></script>
+
+    <link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/styleForRecruit.css" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
     <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
@@ -28,24 +42,40 @@
 #notice {
     color: red;
 }
+.avatar-btns button {
+	height: 35px;
+}
 </style>
 </head>
+
 <body>
-    <div class="container">
+<div class="container">
         <div class="vip-main cgx-txt">
             <h1 class="center-h1">{$recruit_name}-欢迎加入我们！</h1>
-            <div class="recruit-content">
+          
                 <form action="{:U('/Recruit/Recruit/save')}"  enctype="multipart/form-data" method="post">
+			<h1>上传照片</h1>
+			<div >
+                    <input type="file" name="img" class="file-btn"/>
+                    <i class="fa fa-cloud-upload"></i>上传照片(最大{:C('MAX_PHOTO_POST_SIZE')/1024/1024}MB)
+       
+               请上传本人照片！不可以上传卡通头像噢！
+            </div>
+			<h1 style="margin-top:225px">完善信息</h1>
                         <div class="vip-txt-box">
                             <table>
                                 <tr>
                                     <td class="vip-title">学号：</td>
-                                    <td class="vip-input"><input type="text" name="number" value="" placeholder="请输入学号或工号" required/></td>
+                                    <td class="vip-input"><input type="text" name="number" value="" placeholder="请输入你的学号" required/></td>
                                     <input type="hidden" name="grade" value="{$grade}" /></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td class="vip-input"><input type="text" name="truename" value="" placeholder="请输入真实姓名" required/></td>
+                                    <td class="vip-input"><input type="text" name="truename" value="" placeholder="请输入你的名字" required/></td>
+                                </tr>
+				<tr>
+                                    <td class="vip-title">学院：</td>
+                                    <td class="vip-input"><input type="text" name="college" value="" placeholder="请输入你的学院" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
@@ -57,16 +87,16 @@
                                 </tr>
                                 <tr>
                                     <td class="vip-title">邮箱：</td>
-                                    <td class="vip-input"><input type="text" name="email" value="" placeholder="请输找回密码邮箱" required/></td>
+                                    <td class="vip-input"><input type="email" name="email" value="" placeholder="请输找回密码邮箱" required/></td>
                                 </tr>
                                 
                                 <tr>
                                     <td class="vip-title">签名：</td>
-                                    <td class="vip-input"><input type="text" name="flag" value="" placeholder="请输入你的专业" required/></td>
+                                    <td class="vip-input"><input type="text" name="flag" value="" placeholder="请输入你的个性签名" required/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">GitHub：</td>
-                                    <td class="vip-input"><input type="text" name="github" value="" placeholder="[选填]你的GitHub账号，格式为网址如https://github.com/JinkunTian/"/></td>
+                                    <td class="vip-input"><input type="text" name="github" value="" placeholder="[选填]你的GitHub地址，格式为网址如https://github.com/JinkunTian/"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">网站：</td>
@@ -75,8 +105,8 @@
                              <!--    <tr>
                                     <td class="vip-title">寝室：</td>
                                     <td class="vip-input"><input type="text" name="address" value="" placeholder="请输入你的寝室"/></td>
-                                </tr> -->
-                                
+                                </tr> 
+			     -->
                                 <tr>
                                     <td class="vip-title">专业：</td>
                                     <td class="vip-input">
@@ -87,6 +117,7 @@
                                         </select>
                                     </td>
                                 </tr>
+			
                                 <tr>
                                     <td class="vip-title">意向：</td>
                                     <td class="vip-input">
@@ -103,25 +134,23 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="vip-img-box">
-                            <span class="vip-img">
-                                <img src="__PUBLIC__/images/hi.png" alt="请上传你的照片">
-                                <input type="file" name="img" class="file-btn"/>
-                                <span class="span-btn"><i class="fa fa-cloud-upload"></i>上传照片(最大{:C('MAX_PHOTO_POST_SIZE')/1024/1024}MB)</span>
-                            </span>
-                        </div>
+                        
                         <div class="vip-text">
                             <table>
                                 <tr>
                                     <td class="vip-title">个人简介：</td>
                                     <td class="vip-input"><textarea name="info" required placeholder="讲讲你的爱好、特长，你与计算机之间的故事，向大家介绍一下自己。"></textarea></td>
                                 </tr>
+				</table>
+			</div>
+			<div class="vip-text">
+				<table>
                                 <tr>
                                     <td></td>
                                     <td><if condition="$ENABLE_GEETEST eq true">
-                                            <div id="embed-captcha" style="width: 100%"></div>
+                                            <div id="embed-captcha" style="width: 100%;"></div>
                                             <p id="wait" class="show">正在加载验证码......</p>
-                                            <p id="notice" class="hide">请先完成验证</p>
+                                            <p id="notice" class="hide">请先完成验证(若加载不出来验证码请先确保连入校园网并登录了网号！)</p>
                                         </if></td>
                                 </tr>
                                 <tr>
@@ -131,7 +160,7 @@
                             </table>
                         </div>
                 </form>
-            </div>
+
         </div>
     </div>
     <div style="height:100px"></div>
@@ -181,5 +210,6 @@
             });
         </script>
     </if>
+ 
 </body>
 </html>
