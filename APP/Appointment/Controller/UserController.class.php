@@ -80,7 +80,21 @@ class UserController extends CommonController {
             }
         }
     }
-    
+    public function look(){
+        if(isset($_GET['fixer_uid'])){
+
+            $fixer_uid=I('fixer_uid');
+
+            if($fixer_info=M('garden_users')->where(array('uid'=>$fixer_uid))->find()){
+                $this->assign('fixer_info',$fixer_info);
+                $this->display();
+            }else{
+                $this->error('用户不存在！');
+            }
+        }else{
+            $this->error('非法参数');
+        }
+    }
     /**
      * logout方法退出登录并跳转到登录页面
      */
