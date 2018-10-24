@@ -1,0 +1,47 @@
+.btn-xl:hover, .btn-xl:focus, .btn-xl:active, .btn-xl.active, .open .dropdown-toggle.btn-xl {
+	color: #fff;
+	background-color: #fec503;
+	border-color: #f6bf01;
+}
+
+.btn:hover, .btn:focus, .btn:active, .btn.active, .open .dropdown-toggle.btn {
+	color: #fff;
+	background-color: #fec503;
+	border-color: #f6bf01;
+}
+
+.btn {
+	display: inline-block;
+	padding: 8px 20px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	background-color: #23AD21;
+}
+
+.btn-xl {
+color: #fff;
+    background-color: #23AD21;
+    /* border-color: #726FB9; */
+    font-family: "Open Sans",sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    border-radius: 0;
+    letter-spacing: 2px;
+    font-size: 16px;
+    padding: 17px 45px;
+}

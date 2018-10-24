@@ -151,7 +151,7 @@ a{
 }
 .recruit-content{
 	box-shadow: 1px 1px 6px #EAEAEA;
-	min-height: 640px;
+	min-height: 1100px;
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 30px;
@@ -162,7 +162,7 @@ a{
 }
 .appointment-content{
 	box-shadow: 1px 1px 6px #EAEAEA;
-	min-height: 400px;
+	min-height: 100px;
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 30px;
@@ -200,13 +200,13 @@ a{
 	width: 100%;
 }
 .vip-txt-box table input{
-	width: 88%;
+	width: 150%;
 	height: 30px;
 	padding: 6px;
 	border: 1px solid #ccc;
 }
 .vip-txt-box table select{
-	width: 88%;
+	width: 150%;
 	height: 30px;
 	border: 1px solid #ccc;
 }
@@ -215,8 +215,8 @@ a{
 	height: auto;
 }
 .vip-img-box{
-	width: 25%;
-	float: right;
+	width: 50%;
+	float: none;
 }
 .vip-img-box .vip-img{
 	max-width: 150px;
@@ -234,12 +234,13 @@ a{
 	border-radius: 3px;
 }
 .vip-text table .vip-title{
-	width: 100px;
+	width: 70px;
 	display: block;
 	height: 100px;
 	line-height: 100px;
 }
 .vip-text{
+	text-align:center;
 	width: 100%;
 	float: left;
 	margin-top: 10px;
@@ -252,7 +253,6 @@ a{
 	border: 1px solid #ccc;
 }
 .vip-text .vip-btn{
-	float: right;
 	width: 110px;
 	height: 36px;
 	background: #039;

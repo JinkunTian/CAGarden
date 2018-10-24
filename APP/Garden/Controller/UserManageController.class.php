@@ -15,7 +15,16 @@ class UserManageController extends AdminController {
      */
     public function index(){
 
-        $count = M('garden_users')->where(array('status'=>'1'))->count();//正常状态的用户
+        if(I('dep')){
+            if(I('dep')=='all'){
+                $dep_select=array('status'=>'1');
+            }else{
+                $dep_select=array('status'=>'1','dep'=>I('dep'));
+            }
+        }else{
+            $dep_select=array('status'=>'1');            
+        }
+        $count = M('garden_users')->where($dep_select)->count();//正常状态的用户
         $page = new \Think\Page($count,200);
         $page->setConfig('header','条数据');
         $page->setConfig('prev','<');
@@ -27,7 +36,7 @@ class UserManageController extends AdminController {
         $show = $page->show();// 分页显示输出
         $limit = $page->firstRow.','.$page->listRows;
 
-        $users= D('UserView')->where(array('status'=>'1'))->order('type DESC')->limit($limit)->select();
+        $users= D('UserView')->where($dep_select)->order('type DESC')->limit($limit)->select();
 
         if($len=count($users,0)){
             for($i=0;$i<$len;$i++){
