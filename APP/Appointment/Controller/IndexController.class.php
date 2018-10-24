@@ -53,6 +53,10 @@ class IndexController extends CommonController {
     public function addpost(){
         $guest_id = (int)session('guest_id');
 
+        if(I('issues')==''||I('model')==''){
+        	$this->error('请填写型号与故障信息！');
+        }
+
         $data = array(
             'guest_id' =>$guest_id,
             'issues' =>I('issues'),
