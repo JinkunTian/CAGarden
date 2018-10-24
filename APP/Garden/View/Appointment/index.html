@@ -45,7 +45,7 @@
                             </a>
                         </div>
                         <div class="cgx-sbox-bottom">
-                            <p><i class="fa fa-clock-o"></i>{$v.guest_name}于{$v.addtime|date='Y-m-d', ###}预约</p>
+                            <p><i class="fa fa-clock-o"></i>{$v.guest_name}于{:date_format(date_create($v['addtime']),"Y-m-d H:i")}预约</p>
                         </div>
                     </li>
                 </foreach>

@@ -39,7 +39,7 @@
                     </div>
                     <div class="xrz-input-box">
                         <label id="xrz-tit">时间：</label>
-                        <input type="text" name="addtime" value="{$appointment.addtime|date='Y-m-d H:i', ###}" readonly="readonly" />
+                        <input type="text" name="addtime" value="{:date_format(date_create($appointment['addtime']),'Y-m-d H:i')}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box"> <!-- 项目状态 -->
                         <label id="xrz-tit">状态:</label>
