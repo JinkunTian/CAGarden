@@ -31,7 +31,7 @@
 							<td>电话</td>
 							<td>QQ</td>
 							<td>电脑型号</td>
-							<td>故障信息</td>
+							<td width="20%">故障信息</td>
 							<td>状态</td>
 							<td>维修</td>
 							<td>操作</td>
@@ -46,14 +46,12 @@
 								<td>{$v.guest_qq}</td>
 								<td>{$v.model}</td>
 								<td>{$v.issues}</td>
-								<td>
-									<switch name="v.status">
-										<case value="1"><font color="red">已预约</font></case>
-										<case value="2"><font color="red">处理中</font></case>
+								<td><switch name="v.status">
+										<case value="1">已预约</case>
+										<case value="2">处理中</case>
 										<case value="3">已处理</case>
-										<case value="4"><font color="red">已取消</font></case>
-									</switch>
-								</td>
+										<case value="4">已取消</case>
+									</switch></td>
 								<td>{$v.fixer_name}</td>
 								<td><a href="{:U('/Garden/AppointmentManage/edit',array('aid'=>$v['aid']))}" target="_blank">编辑</td>
 							</tr>
