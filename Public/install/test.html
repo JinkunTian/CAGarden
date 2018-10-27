@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./css/install.css">
 <script>
 function testClick(){
-    if($('.yes').length!=7){
+    if($('.yes').length!=6){
         alert('您的配置或权限不符合要求');
     }else{
         location.href='./index.php?c=create';
@@ -107,7 +107,7 @@ function testClick(){
                         <?php if (is_writable('../../Public/Uploads')): ?>
                             可写
                         <?php else: ?>
-                            不可写
+                            不可写，请检查"./Public/Uploads/"目录是否存在并权限为可写。
                         <?php endif ?>
                     </td>
                     <td class="<?php if(is_writable('../../Public/Uploads'))echo 'yes'; ?>">
@@ -119,17 +119,17 @@ function testClick(){
                     </td>
                 </tr>
                 <tr>
-                    <td>./APP/Home/Runtime</td>
+                    <td>./APP</td>
                     <td>可写</td>
                     <td>
-                        <?php if (is_writable('../../APP/Runtime')): ?>
+                        <?php if (is_writable('../../APP')): ?>
                             可写
                         <?php else: ?>
                             不可写
                         <?php endif ?>
                     </td>
-                    <td class="<?php if(is_writable('../../APP/Runtime'))echo 'yes'; ?>">
-                        <?php if (is_writable('../../APP/Runtime')): ?>
+                    <td class="<?php if(is_writable('../../APP'))echo 'yes'; ?>">
+                        <?php if (is_writable('../../APP')): ?>
                             √
                         <?php else: ?>
                             ×
@@ -154,24 +154,6 @@ function testClick(){
                         <?php endif ?>
                     </td>
                 </tr>
-                <tr>
-                    <td>./APP/Common/Conf</td>
-                    <td>可写</td>
-                    <td>
-                        <?php if (is_writable('../../APP/Common/Conf')): ?>
-                            可写
-                        <?php else: ?>
-                            不可写
-                        <?php endif ?>
-                    </td>
-                    <td class="<?php if(is_writable('../../APP/Common/Conf'))echo 'yes'; ?>">
-                        <?php if (is_writable('../../APP/Common/Conf')): ?>
-                            √
-                        <?php else: ?>
-                            ×
-                        <?php endif ?>
-                    </td>
-                </tr>
             </table>
             <p class="agree">
                 <a class="btn btn-primary" href="./index.php?c=agreement">上一步</a>
@@ -183,3 +165,4 @@ function testClick(){
 
 </body>
 </html>
+

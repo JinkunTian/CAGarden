@@ -1,3 +1,5 @@
+
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -18,7 +20,7 @@ CREATE TABLE `pt_appointment` (
   `status` int(1) NOT NULL COMMENT '预约状态',
   `result` text NOT NULL COMMENT '维修结果',
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算机协会义修记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修记录表';
 
 -- ----------------------------
 -- Table structure for pt_appointment_comment
@@ -32,7 +34,7 @@ CREATE TABLE `pt_appointment_comment` (
   `addtime` datetime NOT NULL COMMENT '创建时间',
   `fixer_id` int(10) NOT NULL COMMENT '对应维修用户ID',
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
 
 -- ----------------------------
 -- Table structure for pt_appointment_users
@@ -49,13 +51,25 @@ CREATE TABLE `pt_appointment_users` (
   `qq` varchar(15) NOT NULL COMMENT 'qq号码',
   `email` varchar(255) NOT NULL COMMENT '电子邮箱',
   `mobile` varchar(11) NOT NULL COMMENT '电话',
-  `reg_ip` varchar(64) NOT NULL COMMENT '注册ip',
-  `addtime` datetime NOT NULL COMMENT '注册时间',
+  `reg_ip` varchar(64) NOT NULL COMMENT '注册ip，兼容ipv6但未测试',
+  `addtime` datetime NOT NULL,
   `last_ip` varchar(64) NOT NULL,
   `last_login` datetime NOT NULL,
   PRIMARY KEY (`guest_id`),
   UNIQUE KEY `number` (`number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计算机协会义修用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修用户表';
+
+-- ----------------------------
+-- Table structure for pt_common_count
+-- ----------------------------
+DROP TABLE IF EXISTS `pt_common_count`;
+CREATE TABLE `pt_common_count` (
+  `site_id` int(11) NOT NULL,
+  `visit_count` int(11) NOT NULL COMMENT '访问量',
+  `fix_count` int(11) NOT NULL COMMENT '维修量',
+  `members_count` int(11) NOT NULL COMMENT '成员量',
+  `comment_count` int(11) NOT NULL COMMENT '总评论量'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_common_departments
@@ -81,6 +95,7 @@ INSERT INTO `pt_common_departments` VALUES ('5', '办公室', '', '', '1');
 INSERT INTO `pt_common_departments` VALUES ('6', '主席团', '', '', '2');
 INSERT INTO `pt_common_departments` VALUES ('7', '已退会', '', '', '4');
 INSERT INTO `pt_common_departments` VALUES ('8', '老干部', '', '', '6');
+
 
 -- ----------------------------
 -- Table structure for pt_common_majors
@@ -123,6 +138,9 @@ INSERT INTO `pt_common_majors` VALUES ('23', '市场营销', '经济管理学院
 INSERT INTO `pt_common_majors` VALUES ('24', '人力资源管理', '经济管理学院', '1');
 INSERT INTO `pt_common_majors` VALUES ('25', '国际经济与贸易', '经济管理学院', '1');
 INSERT INTO `pt_common_majors` VALUES ('26', '法学', '人文学院·基础部', '1');
+INSERT INTO `pt_common_majors` VALUES ('29', '其他', '', '1');
+INSERT INTO `pt_common_majors` VALUES ('30', '教师', '', '1');
+INSERT INTO `pt_common_majors` VALUES ('31', '数据科学与大数据技术', '电气信息学院', '1');
 
 -- ----------------------------
 -- Table structure for pt_garden_blackboard
@@ -304,6 +322,18 @@ CREATE TABLE `pt_garden_users` (
 INSERT INTO `pt_garden_users` VALUES ('1', 'admin', 'admin', 'd74a1e9c94e0cdf5839216b41bfaa8eb', '20c0425278b2892c6a30550905b5432f', '/images/img.jpg', '2018-08-22 16:21:52', '192.168.16.8', '2018-05-12 14:28:04', '10.2.24.167', '2961165914', '13088886666', 'admin@domain.com', '1', '3', '部长', '一二三四五，上山打老虎！', '2', '1');
 
 -- ----------------------------
+-- Table structure for pt_index_feedback
+-- ----------------------------
+DROP TABLE IF EXISTS `pt_index_feedback`;
+CREATE TABLE `pt_index_feedback` (
+  `fb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`fb_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for pt_recruit
 -- ----------------------------
 DROP TABLE IF EXISTS `pt_recruit`;
@@ -311,6 +341,7 @@ CREATE TABLE `pt_recruit` (
   `recruit_id` int(10) NOT NULL AUTO_INCREMENT,
   `number` int(10) NOT NULL COMMENT '学号',
   `truename` varchar(255) NOT NULL COMMENT '真实姓名',
+  `college` varchar(255) NOT NULL COMMENT '学院信息',
   `password` varchar(256) NOT NULL COMMENT '密码',
   `salt` varchar(256) NOT NULL COMMENT '盐值加密',
   `img` varchar(255) DEFAULT '/images/hi.png' COMMENT '照片',
@@ -318,6 +349,7 @@ CREATE TABLE `pt_recruit` (
   `mobile` varchar(20) NOT NULL,
   `email` varchar(255) NOT NULL,
   `major` varchar(255) NOT NULL COMMENT '专业',
+  `class` int(11) NOT NULL COMMENT '班级',
   `dep` int(11) NOT NULL COMMENT '部门',
   `flag` text NOT NULL COMMENT '签名',
   `github` varchar(255) NOT NULL,
@@ -353,5 +385,7 @@ CREATE TABLE `pt_recruit_grade` (
   `gname` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `year` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '2' COMMENT '纳新状态1开放报名/2禁止报名/3开放面试/4纳新结束',
   PRIMARY KEY (`gid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

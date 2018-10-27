@@ -1,4 +1,4 @@
 /Public/install/install.lock
 /APP/Common/Conf/config.php
-/Public/Uploads/
-/APP/Runtime/
+/Public/Uploads/*
+/APP/Runtime/*
