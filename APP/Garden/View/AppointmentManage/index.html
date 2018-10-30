@@ -27,9 +27,7 @@
 					<thead>
 						<tr>
 							<td>姓名</td>
-							<td>学号</td>
-							<td>电话</td>
-							<td>QQ</td>
+							<td>预约日期</td>
 							<td>电脑型号</td>
 							<td width="20%">故障信息</td>
 							<td>状态</td>
@@ -41,9 +39,7 @@
 						<foreach name="appointments" item="v">
 							<tr>
 								<td>{$v.guest_name}</td>
-								<td>{$v.guest_number}</td>
-								<td>{$v.guest_mobile}</td>
-								<td>{$v.guest_qq}</td>
+								<td>{:date_format(date_create($v['addtime']),'Y-m-d H:i')}</td>
 								<td>{$v.model}</td>
 								<td>{$v.issues}</td>
 								<td><switch name="v.status">

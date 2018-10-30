@@ -27,7 +27,7 @@ class AppointmentManageController extends CommonController {
         $show = $page->show();// 分页显示输出
         $limit = $page->firstRow.','.$page->listRows;
 
-        $appointments= D('AppointmentView')->order('type DESC')->limit($limit)->select();
+        $appointments= D('AppointmentView')->order('addtime DESC')->limit($limit)->select();
 
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('appointments',$appointments);

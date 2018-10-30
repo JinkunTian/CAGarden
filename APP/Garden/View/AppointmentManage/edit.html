@@ -117,19 +117,18 @@ function del(){
                     <form action="{:U('/Garden/Appointment/save')}" method="post">
                     <div class="xrz-input-box">
                         <label id="xrz-tit">姓名：{$appointment.guest_name}</label>
-                        <input type="hidden" name="guest_name" value="{$appointment.guest_name}" readonly="readonly" />
+                    </div>
+                    <div class="xrz-input-box">
+                        <label id="xrz-tit">学号：{$appointment.guest_number}</label>
                     </div>
                     <div class="xrz-input-box">
                         <label id="xrz-tit">电话：{$appointment.guest_mobile}</label>
-                        <input type="hidden" name="guest_mobile" value="{$appointment.guest_mobile}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box">
                         <label id="xrz-tit">QQ  ：{$appointment.guest_qq}</label>
-                        <input type="hidden" name="guest_qq" value="{$appointment.guest_qq}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box">
-                        <label id="xrz-tit">时间：{:date_format(date_create($v['addtime']),"Y-m-d H:i")}</label>
-                        <input type="hidden" name="addtime" value="{$appointment.addtime|date='Y-m-d H:i', ###}" readonly="readonly" />
+                        <label id="xrz-tit">时间：{:date_format(date_create($appointment['addtime']),"Y-m-d H:i")}</label>
                     </div>
                     <div class="xrz-input-box"> <!-- 项目状态 -->
                         <label id="xrz-tit" style="margin-right:-5px">状态：</label>
