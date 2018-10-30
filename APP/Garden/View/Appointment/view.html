@@ -82,28 +82,6 @@
                         <input type="submit" class="btn-box" id="submit-button" value="我来处理！"/>
                     </div>
                 </form>
-                <notempty name='appointment.fixer_name'>
-                    <h1>请给本次帮助你的{$appointment.fixer_name}同学一个评价</h1>
-                    <foreach name='comments' item='v' key='i'>
-                        <li>
-                            <div class="rzck-txt-box">
-                                <h2>{$v.guest_name}</h2>
-                                <p>{$v.comment}</p>
-                                <div align="right">
-                                        <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
-                                    <i class="fa fa-clock-o"></i>{$v.addtime|date='Y-m-d H:i', ###}
-                                </div>
-                            </div>
-                        </li>
-                    </foreach>
-                    <div class="msg-edit">
-                        <h3>添加评价</h3>
-                        <textarea name="content"  cols="20" wrap="hard" required></textarea>
-                        <input type="hidden" name="aid" value="{$appointment.aid}"/>
-                        <input type="hidden" name="fixer_id" value="{$appointment.fixer_id}"/>
-                        <input type="submit" class="msg-btn" id="AddAppointmentComBnt" id="submit-button" value="提&nbsp;&nbsp;交">
-                    </div>
-                </notempty>
         </div>
     </div>   
     <script src="__PUBLIC__/js/index.js"></script>
