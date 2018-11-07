@@ -11,5 +11,16 @@ class AdminController extends Controller {
         if(!isadmin(intval(session('id')))){
             $this->error('无权查看!');
         }
+	
+        $logs=array(
+        	'part'=>2,
+        	'truename'=>session('name'),
+        	'username'=>session('username'),
+        	'ip'=>get_client_ip(),
+        	'agent'=>$_SERVER["HTTP_USER_AGENT"],
+        	'url'=>$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
+        	'date' => date('y-m-d H:i:s'),
+        );
+        M('system_logs')->add($logs);
     }
 }

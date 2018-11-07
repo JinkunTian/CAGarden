@@ -8,7 +8,7 @@ GitHub: https://github.com/JinkunTian
 Date:2018-8-19 
 Description:社团电脑义诊预约管理（管理权限）控制器
 **************************************************/  
-class AppointmentManageController extends CommonController {
+class AppointmentManageController extends AdminController {
 
 	/**
 	 * index显示已预约的记录
