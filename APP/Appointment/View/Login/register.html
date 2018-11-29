@@ -15,7 +15,30 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
     <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
     <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
-
+    <script type='text/javascript'>
+      function check(){
+        $alertmobile="联系电话为11位。";
+        $alertqq="QQ最小为6位。";
+        $mobile = document.getElementById("mobile");
+        $qq = document.getElementById("QQ");
+        if($mobile.value.length <11 ){
+              alert($alertmobile);
+              $mobile.focus();
+              return false;
+         }
+        if($qq.value.length <6 ){
+              alert($alertqq);
+              $qq.focus();
+              return false;
+         }
+        
+      }
+      //验证邮箱是否合法
+function isEmail(strEmail) { var flag = strEmail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/);
+    if (flag == -1){ alert("邮箱格式不正确");
+    }
+                           }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -36,19 +59,22 @@
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td ><input style="width: auto; max-width: 260px;min-width: 20px;" type="text" name="truename" value="" placeholder="请输入真实姓名" required="required"/></td>
+                                    <td ><input onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"javascript:;
+onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u4E00-\u9FA5]/g,''))" maxlength="4" style="width: auto; max-width: 260px;min-width: 20px;" type="text" name="truename" value="" placeholder="请输入真实姓名" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
-                                    <td ><input  style="width: auto;max-width: 260px;min-width: 20px;" type="text" name="mobile" value="" placeholder="请输入联系电话" required="required"/></td>
+                                    <td ><input style="width: auto;max-width: 260px;min-width: 20px;" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
+onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" id="mobile" name="mobile" value="" placeholder="请输入联系电话" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">QQ：</td>
-                                    <td class="vip-input"><input style="width: auto;" type="text" name="qq" value="" placeholder="请输入联系QQ" required="required"/></td>
+                                    <td class="vip-input"><input style="width: auto;" maxlength="11" id="QQ" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeholder="请输入联系QQ" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">邮箱：</td>
-                                    <td class="vip-input"><input  style="width: auto;" type="text" name="email" value="" placeholder="请输找回密码邮箱" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: auto;" type="text" name="email" id="email" value="" placeholder="请输入找回密码邮箱" onblur="isEmail(this.value);" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">专业：</td>
@@ -82,7 +108,7 @@
                                 </tr>
                                 <tr></tr>
                                 <tr>
-                                    <td><input style="width: 100%" type="submit"  id="embed-submit" value="注册"></td>
+                                    <td><input style="width: 100%" type="submit" onclick="return check()" id="embed-submit" value="注册"></td>
                                 </tr>
                             </table>
                         </div>

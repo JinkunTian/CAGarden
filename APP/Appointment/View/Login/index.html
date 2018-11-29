@@ -10,6 +10,17 @@
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
 	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+  	<script language="javascript"> 
+      	function checkusername(){
+           $alerttxt1="学号或工号为8位。";
+           $username = document.getElementById("user");
+          if($username.value.length < 8){
+          		alert($alerttxt1);
+         		$username.focus();
+           	 return false;
+            }
+         }
+ </script>
 </head>
 <body>
 	<div class="login-content-box">
@@ -25,7 +36,8 @@
 						<span class="login-user-span">
 							<i class="fa fa-user"></i>
 						</span>
-					<input type="text" name="username" id="user" placeholder="请输入学号或工号" required>
+					<input type="text" name="username" id="user" maxlength="8" placeholder="请输入学号或工号" required>
+                      
 					</div>
 					<div class="login-user">
 						<span class="login-user-span">
@@ -41,12 +53,11 @@
 					</div>
                 </if>
 				<div class="login-btn-box">
-				<input type="submit" class="subpost" id="embed-submit" value="登&nbsp;&nbsp;录">
+				<input type="submit" class="subpost" onclick="return checkusername()" id="embed-submit" value="登&nbsp;&nbsp;录">
+                  
+
 				</div>
-
-				</form>
-
-			</div>
+                 </form>
 			<p class='login-p'><a href="https://blog.tianjintech.com">&copy; TianjinTech</a></p>
 		</div>
 	</div>

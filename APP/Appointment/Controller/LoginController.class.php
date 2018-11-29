@@ -59,9 +59,11 @@ class LoginController extends Controller {
             if($validate_response){
                 $username = I('username');
                 $pwd = I('password','','md5');
+              	if(strlen($username)<8 || strlen($username)>8){
+                 	$this->error('学号或工号为8位。');
+                }
                 $user = M('appointment_users')->where(array('number' => $username))->find();
                 if ($user) {
-
                     if($user['password'] != md5($user['salt'].$pwd)){
                         $this->error('帐号或者密码错误');
                     }else{
@@ -85,7 +87,7 @@ class LoginController extends Controller {
                     
                 }else{
                     //用户不存在，引导用户前去注册
-                    $this->redirect('/Appointment/Login/register',array('number'=>$username));
+                      $this->redirect('/Appointment/Login/register',array('number'=>$username));
                 }
             }else{
                 $this->error('验证码错误');
