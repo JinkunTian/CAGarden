@@ -175,7 +175,7 @@ class RecruitController extends AdminController {
      * listRecruit列出某个纳新年度的成员信息列表
      * grade指定纳新年度，缺省为最新纳新年度
      */
-    public function listRecruit(){
+    public function listrecruit(){
 
         if(isset($_GET['grade'])){
             $grade=I('grade');

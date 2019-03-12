@@ -102,7 +102,7 @@ function userfill(thisValue) {
      }
 }
 function del(){
-    if(confirm("确定要删除吗？该操作会删除本项目以及所有子项目！")){
+    if(confirm("确定要删除吗？")){
         return true;
     }else{
         return false;
@@ -114,7 +114,7 @@ function del(){
         <div class="cgx-txt">
                 <h1>编辑维修记录</h1>
                 <div class="xrz-box">
-                    <form action="{:U('/Garden/Appointment/save')}" method="post">
+                    <form action="{:U('/Garden/appointmentmanage/save')}" method="post">
                     <div class="xrz-input-box">
                         <label id="xrz-tit">姓名：{$appointment.guest_name}</label>
                     </div>
@@ -184,7 +184,7 @@ function del(){
                     <if condition="$appointment['status'] eq '4'">
                         <div class="blog-text txt-srk">
                             <label id="xrz-tit">其他操作:</label>
-                            <i class='fa fa-trash'></i><a href="{:U('/Garden/Appointment/del',array('aid' => $appointment['aid']))}" onclick='return del();'>删除记录</a>
+                            <i class='fa fa-trash'></i><a href="{:U('/Garden/Appointmentmanage/del',array('aid' => $appointment['aid']))}" onclick='return del();'>删除记录</a>
                         </div>
                     </if>
 

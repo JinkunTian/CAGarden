@@ -124,4 +124,15 @@ class AppointmentManageController extends AdminController {
             $this->error('记录不存');            
         }
 	}
+  
+  	/**
+     * del方法删除预约记录
+     */
+    public function del(){
+        if(M('appointment')->where(array('aid'=>I('aid')))->delete()){
+            $this->success('删除成功！',U('/Garden/Appointmentmanage'));
+        }else{
+            $this->error('删除失败，目标记录不存在！',U('/Garden/Appointmentmanage'));
+        }
+    }
 }
