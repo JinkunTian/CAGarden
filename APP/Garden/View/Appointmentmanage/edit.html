@@ -180,7 +180,10 @@ function del(){
                             </if>
                         </if>
                     </notempty>
-
+					<div class="blog-text txt-srk">
+                		<label id="xrz-tit">其他操作:</label>
+                        <a href="{:U('/Garden/Appointmentmanage/print_info',array('aid' => $appointment['aid']))}" target="_blank">打印</a>
+                    </div>
                     <if condition="$appointment['status'] eq '4'">
                         <div class="blog-text txt-srk">
                             <label id="xrz-tit">其他操作:</label>

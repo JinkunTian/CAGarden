@@ -60,6 +60,7 @@ class IndexController extends CommonController {
         $data = array(
             'guest_id' =>$guest_id,
             'issues' =>I('issues'),
+            'brand' =>I('brand'),
             'model' =>I('model'),
             'addtime' => date('y-m-d H:i:s'),
             'edittime' => date('y-m-d H:i:s'),

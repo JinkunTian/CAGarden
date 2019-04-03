@@ -125,7 +125,47 @@ class AppointmentManageController extends AdminController {
         }
 	}
   
-  	/**
+     /**
+	 * print打印预约信息
+	 */
+	public function print_info()
+	{
+		if(isset($_GET['aid'])){
+
+			$aid=I('aid');
+
+	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid))->find()){
+
+                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
+
+                $shift_count=0;
+              $shift[0]['truename']='';
+              $shift[1]['truename']='';
+              $shift[2]['truename']='';
+              $shift[3]['truename']='';
+                for ($i=4; $i > 1; $i--) { 
+
+                    if($appointment['fixer'.$i.'_id']){
+                        $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
+                    }else{
+		    }
+                }
+		$shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer_id']))->find();
+                $this->assign('shift_3',$shift[3]);
+                $this->assign('shift_2',$shift[2]);
+                $this->assign('shift_1',$shift[1]);
+                $this->assign('shift_0',$shift[0]);
+                $this->assign('appoint',$appointment);
+            }else{
+                $this->error('记录不存在或着你不能编辑别人的记录');
+            }        
+		}else{
+			$this->error('参数错误');
+		}
+        $this->display();
+	}
+
+  /**
      * del方法删除预约记录
      */
     public function del(){
