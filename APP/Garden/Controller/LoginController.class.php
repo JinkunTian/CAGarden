@@ -46,7 +46,7 @@ class LoginController extends Controller {
         if ($validate_response) {
             $username = I('username');
             $pwd = I('password','','md5');
-            $user = M('garden_users')->where(array('username' => $username))->find();
+            $user = M('garden_users')->where(array('username' => $username,'status'=>1))->find();
             if (!$user || $user['password'] != md5($user['salt'].$pwd)) {
                 $this->error('帐号或者密码错误');
             };

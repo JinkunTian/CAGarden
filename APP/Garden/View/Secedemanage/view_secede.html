@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>退会申请信息 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+            <h1 class="center-h1"><i class="fa fa-user"></i>退会申请信息</h1>
+            <div class="recruit-content">
+                <form action="{:U('/Garden/Secedemanage/accept_secede')}"  enctype="multipart/form-data" method="post">
+                    <div class="vip-txt-box">
+                        <table>
+                            <tr>
+                                <td class="vip-title">学号：</td>
+                                <td class="vip-input">{$user.username}</td>
+                                <input type="hidden" name="uid" value="{$user.uid}"/>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">姓名：</td>
+                                <td class="vip-input">{$user.truename}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">权限：</td>
+                                <td class="vip-input">
+                                    <if condition="$user['type'] eq '2' ">
+                                        管理员
+                                    <else />
+                                        用户
+                                    </if>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">电话：</td>
+                                <td class="vip-input">{$user.mobile}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">QQ：</td>
+                                <td class="vip-input">{$user.qq}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">邮箱：</td>
+                                <td class="vip-input">{$user.email}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">专业：</td>
+                                <td class="vip-input">{$user.mname}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">部门：</td>
+                                <td class="vip-input">{$user.dname}</td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title">职位：</td>
+                                <td class="vip-input">{$user.position}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="vip-img-box">
+                        <span class="vip-img">
+                            <img src="__PUBLIC__{$user.img}" alt="">
+                        </span>
+                    </div>
+                    <div class="vip-text">
+                        <table>
+                            <tr>
+                                <td class="vip-title">退会原因：</td>
+                                <td class="vip-input">{$user.secede_info}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <if condition="$user['status'] eq '1' ">
+                                    <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="同&nbsp;&nbsp;意"></td>
+                                <else />
+                                    <td></td>
+                                </if>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

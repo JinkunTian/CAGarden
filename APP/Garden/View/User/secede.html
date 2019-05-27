@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>申请退出协会 - {:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+    <div class="container">
+        <include file='Common:header'/>
+        <div class="vip-main cgx-txt">
+            <h1 class="center-h1"><i class="fa fa-user"></i>申请退出协会</h1>
+            <div class="vip-content">
+                <notempty name="user_data">
+                    <form action="{:U('/Garden/User/secede_post')}"  enctype="multipart/form-data" method="post">
+                        <div class="vip-txt-box">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">学号：</td>
+                                    <td class="vip-input">{$user_data.username}</td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">姓名：</td>
+                                    <td class="vip-input">{$user_data.truename}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="vip-text">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">退出原因：</td>
+                                    <td class="vip-input"><textarea name="secede_info" required></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <input type="hidden" name="uid" value="{$user_data.uid}"/>
+                                    <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                <else />
+                    你已经提交了申请，正在审核中
+                </notempty>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

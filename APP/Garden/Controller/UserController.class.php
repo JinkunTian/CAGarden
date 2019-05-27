@@ -14,7 +14,36 @@ class UserController extends CommonController {
 
         $this->display();
     }
+    /**
+     * 显示退会页面
+     */
+    public function secede(){
+        $id = (int)session('id');
+        if(!(M('garden_secede')->where(array('uid'=>$id))->find())){
+          $this->user_data = D('UserView')->where(array('uid'=>$id))->find();
+        }
+        $this->display();
+    }
+    /**
+     * 退会提交处理
+     */
+    public function secede_post(){
+      $id = (int)session('id');
 
+      if(M('garden_secede')->where(array('uid'=>$id))->find()){
+        $this->error('你已经提交过退会申请了！');
+      }elseif($user=M('garden_users')->where(array('uid'=>$id,'status'=>1))->find()){
+        $secede_info=array('uid'=>$id,
+              'username'=>$user['username'],
+              'truename'=>$user['truename'],
+              'secede_info'=>I('secede_info'),
+              'addtime'=>date('y-m-d H:i:s'));
+        M('garden_secede')->add($secede_info);
+        $this->success('退会申请提交成功！',U('/Garden/User/secede?random='.rand()));
+      }else{
+        die('503 非法输入');
+      }
+    }
     /**
      * 保存用户编辑的个人信息
      */
