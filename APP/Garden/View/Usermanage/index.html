@@ -6,7 +6,7 @@
 	<meta content="yes" name="apple-mobile-web-app-capable" />
 	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
 	<meta content="telephone=no" name="format-detection" />
-	<title>用户管理 - {:C('SITE_NAME')}后花园</title>
+	<title>用户管理-{$dep_name}{:C('SITE_NAME')}后花园</title>
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
 	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
 	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
@@ -21,12 +21,20 @@
 	<include file='Common:header'/>
 		<div id="info"></div>
 		<div class="cgx-txt">
-			<h1 ><i class="fa fa-users"></i>所有用户<span class="sha-add"><a href="{:U('/Garden/UserManage/adduser')}" title="添加用户" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+			<h1 ><i class="fa fa-users"></i>{$dep_name}用户列表<span class="sha-add"><a href="{:U('/Garden/UserManage/adduser')}" title="添加用户" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+			<div class="blog-user">
+				<foreach name='departments' item='v'>
+	                <span  class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>$v['did']))}" target="_self"><i class="fa fa-user" style="color:white"></i>{$v.dname}</a></span>
+	            </foreach>
+	            <span  class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'all'))}" target="_self"><i class="fa fa-user" style="color:white"></i>所有用户</a></span>
+	        </div>
+	        <br>
 			<div class="xrz-box">
 				<table width="100%" class="edit-project-user td">
 					<thead>
 						<tr>
 							<td>姓名</td>
+							<td>状态</td>
 							<td>权限</td>
 							<td>用户名/工号</td>
 							<td>电话</td>
@@ -40,6 +48,11 @@
 						<foreach name="users" item="v">
 							<tr>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.truename}</a></td>
+								<eq name="v.status" value="1">
+									<td>正常</td>
+								<else />
+									<td><font color="red">退会</font></td>
+								</eq>
 								<td>{$v.type}</td>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.username}</a></td>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.mobile}</a></td>

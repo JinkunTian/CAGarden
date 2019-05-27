@@ -17,12 +17,19 @@ class UserManageController extends AdminController {
 
         if(I('dep')){
             if(I('dep')=='all'){
-                $dep_select=array('status'=>'1');
+                $dep_select=array();
+                $dep_name='全部';
             }else{
-                $dep_select=array('status'=>'1','dep'=>I('dep'));
+                if($dep=M('common_departments')->where(array('did'=>I('dep')))->find()){
+                    $dep_name=$dep['dname'].'-';
+                    $dep_select=array('status'=>'1','dep'=>I('dep'));
+                }else{
+                    die('503 非法输入');
+                }
             }
         }else{
-            $dep_select=array('status'=>'1');            
+            $dep_select=array('status'=>'1');
+            $dep_name='';           
         }
         $count = M('garden_users')->where($dep_select)->count();//正常状态的用户
         $page = new \Think\Page($count,200);
@@ -49,8 +56,12 @@ class UserManageController extends AdminController {
                 }
             }
         }
+
+        $departments=M('common_departments')->select();
+        $this->assign('departments',$departments);
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('users',$users);
+        $this->assign('dep_name',$dep_name);
         $this->display();
     }
 
