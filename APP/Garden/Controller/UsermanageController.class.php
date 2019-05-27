@@ -19,6 +19,9 @@ class UserManageController extends AdminController {
             if(I('dep')=='all'){
                 $dep_select=array();
                 $dep_name='全部';
+            }elseif(I('dep')=='secede'){
+                $dep_name='已退会-';
+                $dep_select=array('status'=>'0');
             }else{
                 if($dep=M('common_departments')->where(array('did'=>I('dep')))->find()){
                     $dep_name=$dep['dname'].'-';

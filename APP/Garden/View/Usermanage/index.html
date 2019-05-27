@@ -26,7 +26,8 @@
 				<foreach name='departments' item='v'>
 	                <span  class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>$v['did']))}" target="_self"><i class="fa fa-user" style="color:white"></i>{$v.dname}</a></span>
 	            </foreach>
-	            <span  class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'all'))}" target="_self"><i class="fa fa-user" style="color:white"></i>所有用户</a></span>
+	            <span class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'secede'))}" target="_self"><i class="fa fa-user" style="color:white"></i>已退会</a></span>
+	            <span class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'all'))}" target="_self"><i class="fa fa-user" style="color:white"></i>所有用户</a></span>
 	        </div>
 	        <br>
 			<div class="xrz-box">
