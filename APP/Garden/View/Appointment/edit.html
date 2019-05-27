@@ -128,7 +128,7 @@ function del(){
                         <input type="hidden" name="guest_qq" value="{$appointment.guest_qq}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box">
-                        <label id="xrz-tit">时间：{:date_format(date_create($v['addtime']),"Y-m-d H:i")}</label>
+                        <label id="xrz-tit">时间：{:date_format(date_create($appointment['addtime']),"Y-m-d H:i")}</label>
                         <input type="hidden" name="addtime" value="{$appointment.addtime|date='Y-m-d H:i', ###}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box"> <!-- 项目状态 -->
