@@ -93,9 +93,9 @@ class IndexController extends CommonController {
         $this->assign('sub_projects',$list);
         $this->assign('pr_p_info',$pr_p_info);
         if($pr_id==1){$this->assign('isroot',true);}//根项目
-        $password = D('PublicPasswordView')->where(array('pw_prid'=>$pr_id,'status'=>'1'))->select(); //查询项目密码信息
-        $len=count($password, 0);
-        if($len){
+        $password = D('PublicPasswordView')->where(array('pw_prid'=>$pr_id,'status'=>'1'))->select(); //查询项目密码信息        
+        if($password){
+            $len=count($password, 0);
             for($i=0;$i<$len;$i++)
             {
                 $musers=explode_members($password[$i]['pw_muser']);
