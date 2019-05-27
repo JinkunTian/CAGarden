@@ -31,6 +31,7 @@
 							<td>电脑型号</td>
 							<td width="20%">故障信息</td>
 							<td>状态</td>
+                            <td>奖励</td>
 							<td>维修</td>
 							<td>操作</td>
 						</tr>
@@ -48,6 +49,15 @@
 										<case value="3">已处理</case>
 										<case value="4">已取消</case>
 									</switch></td>
+                              <if condition="$v.status eq 3">
+                                  <if condition="$v.reward eq '未奖励'">
+                                      <td><a href="{:U('/Garden/AppointmentManage/add_reward',array('aid'=>$v['aid']))}">点击奖励</td>
+                                        <else/>
+                                    <td>{$v.reward}</td>
+                                </if>
+                                <else/>
+                                <td></td>
+                              </if>
 								<td>{$v.fixer_name}</td>
 								<td><a href="{:U('/Garden/AppointmentManage/edit',array('aid'=>$v['aid']))}" target="_blank">编辑</td>
 							</tr>

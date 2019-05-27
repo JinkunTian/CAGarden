@@ -147,10 +147,9 @@ class AppointmentManageController extends AdminController {
 
                     if($appointment['fixer'.$i.'_id']){
                         $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
-                    }else{
-		    }
+                    }	
                 }
-		$shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer_id']))->find();
+				$shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer_id']))->find();
                 $this->assign('shift_3',$shift[3]);
                 $this->assign('shift_2',$shift[2]);
                 $this->assign('shift_1',$shift[1]);
@@ -165,7 +164,32 @@ class AppointmentManageController extends AdminController {
         $this->display();
 	}
 
-  /**
+	/**
+	 * reward 统计奖励信息
+	 */
+	public function add_reward()
+	{
+		$aid=I('aid');
+		if($add_info=D('AppointmentView')->where(array('aid'=>$aid,'reward'=>'未奖励'))->find()){
+          $user=M('garden_users')->where(array('uid'=>$add_info['fixer_id']))->find();
+			$add_reward_info=array(
+              'user_id'=>$add_info['fixer_id'],
+              'truename'=>$add_info['fixer_name'],
+              'before_add'=>(int)$user['reward_sum'],
+              'reward_count'=>1,
+              'after_add'=>((int)$user['reward_sum']+1),
+              'reward_reason'=>'义诊奖励，维修['.$add_info['guest_name'].']的电脑[AID'.$add_info['aid'].']',
+              'datetime'=>date('y-m-d H:i:s'));
+			M('garden_reward_log')->add($add_reward_info);
+          	$data=array('uid'=>$add_info['fixer_id'],'reward_sum'=>($user['reward_sum']+1));
+          	M('garden_users')->where(array('uid'=>$add_info['fixer_id']))->save($data);
+			M('appointment')->where(array('aid'=>$aid))->save(array('aid'=>$aid,'reward'=>'已奖励'));
+			$this->success('成功！');
+		}else{
+			$this->error('失败！');
+		}
+	}
+  	/**
      * del方法删除预约记录
      */
     public function del(){
