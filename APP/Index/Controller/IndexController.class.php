@@ -13,7 +13,7 @@ class IndexController extends Controller {
       	$common_count['fix_count']=$base_count['fix_count']+M('appointment')->where(array('status'=>3))->count();
       	$common_count['visit_count']=$base_count['visit_count'];    
       
-		$best=M('garden_users')->order('rand()')->limit(3)->select();
+		$best=M('garden_users')->where(array('status'=>1))->order('rand()')->limit(3)->select();
 		//$best=M('garden_users')->order('last_login desc')->limit(3)->select();
       
 		$this->assign('best',$best);
