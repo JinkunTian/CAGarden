@@ -53,8 +53,8 @@ class SecedemanageController extends AdminController {
     public function accept_secede(){
         $id =intval(I('uid'));
         if($user= D('SecedeView')->where(array('uid'=>$id))->find()){
-            M('garden_secede')->where(array('uid'=>$id))->save(array('status'=>2,'status_info'=>'正常退会'));
-            M('garden_users')->where(array('uid'=>$id))->save(array('status'=>0));
+            M('garden_secede')->where(array('uid'=>$id))->save(array('status'=>2));
+            M('garden_users')->where(array('uid'=>$id))->save(array('status'=>0,'status_info'=>'正常退会'));
             $this->success('已批准'.$user['truename'].'的退会申请',U('/Garden/Secedemanage'));
         }else{
             die('503 非法输入');
