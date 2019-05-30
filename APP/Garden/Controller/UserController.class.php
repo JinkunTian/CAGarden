@@ -45,6 +45,36 @@ class UserController extends CommonController {
       }
     }
     /**
+     * 显示留会页面
+     */
+    public function succeed(){
+        $id = (int)session('id');
+        if(!(M('garden_succeed')->where(array('uid'=>$id))->find())){
+          $this->user_data = D('UserView')->where(array('uid'=>$id))->find();
+        }
+        $this->display();
+    }
+    /**
+     * 留会提交处理
+     */
+    public function succeed_post(){
+      $id = (int)session('id');
+
+      if(M('garden_secede')->where(array('uid'=>$id))->find()){
+        $this->error('你已经提交过留会申请了！');
+      }elseif($user=M('garden_users')->where(array('uid'=>$id,'status'=>1))->find()){
+        $secede_info=array('uid'=>$id,
+              'username'=>$user['username'],
+              'truename'=>$user['truename'],
+              'succeed_info'=>I('succeed_info'),
+              'addtime'=>date('y-m-d H:i:s'));
+        M('garden_succeed')->add($secede_info);
+        $this->success('留会申请提交成功！',U('/Garden/User/succeed?random='.rand()));
+      }else{
+        die('503 非法输入');
+      }
+    }
+    /**
      * 保存用户编辑的个人信息
      */
     public function datapost(){
