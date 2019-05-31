@@ -119,7 +119,7 @@ class RecruitController extends AdminController {
                 'dep' =>  I('dep'),
                 'flag' => $recruit['flag'],
                 'status' => '1',
-		'status_info'='正常在任',
+		'status_info'=>'正常在任',
                 'type' => '1',
                 );
             /***    社团管理网站基于ProjectTree搭建，将新成员信息添加到ProjectTree数据库user表  ***/
