@@ -1,5 +1,5 @@
 #  CAGarden
->Author：田津坤(tianjinkun@spyder.link)
+>Author：田津坤(tianjinkun@spyder.link)  
 >重庆大学城市科技学院	2018年8月  
 
 CAGarden是根据ProjectTree开发出来的一个专门用于计算机协会日常使用的网站程序，除了基于ProjectTree的日常项目管理外，添加了社团纳新、人员入会退会管理、计算机义修在线预约、积分排行、物资管理等社团常用功能。
