@@ -26,6 +26,7 @@
 				<foreach name='departments' item='v'>
 	                <span  class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>$v['did']))}" target="_self"><i class="fa fa-user" style="color:white"></i>{$v.dname}</a></span>
 	            </foreach>
+	            <span class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'retire'))}" target="_self"><i class="fa fa-user" style="color:white"></i>卸任干部</a></span>
 	            <span class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'secede'))}" target="_self"><i class="fa fa-user" style="color:white"></i>已退会</a></span>
 	            <span class="randcolor"><a href="{:U('/Garden/usermanage/index',array('dep'=>'all'))}" target="_self"><i class="fa fa-user" style="color:white"></i>所有用户</a></span>
 	        </div>
@@ -49,11 +50,13 @@
 						<foreach name="users" item="v">
 							<tr>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.truename}</a></td>
-								<eq name="v.status" value="1">
+								<if condition="($v.status eq 1)">
 									<td>正常</td>
+								<elseif condition="($v.status eq 3)" />
+									<td><font color="blue">卸任</font></td>
 								<else />
 									<td><font color="red">退会</font></td>
-								</eq>
+								</if>
 								<td>{$v.type}</td>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.username}</a></td>
 								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.mobile}</a></td>

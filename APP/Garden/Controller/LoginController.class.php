@@ -46,7 +46,9 @@ class LoginController extends Controller {
         if ($validate_response) {
             $username = I('username');
             $pwd = I('password','','md5');
-            $user = M('garden_users')->where(array('username' => $username,'status'=>1))->find();
+            $map['username']=array('eq',$username);
+            $map['status']=array('gt',0);
+            $user = M('garden_users')->where($map)->find();
             if (!$user || $user['password'] != md5($user['salt'].$pwd)) {
                 $this->error('帐号或者密码错误');
             };
@@ -58,12 +60,16 @@ class LoginController extends Controller {
             M('garden_users')->save($data);
 
             session_unset();
-            // session_destroy();
 
             session('id',$user['uid']);
             session('username',$user['username']);
             session('6c440f695619e361040767ac9f6fb619',true);//防止跨站
-            session('admin',$user['type']);
+            if($user['status']==1){
+            	session('admin',$user['type']);
+            }else{
+            	session('admin',1);
+            }
+            
             session('name',$user['truename']);
 
             $this->redirect('/Garden/Index');

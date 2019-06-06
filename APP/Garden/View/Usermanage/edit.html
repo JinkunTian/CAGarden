@@ -99,6 +99,13 @@
                                     <td class="vip-input">
 										<input type="text" name="password_{$random}" value="" placeholder="留空则不修改密码" />
 									</td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">操作：</td>
+                                    <td class="vip-input">
+                                        <a href="{:U('/garden/usermanage/retireuser',array('uid'=>$v['uid']))}">标记为干部卸任</a>
+                                        <a href="{:U('/garden/usermanage/reneging_post',array('uid'=>$v['uid']))}">标记为中途退回</a>
+                                    </td>
                                 </tr> 
                             </table>
                         </div>
