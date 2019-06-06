@@ -22,6 +22,9 @@ class UserManageController extends AdminController {
             }elseif(I('dep')=='secede'){
                 $dep_name='已退会-';
                 $dep_select=array('status'=>'0');
+            }elseif(I('dep')=='retire'){
+                $dep_name='已卸任-';
+                $dep_select=array('status'=>'3');
             }else{
                 if($dep=M('common_departments')->where(array('did'=>I('dep')))->find()){
                     $dep_name=$dep['dname'].'-';
@@ -213,6 +216,33 @@ class UserManageController extends AdminController {
             }
         }else{
             $this->error('页面不存在');
+        }
+    }
+    /**
+     * retire方法将用户设置为干部卸任状态
+     */
+    public function retireuser(){
+        if($user=M('garden_users')->where(array('uid'=>I('uid')))->find()){
+            $user['status']=3;
+            $user['type']=1;//置为普通用户，撤销管理员权限
+            $user['status_info']='干部卸任';
+            M('garden_users')->where(array('uid'=>I('uid')))->save($user);
+            $this->success('已将'.$user['truename'].'标记为干部卸任！');
+        }else{
+            $this->error('输入非法，没有找到对应用户！');
+        }
+    }
+    /**
+     * reneging_post方法将用户设置为干部卸任状态
+     */
+    public function reneging_post(){
+        if($user=M('garden_users')->where(array('uid'=>I('uid')))->find()){
+            $user['status']=0;//退会用户状态为0，封号，不可再登陆后花园
+            $user['status_info']='中途退会';
+            M('garden_users')->where(array('uid'=>I('uid')))->save($user);
+            $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
+        }else{
+            $this->error('没有找到对应用户！');
         }
     }
 }
