@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ProjectTree安装程序</title>
+<title>CAGarden安装程序</title>
 <script type="text/javascript" src="./js/jquery-2.0.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="./css/bootstrap-theme.min.css">
@@ -15,7 +15,7 @@
 <body>
 <div id="nav">
     <div class="inside">
-        <p class="name">ProjectTree<span>安装向导</span></p>
+        <p class="name">CAGarden<span>安装向导</span></p>
         <ul class="schedule">
             <li class="number">1</li>
             <li class="word">使用协议</li>
@@ -68,12 +68,12 @@
                     <input class="form-control" type="text" name="DB_PREFIX" value="pt_">
                 </div>
                 <div class="one">
-                    <label class="control-label"> 加密密钥,请妥善保管！</label>
-                    <input class="form-control" type="text" name="PASSWORD_KEY" value="<?php echo md5(time()); ?>">
-                </div>
-                <div class="one">
                     <label class="control-label"> 站点名称</label>
                     <input class="form-control" type="text" name="SITE_NAME" value="计算机协会">
+                </div>
+                <div class="one">
+                    <label class="control-label"> 加密密钥,请妥善保管！</label>
+                    <input class="form-control" type="text" name="PASSWORD_KEY" value="<?php echo md5(time()); ?>">
                 </div>
                 <p class="agree">
                     <a class="btn btn-primary" href="./index.php?c=test">上一步</a>
