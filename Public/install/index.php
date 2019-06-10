@@ -72,7 +72,47 @@ return array(
     'DB_PWD'                =>  '{$data['DB_PWD']}',      // 密码
     'DB_PORT'               =>  '{$data['DB_PORT']}',     // 端口
     'DB_PREFIX'             =>  '{$data['DB_PREFIX']}',   // 数据库表前缀
+    
+    /**
+     * 站点名称
+     */
+    'SITE_NAME'             =>  '{$data['SITE_NAME']}',
+
+    /**
+     * 密码加密密钥
+     */
     'PASSWORD_KEY'			=>	'{$data['PASSWORD_KEY']}',
+
+    /**
+     * 默认模块为前台
+     */
+    'DEFAULT_MODULE'		=>	'Index',
+
+    /**
+      * URL重写，隐藏index.php,
+      * 请保证你的服务器支持伪静态
+      */ 
+    'URL_MODEL' => '2',
+
+    'SHOW_PAGE_TRACE' => false,  //开启调试模式
+
+    /**
+     * 允许/禁止在公告中评论
+     */
+    'ALLOW_BLACKBOARD_COMMENT'  =>false,
+
+    /**
+     * 最大头像上传大小
+     */
+    'MAX_PHOTO_POST_SIZE'	=> 4194304,
+
+    /**
+     * GEETEST极验滑动验证码
+     */
+    'ENABLE_GEETEST'        =>  false,
+    'CAPTCHA_ID'            =>  'YOUR_CAPTCHA_ID',
+    'PRIVATE_KEY'           =>  'YOUR_PRIVATE_KEY',
+    'ERROR_PAGE' =>'/Public/error.html',
 );
 php;
 
