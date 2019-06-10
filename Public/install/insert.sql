@@ -39,4 +39,9 @@ INSERT INTO `pt_garden_projects` VALUES ('1', '0', '', '计算机协会', '2018-
 -- ----------------------------
 -- Records of pt_garden_users
 -- ----------------------------
-INSERT INTO `pt_garden_users` VALUES ('1', 'admin', 'admin', 'd74a1e9c94e0cdf5839216b41bfaa8eb', '20c0425278b2892c6a30550905b5432f', '/images/img.jpg', '2018-08-22 16:21:52', '192.168.16.8', '2018-05-12 14:28:04', '10.2.24.167', '2961165914', '13088886666', 'admin@domain.com', '1', '3', '部长', '一二三四五，上山打老虎！', '2', '1');
+INSERT INTO `pt_garden_users` VALUES ('1', 'admin', 'admin', 'd74a1e9c94e0cdf5839216b41bfaa8eb', '20c0425278b2892c6a30550905b5432f', '/images/img.jpg', '2018-08-22 16:21:52', '192.168.16.8','2018-05-12 14:28:04', '10.2.24.167', '2961165914', '13088886666', 'admin@domain.com','1', '3', '部长', '一二三四五，上山打老虎！', '2', '1','1', NULL);
+
+-- ----------------------------
+-- Records of pt_common_count
+-- ----------------------------
+INSERT INTO `pt_common_count` VALUES ('1', '0', '0', '0', '0');
