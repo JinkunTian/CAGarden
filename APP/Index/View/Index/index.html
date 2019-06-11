@@ -106,7 +106,7 @@
 						<div class="owl-portfolio owl-carousel">
 							<foreach name='association_news' item='v' key='i'>
 								<div class="item">
-									<div class="owl-portfolio-item"><img src="{$v.picture}" class="img-responsive" alt="新闻图片"></div>
+									<div class="owl-portfolio-item" style="width:400px;height:300px"><img src="{$v.picture}" class="img-responsive" style="width:100%;height:100%" alt="新闻图片"></div>
 								</div>
 							</foreach>
 						</div>
@@ -196,8 +196,8 @@
 					<foreach name='best' item='v' key='i'>
 						<div class="col-md-4">
 							<div class="team-item">
-								<div class="team-image" >
-									<img width=100% height=100% src="__PUBLIC__{$v.img}" class="img-responsive" alt="成员照骗">
+								<div class="team-image" style="width:360px;height:480px">
+									<img style="width:100%;height:100%" src="__PUBLIC__{$v.img}" class="img-responsive" alt="成员照骗">
 								</div>
 								<div class="team-text">
 									<h3>{$v.truename}</h3>
