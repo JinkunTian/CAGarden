@@ -42,6 +42,40 @@ INSERT INTO `pt_garden_projects` VALUES ('1', '0', '', '计算机协会', '2018-
 INSERT INTO `pt_garden_users` VALUES ('1', 'admin', 'admin', 'd74a1e9c94e0cdf5839216b41bfaa8eb', '20c0425278b2892c6a30550905b5432f', '/images/img.jpg', '2018-08-22 16:21:52', '192.168.16.8','2018-05-12 14:28:04', '10.2.24.167', '2961165914', '13088886666', 'admin@domain.com','1', '3', '部长', '一二三四五，上山打老虎！', '2', '1','1', NULL);
 
 -- ----------------------------
--- Records of pt_common_count
+-- Records of pt_index_config
 -- ----------------------------
-INSERT INTO `pt_common_count` VALUES ('1', '0', '0', '0', '0');
+INSERT INTO `pt_index_config` VALUES ('1', 'association_slogan', '首页大图标语', null, '城科最有实力的计算机交流社团', null, null);
+INSERT INTO `pt_index_config` VALUES ('2', 'main_button', '首页大图主按钮功能', null, '网上预约', '/Appointment', null);
+INSERT INTO `pt_index_config` VALUES ('3', 'association_info', '社团介绍', null, '现教中心计算机协会是由重庆大学城市科技学院在读全日制本科或专科生参与构成的全校性、非政治性的为学生提供计算机学习交流的社团组织，由重庆大学城市科技现代教育技术中心指导。是目前校内最权威、覆盖面最广、规模最大的学生计算机交流组织。', null, null);
+INSERT INTO `pt_index_config` VALUES ('4', 'major_activities', '社团主要活动', '0', '网站开发', '协会附有网站架设小组,<br/>\r\n职能为创建和维护协会相关网站.', null);
+INSERT INTO `pt_index_config` VALUES ('5', 'major_activities', '社团主要活动', '1', '电脑维修', '协会技术部提供电脑系统重装,<br/>\r\n常见故障排除及维护等服务.', null);
+INSERT INTO `pt_index_config` VALUES ('6', 'major_activities', '社团主要活动', '2', '软件安装', '协会提供常用软件安装服务,\r\n如:Office,Photoshop,AutoCAD.', null);
+INSERT INTO `pt_index_config` VALUES ('7', 'major_activities', '社团主要活动', '3', '想起来再写', null, null);
+INSERT INTO `pt_index_config` VALUES ('8', 'association_album', '首页相册', '0', '2017动员大会', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/14/20180414000242-87733834-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/4');
+INSERT INTO `pt_index_config` VALUES ('9', 'association_album', '首页相册', '1', '表情包大赛', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415170923-5843adce-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/3');
+INSERT INTO `pt_index_config` VALUES ('10', 'association_album', '首页相册', '2', '网络安全周', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171230-6b6e3c49-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/5');
+INSERT INTO `pt_index_config` VALUES ('11', 'association_album', '首页相册', '3', '电脑义诊', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171549-63b32513-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/2');
+INSERT INTO `pt_index_config` VALUES ('12', 'association_album', '首页相册', '4', '周末影院', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171429-7068c1f1-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/6');
+INSERT INTO `pt_index_config` VALUES ('13', 'association_album', '首页相册', '5', '电脑义诊', 'http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171548-60f3d0e6-me.jpg', 'http://photo.mecca.org.cn/index.php?/category/2');
+INSERT INTO `pt_index_config` VALUES ('14', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-1.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('15', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-3.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('16', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-4.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('17', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-5.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('18', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-6.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('19', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-7.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('20', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-8.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('21', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-9.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('22', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-10.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('23', 'partner_association', '兄弟社团', null, 'Public/Index/images/demo/partners-11.png', null, null);
+INSERT INTO `pt_index_config` VALUES ('24', '', '', null, '', null, null);
+INSERT INTO `pt_index_config` VALUES ('25', 'association_address', '协会办公地址', null, '图书馆407室', null, null);
+INSERT INTO `pt_index_config` VALUES ('26', 'contact_info', '联系方式', '0', 'https://jq.qq.com/?_wv=1027&k=5o26do6', 'QQ群1群：303770202', null);
+INSERT INTO `pt_index_config` VALUES ('27', 'contact_info', '联系方式', '1', 'https://jq.qq.com/?_wv=1027&k=5aaFyV9', 'QQ群2群：345966568', null);
+INSERT INTO `pt_index_config` VALUES ('28', 'navbar', '导航栏', null, '/Appointment', '预约维修', null);
+INSERT INTO `pt_index_config` VALUES ('29', 'navbar', '导航栏', null, '/#about', '协会介绍', null);
+INSERT INTO `pt_index_config` VALUES ('30', 'navbar', '导航栏', null, 'http://blog.ca.cqucc.edu.cn', '培训中心', null);
+INSERT INTO `pt_index_config` VALUES ('31', 'navbar', '导航栏', null, 'http://file.ca.cqucc.edu.cn', '查看资源站', null);
+INSERT INTO `pt_index_config` VALUES ('32', 'navbar', '导航栏', null, 'http://search.ca.cqucc.edu.cn', '搜索资源站', null);
+INSERT INTO `pt_index_config` VALUES ('33', 'navbar', '导航栏', null, 'http://photo.ca.cqucc.edu.cn', '相册', null);
+INSERT INTO `pt_index_config` VALUES ('34', 'navbar', '导航栏', null, '/#team', '大佬介绍', null);
+INSERT INTO `pt_index_config` VALUES ('35', 'navbar', '导航栏', null, '/Recruit', '加入我们', null);

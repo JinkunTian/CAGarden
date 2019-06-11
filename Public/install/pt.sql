@@ -20,7 +20,7 @@ CREATE TABLE `pt_appointment` (
   `result` text NOT NULL COMMENT '维修结果',
   `reward` varchar(255) NOT NULL DEFAULT '未奖励' COMMENT '奖励状态',
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修记录表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='计算机协会义修记录表';
 
 -- ----------------------------
 -- Table structure for pt_appointment_comment
@@ -34,7 +34,7 @@ CREATE TABLE `pt_appointment_comment` (
   `addtime` datetime NOT NULL COMMENT '创建时间',
   `fixer_id` int(10) NOT NULL COMMENT '对应维修用户ID',
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
 
 -- ----------------------------
 -- Table structure for pt_appointment_users
@@ -57,19 +57,7 @@ CREATE TABLE `pt_appointment_users` (
   `last_login` datetime NOT NULL,
   PRIMARY KEY (`guest_id`),
   UNIQUE KEY `number` (`number`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修用户表';
-
--- ----------------------------
--- Table structure for pt_common_count
--- ----------------------------
-DROP TABLE IF EXISTS `pt_common_count`;
-CREATE TABLE `pt_common_count` (
-  `site_id` int(11) NOT NULL,
-  `visit_count` int(11) NOT NULL COMMENT '访问量',
-  `fix_count` int(11) NOT NULL COMMENT '维修量',
-  `members_count` int(11) NOT NULL COMMENT '成员量',
-  `comment_count` int(11) NOT NULL COMMENT '总评论量'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='计算机协会义修用户表';
 
 -- ----------------------------
 -- Table structure for pt_common_departments
@@ -82,7 +70,7 @@ CREATE TABLE `pt_common_departments` (
   `dep_reqire` text NOT NULL COMMENT '部门要求',
   `status` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`did`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='部门信息';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='部门信息';
 
 -- ----------------------------
 -- Table structure for pt_common_majors
@@ -94,7 +82,7 @@ CREATE TABLE `pt_common_majors` (
   `institute` varchar(255) NOT NULL COMMENT '所属学院',
   `status` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`mid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='专业信息';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='专业信息';
 
 -- ----------------------------
 -- Table structure for pt_garden_blackboard
@@ -108,7 +96,7 @@ CREATE TABLE `pt_garden_blackboard` (
   `visits` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '查看量',
   `addtime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_comment
@@ -121,7 +109,7 @@ CREATE TABLE `pt_garden_comment` (
   `content` text,
   `addtime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_logs
@@ -135,7 +123,7 @@ CREATE TABLE `pt_garden_logs` (
   `log_info` text NOT NULL COMMENT '日志内容',
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '状态[1正常/2删除]',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_msg
@@ -147,7 +135,7 @@ CREATE TABLE `pt_garden_msg` (
   `content` text,
   `addtime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_personal_password
@@ -198,7 +186,7 @@ CREATE TABLE `pt_garden_projects` (
   `pr_info` text NOT NULL COMMENT '项目详细介绍',
   `pr_status` int(1) NOT NULL COMMENT '项目状态（1正常，2待审核，3停用））',
   PRIMARY KEY (`pr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_public_password
@@ -221,7 +209,7 @@ CREATE TABLE `pt_garden_public_password` (
   `project_mamager_permit` tinyint(1) NOT NULL DEFAULT '1' COMMENT '允许密码所在项目组管理员管理密码',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '密码状态',
   PRIMARY KEY (`pw_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_public_password_addition
@@ -235,7 +223,7 @@ CREATE TABLE `pt_garden_public_password_addition` (
   `is_secret` int(11) DEFAULT '0' COMMENT '是否为敏感信息',
   `key_classify` int(11) NOT NULL DEFAULT '1' COMMENT '附加密码分类',
   PRIMARY KEY (`addition_password_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_reward_log
@@ -251,7 +239,7 @@ CREATE TABLE `pt_garden_reward_log` (
   `reward_reason` text NOT NULL,
   `datetime` datetime NOT NULL,
   PRIMARY KEY (`reward_log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_secede
@@ -266,7 +254,7 @@ CREATE TABLE `pt_garden_secede` (
   `status` int(10) NOT NULL DEFAULT '1' COMMENT '审核状态',
   `addtime` datetime NOT NULL COMMENT '提交时间',
   PRIMARY KEY (`secede_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='退会申请表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='退会申请表';
 
 -- ----------------------------
 -- Table structure for pt_garden_succeed
@@ -281,7 +269,7 @@ CREATE TABLE `pt_garden_succeed` (
   `status` int(10) NOT NULL DEFAULT '1' COMMENT '审核状态',
   `addtime` datetime NOT NULL COMMENT '提交时间',
   PRIMARY KEY (`succeed_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='退会申请表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='退会申请表';
 
 -- ----------------------------
 -- Table structure for pt_garden_users
@@ -311,7 +299,22 @@ CREATE TABLE `pt_garden_users` (
   `status_info` varchar(255) DEFAULT NULL COMMENT '状态说明',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for pt_index_config
+-- ----------------------------
+DROP TABLE IF EXISTS `pt_index_config`;
+CREATE TABLE `pt_index_config` (
+  `cid` int(11) NOT NULL AUTO_INCREMENT COMMENT '网站首页配置信息',
+  `config_name` varchar(255) NOT NULL,
+  `config_commit` varchar(255) DEFAULT NULL,
+  `config_key` varchar(255) DEFAULT NULL,
+  `config_value_1` varchar(255) DEFAULT NULL,
+  `config_value_2` varchar(255) DEFAULT NULL,
+  `config_value_3` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_index_feedback
@@ -324,6 +327,22 @@ CREATE TABLE `pt_index_feedback` (
   `message` text NOT NULL,
   PRIMARY KEY (`fb_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for pt_index_news
+-- ----------------------------
+DROP TABLE IF EXISTS `pt_index_news`;
+CREATE TABLE `pt_index_news` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '新闻ID',
+  `title` varchar(100) NOT NULL COMMENT '新闻标题',
+  `picture` varchar(255) DEFAULT NULL COMMENT '首页展示图片',
+  `content` text NOT NULL COMMENT '新闻内容',
+  `author_id` int(10) NOT NULL COMMENT '作者ID',
+  `author_name` varchar(255) DEFAULT NULL COMMENT '作者姓名',
+  `visits` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '查看量',
+  `addtime` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_recruit
@@ -353,7 +372,7 @@ CREATE TABLE `pt_recruit` (
   `status` int(11) NOT NULL COMMENT '纳新状态[0待纳/1已纳]',
   PRIMARY KEY (`recruit_id`),
   UNIQUE KEY `number` (`number`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_recruit_comment
@@ -366,7 +385,7 @@ CREATE TABLE `pt_recruit_comment` (
   `content` text NOT NULL,
   `addtime` datetime NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_recruit_grade
@@ -379,7 +398,7 @@ CREATE TABLE `pt_recruit_grade` (
   `year` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '2' COMMENT '纳新状态1开放报名/2禁止报名/3开放面试/4纳新结束',
   PRIMARY KEY (`gid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_system_logs
@@ -396,4 +415,4 @@ CREATE TABLE `pt_system_logs` (
   `url` text NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`lid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
