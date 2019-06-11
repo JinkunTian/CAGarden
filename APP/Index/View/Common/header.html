@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default equinav navlist clearfix" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </div>
+    <div class="collapse navbar-collapse">
+    <div class="nav-zoom">
+        <ul class="nav navbar-nav">
+            <foreach name='navbar' item='v' key='i'>
+                <li>
+                    <a class="page-scroll" href="{$v.config_value_1}">{$v.config_value_2}</a>
+                </li>
+            </foreach>
+        </ul>
+        <span class="nav-r-user"></span>
+    </div>
+    </div><!-- /.navbar-collapse -->
+</nav>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>编辑新闻 - {:C('SITE_NAME')}后花园</title>
+    <link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type="text/javascript" charset="utf-8" src="__PUBLIC__/plugins/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__PUBLIC__/plugins/ueditor/ueditor.all.min.js"> </script>
+</head>
+<body>
+<script type="text/javascript">
+var ue = UE.getEditor('editor');
+</script>
+    <div class="container">
+            <include file='Common:header'/>
+        <div class="cgx-txt">
+        <h1><i class="fa fa-pencil"></i>编辑新闻</h1>
+        <div class="xrz-box">
+    <if condition = 'ACTION_NAME eq "edit"'>
+        <form action="{:U('/Garden/News/editpost')}" enctype="multipart/form-data" method="post">
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">标&nbsp;&nbsp;题:</label>
+                    <input type="text" name="title" value="{:isset($edit['title'])?$edit['title']:''}" required/>
+                </div>
+                <div class="xrz-input-box">
+                        <label id="xrz-tit">首页图片:</label>
+                        <div style="width:400px;height:300px">
+                            <img src="{$edit.picture}" style="width: 100%;height:100%" alt="新闻图片">
+                        </div><br>
+                        <label id="xrz-tit">更换图片(分辨率建议在800x600左右,文件大小500KB以内)(不选择文件则不更改)</label>
+                        <input type="file" name="img" />
+                    </div>
+                <div class="blog-text txt-srk">
+                    <label id="xrz-tit">正文:</label>
+                    <script id="editor" name="content" type="text/plain" style="width:100%;height:500px;">{:isset($edit['content'])?htmlspecialchars_decode($edit['content']):''}</script>
+                </div>
+                <input type="hidden" name="id" value="{$edit.id}"/>
+    <else/>
+        <form action="{:U('/Garden/News/articlepost')}" enctype="multipart/form-data" method="post">
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">标&nbsp;&nbsp;题:</label>
+                    <input type="text" name="title" required/>
+                </div>
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">首页图片（分辨率建议在800x600左右,文件大小500KB以内）:</label>
+                    <input type="file" name="img" required />
+                </div>
+                <div class="blog-text txt-srk">
+                    <label id="xrz-tit">正文:</label>
+                    <script id="editor" name="content" type="text/plain" style="width:100%;height:500px;"></script>
+                </div>
+    </if>
+
+                <div class="btn-div">
+                    <input type="submit" class="btn-box" id="submit-button" value="发 布"/>
+                </div>
+        </div>
+        </form>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

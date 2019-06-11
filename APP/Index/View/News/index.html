@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>协会新闻 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+</head>
+<body>
+
+    <div class="container">
+            <include file='Common:header'/>
+        <div class="cgx-txt">
+        <h1>
+        <i class="fa fa-list-alt"></i>协会新闻
+        </h1>
+            <div class="cgx-sbox">
+                <ul class="cgx-txt-box clearfix">
+                <foreach name='article' item='v' key='i'>
+                    <li>
+                        <div class="cgx-sbox-top">
+                            <a href="{:U('/Index/News/look', array('id' => $v['id']))}"><h3 align="center">{$v.title}</h3><p></p></a>
+                        </div>
+                        <div class="cgx-sbox-bottom">
+                            <p>
+                                <span><i class="fa fa-user"></i>{$v.author_name} 发布</span>
+                                <span class="blog-box-ico"><i class="fa fa-eye"></i>{$v.visits}</span>
+                                <span class="blog-box-ico"><i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d")}</span>
+                            </p>
+                        </div>
+                    </li>
+                </foreach>
+                </ul>
+                    <div class="msg-page">
+                        <div class="page">{$page}</div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

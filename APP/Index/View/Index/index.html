@@ -37,30 +37,11 @@
 						<li class="hidden">
 							<a href="#page-top"></a>
 						</li>
-						<li>
-							<a class="page-scroll" href="/Appointment">预约维修</a>
-						</li>
-						<li>
-							<a class="page-scroll" href="#about">协会介绍</a>
-						</li>
-                      				<li>
-							<a class="page-scroll" href="http://blog.ca.cqucc.edu.cn" target="_Blank">培训中心</a>
-						</li>
-                      				<li>
-							<a class="page-scroll" href="http://file.ca.cqucc.edu.cn" target="_Blank">查看资源站</a>
-						</li>
-                      	<li>
-							<a class="page-scroll" href="http://search.ca.cqucc.edu.cn" target="_Blank">搜索资源站</a>
-						</li>
-						<li>
-							<a class="page-scroll" href="http://photo.ca.cqucc.edu.cn" target="_Blank">相册</a>
-						</li>
-						<li>
-							<a class="page-scroll" href="#team">大佬介绍</a>
-						</li>
-						<li>
-							<a class="page-scroll" href="/Recruit">加入我们</a>
-						</li>
+						<foreach name='navbar' item='v' key='i'>
+							<li>
+								<a class="page-scroll" href="{$v.config_value_1}">{$v.config_value_2}</a>
+							</li>
+						</foreach>
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -73,8 +54,8 @@
 				<div class="slider-container">
 					<div class="intro-text">
 						<div class="intro-lead-in">{:C('SITE_NAME')}</div>
-						<div class="intro-heading">城科最有实力的计算机交流社团</div>
-						<a target="_blank" href="/Appointment" class="page-scroll btn btn-xl">网上预约</a>
+						<div class="intro-heading">{$association_slogan.config_value_1}</div>
+						<a target="_blank" href="{$main_button.config_value_2}" class="page-scroll btn btn-xl">{$main_button.config_value_1}</a>
 					</div>
 				</div>
 			</div>
@@ -85,185 +66,84 @@
 					<div class="col-lg-12 text-center">
 						<div class="section-title">
 							<h2>协会介绍</h2>
-							<p>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;现教中心计算机协会是由重庆大学城市科技学院在读全日制本科或专科生参与构成的全校性、非政治性的为学生提供计算机学习交流的社团组织，由重庆大学城市科技现代教育技术中心指导。是目前校内最权威、覆盖面最广、规模最大的学生计算机交流组织。</p>
+							<p>{$association_info.config_value_1}</p>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<!-- about module -->
-					<div class="col-md-3 text-center">
-						<div class="mz-module-about">
-							<i class="fa fa-briefcase ot-circle"></i>
-							<h3>网站开发</h3>
-							<p>协会附有网站架设小组,<br>职能为创建和维护协会相关网站.</p>
+					<foreach name='major_activities' item='v' key='i'>
+						<div class="col-md-3 text-center">
+							<div class="mz-module-about">
+								<i class="fa fa-briefcase ot-circle"></i>
+								<h3>{$v.config_value_1}</h3>
+								<p>{$v.config_value_2}</p>
+							</div>
 						</div>
-					</div>
-					<!-- end about module -->
-					<!-- about module -->
-					<div class="col-md-3 text-center">
-						<div class="mz-module-about">
-							<i class="fa fa-photo ot-circle"></i>
-							<h3>电脑维修</h3>
-							<p>协会技术部提供电脑系统重装,<br>常见故障排除及维护等服务.</p>
-						</div>
-					</div>
-					<!-- end about module -->
-					<!-- about module -->
-					<div class="col-md-3 text-center">
-						<div class="mz-module-about">
-							<i class="fa fa-camera-retro ot-circle"></i>
-							<h3>软件安装</h3>
-							<p>协会提供常用软件安装服务,<br>如:Office,Photoshop,AutoCAD.</p>
-						</div>
-					</div>
-					<!-- end about module -->
-					<!-- about module -->
-					<div class="col-md-3 text-center">
-						<div class="mz-module-about">
-							<i class="fa fa-cube ot-circle"></i>
-							<h3>想起来再写</h3>
-							<p> </p>
-						</div>
-					</div>
+					</foreach>
 					<!-- end about module -->
 				</div>
 			</div>
 			<!-- /.container -->
 		</section>
       
-      <!--
+      
 		<section class="light-bg">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-7">
 						<div class="section-text">
-							<h3>预约维修介绍</h3>
-							<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore</p>
+							<h3>协会新闻</h3>
 							<ul>
-								<li>Responsive Bootstrap Template</li>
-								<li>Developer Friendly Code</li>
-								<li>Creative Freedom Experience</li>
-								<li>MOOZThemes.com Do Things With Love</li>
+								<foreach name='association_news' item='v' key='i'>
+									<li><a href="{:U('/Index/News/look',array('id'=>$v['id']))}">{$v.title}</a></li>
+								</foreach>
 							</ul>
 						</div>
 					</div>
 					<div class="col-md-5">
 
 						<div class="owl-portfolio owl-carousel">
-							<div class="item">
-								<div class="owl-portfolio-item"><img src="__PUBLIC__/Index/images/demo/portfolio-7.jpg" class="img-responsive" alt="portfolio"></div>
-							</div>
-							<div class="item">
-								<div class="owl-portfolio-item"><img src="__PUBLIC__/Index/images/demo/portfolio-8.jpg" class="img-responsive" alt="portfolio"></div>
-							</div>
-							<div class="item">
-								<div class="owl-portfolio-item"><img src="__PUBLIC__/Index/images/demo/portfolio-9.jpg" class="img-responsive" alt="portfolio"></div>
-							</div>
+							<foreach name='association_news' item='v' key='i'>
+								<div class="item">
+									<div class="owl-portfolio-item"><img src="{$v.picture}" class="img-responsive" alt="新闻图片"></div>
+								</div>
+							</foreach>
 						</div>
 
 					</div>
 				</div>
 			</div>
 		</section>
-	-->
+		
 		<section id="portfolio">
 			<div class="container">
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<div class="section-title">
-						<h2>相册</h2>
-						<p> 我们的工作相册是展示协会风采最好的方式,你可以在这里查看我们的工作内容。</p>
+				<div class="row">
+					<div class="col-lg-12 text-center">
+						<div class="section-title">
+							<h2>相册</h2>
+							<p> 我们的工作相册是展示协会风采最好的方式,你可以在这里查看我们的工作内容。</p>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row row-0-gutter">
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/14/20180414000242-87733834-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>2017动员大会</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/4" >View more</a>
-							</figcaption>
-						</figure>
-					</div>
+				<div class="row row-0-gutter">
+					<!-- start portfolio item -->
+					<foreach name='association_album' item='v' key='i'>
+						<div class="col-md-4 col-0-gutter">
+							<div class="ot-portfolio-item">
+								<figure class="effect-bubba">
+									<img src="{$v.config_value_2}" alt="活动图片" class="img-responsive" />
+									<figcaption>
+										<h2>{$v.config_value_1}</h2>
+										<p>{:C('SITE_NAME')}</p>
+										<a target="_blank" href="{$v.config_value_3}" >查看更多</a>
+									</figcaption>
+								</figure>
+							</div>
+						</div>
+					</foreach>
+					<!-- end portfolio item -->
 				</div>
-				<!-- end portfolio item -->
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415170923-5843adce-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>表情包大赛</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/3">View more</a>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
-				<!-- end portfolio item -->
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171230-6b6e3c49-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>网络安全周</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/5">View more</a>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
-				<!-- end portfolio item -->
-			</div>
-			<div class="row row-0-gutter">
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171549-63b32513-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>电脑义诊</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/2">View more</a>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
-				<!-- end portfolio item -->
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171429-7068c1f1-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>周末影院</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/6">View more</a>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
-				<!-- end portfolio item -->
-				<!-- start portfolio item -->
-				<div class="col-md-4 col-0-gutter">
-					<div class="ot-portfolio-item">
-						<figure class="effect-bubba">
-							<img src="http://photo.mecca.org.cn/_data/i/upload/2018/04/15/20180415171548-60f3d0e6-me.jpg" alt="img02" class="img-responsive" />
-							<figcaption>
-								<h2>电脑义诊</h2>
-								<p>现教中心计算计协会</p>
-								<a target="_blank" href="http://photo.mecca.org.cn/index.php?/category/2">View more</a>
-							</figcaption>
-						</figure>
-					</div>
-				</div>
-				<!-- end portfolio item -->
-			</div>
 			</div><!-- end container -->
 		</section>
 
@@ -313,46 +193,20 @@
 				</div>
 				<div class="row">
 					<!-- team member item -->
-					<div class="col-md-4">
-						<div class="team-item">
-							<div class="team-image" >
-								<img width=100% height=100% src="__PUBLIC__{$best.0.img}" class="img-responsive" alt="author">
+					<foreach name='best' item='v' key='i'>
+						<div class="col-md-4">
+							<div class="team-item">
+								<div class="team-image" >
+									<img width=100% height=100% src="__PUBLIC__{$v.img}" class="img-responsive" alt="成员照骗">
+								</div>
+								<div class="team-text">
+									<h3>{$v.truename}</h3>
+									<div class="team-position">{$v.position}<br>QQ:{$v.qq}</div>
+									<p>{$v.flag}</p>
+								</div>
 							</div>
-							<div class="team-text">
-								<h3>{$best.0.truename}</h3>
-								<div class="team-position">{$best.0.position}<br>QQ:{$best.0.qq}</div>
-								<p>{$best.0.flag}</p>
-							</div>
-						</div>
-					</div>
-					<!-- end team member item -->
-					<!-- team member item -->
-					<div class="col-md-4">
-						<div class="team-item">
-							<div class="team-image">
-								<img  width=100% height=100%  src="__PUBLIC__{$best.1.img}" class="img-responsive"  alt="author" />
-							</div>
-							<div class="team-text">
-								<h3>{$best.1.truename}</h3>
-								<div class="team-position">{$best.1.position}<br>QQ:{$best.1.qq}</div>
-								<p>{$best.1.flag}</p>
-							</div>
-						</div>
-					</div>
-					<!-- end team member item -->
-					<!-- team member item -->
-					<div class="col-md-4">
-						<div class="team-item">
-							<div class="team-image">
-								<img width=100% height=100% src="__PUBLIC__{$best.2.img}" class="img-responsive" alt="author">
-							</div>
-							<div class="team-text">
-								<h3>{$best.2.truename}</h3>
-								<div class="team-position">{$best.2.position}<br>QQ:{$best.2.qq}</div>
-								<p>{$best.2.flag}</p>
-							</div>
-						</div>
-					</div>
+						</div>	
+					</foreach>
 					<!-- end team member item -->
 				</div>
 			</div>
@@ -370,40 +224,11 @@
 				<div class="row">
 					<div class="col-lg-12 text-center">
 						<div class="owl-partners owl-carousel">
-							<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-1.png" alt="partners"></div>
-							</div>
-							<!--<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-2.png" alt="partners"></div>
-							</div>-->
-							<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-3.png" alt="partners"></div>
-							</div>
-							<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-4.png" alt="partners"></div>
-							</div>
-							<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-5.png" alt="partners"></div>
-							</div>
-                            <div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-6.png" alt="partners"></div>
-							</div>
-							<div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-7.png" alt="partners"></div>
-							</div>
-                          <div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-8.png" alt="partners"></div>
-							</div>
-                          <div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-9.png" alt="partners"></div>
-							</div>
-                          <div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-10.png" alt="partners"></div>
-							</div>
-                          <div class="item">
-								<div class="partner-logo"><img src="__PUBLIC__/Index/images/demo/partners-11.png" alt="partners"></div>
-							</div>
-							
+							<foreach name='partner_association' item='v' key='i'>
+								<div class="item">
+									<div class="partner-logo"><img src="{$v.config_value_1}" alt="兄弟协会"></div>
+								</div>
+							</foreach>
 						</div>
 					</div>
 				</div>
@@ -423,10 +248,11 @@
 					<div class="col-md-3">
 						<div class="section-text">
 							<h4>协会办公室地址</h4>
-							<p>10栋楼下103-2（校医务室向里走）。</p>
-                          <h4>QQ交流群</h4>
-                          <p><a href="https://jq.qq.com/?_wv=1027&k=5aaFyV9">2群：345966568</a></p>
-                          <p><a href="https://jq.qq.com/?_wv=1027&k=5o26do6">1群：303770202</a></p>
+								<p>{$association_address.config_value_1}</p>
+							<h4>联系方式</h4>
+								<foreach name='contact_info' item='v' key='i'>
+									<p><a href="{$v.config_value_1}">{$v.config_value_2}</a></p>
+								</foreach>
 						</div>
 					</div>
 					<div class="col-md-3">
@@ -477,7 +303,7 @@
 		</p>
 		<footer>
 			<div class="container text-center">
-				<p>现代教育中心-计算机协会</p>
+				<p>Copyright TianjinTech.com Allright Reserved</p>
 			</div>
 		</footer>
 
