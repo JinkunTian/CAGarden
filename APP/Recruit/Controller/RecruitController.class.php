@@ -102,6 +102,7 @@ class RecruitController extends Controller {
                 'qq' => I('qq'),
                 'email' => I('email'),
                 'major' => I('major'),
+                'class' => I('class'),
                 'dep' => I('dep'),
                 'flag' => I('flag'),
                 'github' => I('github'),
