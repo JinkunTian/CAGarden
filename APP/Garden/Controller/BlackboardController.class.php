@@ -107,7 +107,7 @@ class BlackBoardController extends CommonController {
         $uid=intval(session('id'));
         if(M('garden_blackboard')->where(array('id'=>I('id'),'author_id'=>$uid))->find()){
             if (M('garden_blackboard')->save($data)) {
-                $this->success('保存成功！',U('/Garden/BlackBoard/index'));
+                $this->success('保存成功！',U('/Garden/Blackboard/index'));
             }else{
                 $this->error('修改失败');
             }
@@ -128,7 +128,7 @@ class BlackBoardController extends CommonController {
         );
         //添加数据
         if (M('garden_blackboard')->add($data)) {
-            $this->success('保存成功！',U('/Garden/BlackBoard/index'));
+            $this->success('保存成功！',U('/Garden/Blackboard/index'));
         }else{
             $this->error('发布失败');
         }
@@ -179,6 +179,8 @@ class BlackBoardController extends CommonController {
             }else{
                 $this->ajaxReturn(array('info' => '<i class="fa fa-remove"></i> 提交失败,请重试','status' => 0), 'json');
             }
+        }else{
+            $this->ajaxReturn(array('info' => '<i class="fa fa-remove"></i> 评论功能已禁用','status' => 0), 'json');
         }
     }
 
@@ -198,6 +200,8 @@ class BlackBoardController extends CommonController {
             }else{
                 $this->error('你无法删除别人的评论');
             }
+        }else{
+            $this->error('评论功能已禁用');
         }
     }
 }

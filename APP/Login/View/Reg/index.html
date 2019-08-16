@@ -43,24 +43,18 @@ function isEmail(strEmail) { var flag = strEmail.search(/^\w+((-\w+)|(\.\w+))*\@
 <body>
     <div class="container">
         <div class="vip-main cgx-txt">
-            <h1 class="center-h1">欢迎加入我们！</h1>
+            <h1 class="center-h1">请完善相关信息</h1>
             <div class="new_guest-content">
-                <form action="{:U('/Appointment/Login/registerpost')}"  enctype="multipart/form-data" method="post">
+                <form action="{:U('/Login/Reg/registerpost')}"  enctype="multipart/form-data" method="post">
                         <div class="vip-txt-box">
                             <table>
                                 <tr>
                                     <td class="vip-title">学号：</td>
-                                    <notempty name="number">
-                                        <td class="vip-input" style="width: 198px"><input style="width: 198px" type="hidden" name="number" value="{$number}"><label>{$number}</label></td>
-                                    </notempty>
-                                    <empty name="number">
-                                        <td class="vip-input"><input  style="width: 260px" type="text" name="number" value="" placeholder="请输入学号或工号" required="required"/></td>
-                                    </empty>
+                                    <td class="vip-input"><input  style="width: auto" type="text" name="username" value="{:session('username')}" required="required" readonly="readonly"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td ><input onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"javascript:;
-onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\u4E00-\u9FA5]/g,''))" maxlength="4" style="width: auto; max-width: 260px;min-width: 20px;" type="text" name="truename" value="" placeholder="请输入真实姓名" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="{:session('name')}" required="required" readonly="readonly"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
@@ -92,7 +86,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 </tr> -->
                                 <tr>
                                     <td class="vip-title">密码：</td>
-                                    <td class="vip-input"><input  style="width: auto;" type="text" name="password" value="" placeholder="请输入密码" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: auto;" type="text" name="password" value="" placeholder="请设置一个登陆密码" required="required"/></td>
                                 </tr>
                             </table>
                             <table style="width: 100%">
@@ -108,7 +102,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 </tr>
                                 <tr></tr>
                                 <tr>
-                                    <td><input style="width: 100%" type="submit" onclick="return check()" id="embed-submit" value="注册"></td>
+                                    <td><input style="width: 100%" type="submit" onclick="return check()" id="embed-submit" value="保存"></td>
                                 </tr>
                             </table>
                         </div>

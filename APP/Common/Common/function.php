@@ -89,7 +89,7 @@
             $z=0;
             for ($i=0; $i < $len; $i++) {
                 if($members_id[$i]>0){
-                    $members[$z++]=D('UserView')->where(array('uid'=>$members_id[$i]))->find();
+                    $members[$z++]=M('garden_user_view')->where(array('uid'=>$members_id[$i]))->find();
                 }
             }
         }else{
@@ -124,7 +124,7 @@
         return $addition;
     }
     function isadmin(){
-        $info=M('garden_users')->where(array('uid'=>intval(session('id'))))->find();
+        $info=M('garden_users_extend')->where(array('uid'=>intval(session('id'))))->find();
         if($info['type']=='2'){
             return true;
         }else{

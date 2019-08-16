@@ -48,7 +48,7 @@ function del(){
                                 <span><a href="{:U('/Garden/News/edit', array('id' => $v['id']))}"><i class="fa fa-pencil"></i>编辑</a></span>
                                 <span class="blog-box-ico"><a href="{:U('/Garden/News/del', array('id' => $v['id']))}" onclick='return del();'><i class="fa fa-trash"></i>删除</a></span>
                             <else/>
-                                <span><i class="fa fa-user"></i>{$v.truename}</span>
+                                <span><i class="fa fa-user"></i>{$v.author_name}</span>
                             </if>
                             <span class="blog-box-ico"><i class="fa fa-eye"></i>{$v.visits}</span>
                             <span class="blog-box-ico"><i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d")}</span>

@@ -14,7 +14,7 @@ class AppointmentController extends CommonController {
 	 * index显示已预约的记录
 	 */
     public function index(){
-        $myAppointment=D('AppointmentView');
+        $myAppointment=M('appointment_view');
         $appointments=$myAppointment->where(array('status'=>'1'))->select();
         $this->assign('appointments',$appointments);
         $this->display();
@@ -25,9 +25,9 @@ class AppointmentController extends CommonController {
      */
     public function my(){
 
-        $uid=intval(session('id'));
+        $uid=session('id');
 
-        $myAppointment=D('AppointmentView');
+        $myAppointment=M('appointment_view');
         $appointments=$myAppointment->where(array('fixer_id'=>$uid))->select();
 
         $this->assign('appointments',$appointments);
@@ -42,12 +42,8 @@ class AppointmentController extends CommonController {
 
 			$aid=I('aid');
 
-	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid))->find()){
-
-                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
-
+	        if($appointment=M('appointment_view')->where(array('aid'=>$aid))->find()){
                 $this->assign('appointment',$appointment);
-                $this->assign('comments',$comments);
             }else{
                 $this->error('记录不存');
             }
@@ -66,25 +62,21 @@ class AppointmentController extends CommonController {
 		if(isset($_GET['aid'])){
 
 			$aid=I('aid');
-            $uid=intval(session('id'));
+            $uid=session('id');
 
-	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
-
-                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
+	        if($appointment=M('appointment_view')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
 
                 $shift_count=0;
-
+                $shift=array();
                 for ($i=4; $i > 1; $i--) { 
 
                     if($appointment['fixer'.$i.'_id']){
-                        $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
+                        $shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
                     }
                 }
-
                 $this->assign('shift',$shift);
                 $this->assign('shift_count',$shift_count);
                 $this->assign('appointment',$appointment);
-                $this->assign('comments',$comments);
             }else{
                 $this->error('记录不存在或着你不能编辑别人的记录');
             }        
@@ -116,7 +108,7 @@ class AppointmentController extends CommonController {
      */
     public function save(){
 
-    	$uid=intval(session('id'));
+    	$uid=session('id');
     	$aid=intval(I('aid'));
 
         if(((I('status')=='2')&&(I('result')!=''))){
@@ -138,7 +130,7 @@ class AppointmentController extends CommonController {
             if(I('shift_to_id')!=''){
 
                 $str=$source['fixer_id'].','.$source['fixer2_id'].','.$source['fixer3_id'].','.$source['fixer4_id'];
-                $shift_count=M('garden_users')->where(array('uid'=>array('in',$str)))->count();
+                $shift_count=M('garden_users_extend')->where(array('uid'=>array('in',$str)))->count();
 
                 /**
                  * fixer右移插入，保证fixer_id为最移交后的最终负责人
@@ -170,25 +162,23 @@ class AppointmentController extends CommonController {
 		if(isset($_GET['aid'])){
 
 			$aid=I('aid');
-            $uid=intval(session('id'));
+            $uid=session('id');
 
-	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
-
-                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
+	        if($appointment=M('appointment_view')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
 
                 $shift_count=0;
-              $shift[0]['truename']='';
-              $shift[1]['truename']='';
-              $shift[2]['truename']='';
-              $shift[3]['truename']='';
+                $shift[0]['truename']='';
+                $shift[1]['truename']='';
+                $shift[2]['truename']='';
+                $shift[3]['truename']='';
                 for ($i=4; $i > 1; $i--) { 
 
                     if($appointment['fixer'.$i.'_id']){
-                        $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
+                        $shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
                     }else{
-		    }
+                    }
                 }
-		$shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer_id']))->find();
+		        $shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer_id']))->find();
                 $this->assign('shift_3',$shift[3]);
                 $this->assign('shift_2',$shift[2]);
                 $this->assign('shift_1',$shift[1]);

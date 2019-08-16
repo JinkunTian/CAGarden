@@ -37,7 +37,7 @@ class UserManageController extends AdminController {
             $dep_select=array('status'=>'1');
             $dep_name='';           
         }
-        $count = M('garden_users')->where($dep_select)->count();//正常状态的用户
+        $count = M('garden_users_extend')->where($dep_select)->count();//正常状态的用户
         $page = new \Think\Page($count,200);
         $page->setConfig('header','条数据');
         $page->setConfig('prev','<');
@@ -49,7 +49,7 @@ class UserManageController extends AdminController {
         $show = $page->show();// 分页显示输出
         $limit = $page->firstRow.','.$page->listRows;
 
-        $users= D('UserView')->where($dep_select)->order('type DESC')->limit($limit)->select();
+        $users= M('garden_user_view')->where($dep_select)->order('type DESC')->limit($limit)->select();
 
         if($len=count($users,0)){
             for($i=0;$i<$len;$i++){
@@ -82,7 +82,7 @@ class UserManageController extends AdminController {
         $this->random=md5(time());
         $this->departments=M('common_departments')->where($map)->select();
         $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
-        $this->user_data = D('UserView')->where(array('uid'=>$id))->select();
+        $this->user_data = M('garden_user_view')->where(array('uid'=>$id))->select();
 
         $this->display();
     }
@@ -94,16 +94,21 @@ class UserManageController extends AdminController {
         /**
          * 基础信息
          */
-        $data = array(
-                'truename' => I('truename_'.I('random')),
-                'type' => I('type_'.I('random')),
-                'mobile' => I('mobile_'.I('random')),
-                'qq' => I('qq_'.I('random')),
-                'email' => I('email_'.I('random')),
-                'major' => I('major_'.I('random')),
-                'dep' => I('dep_'.I('random')),
-                'position' =>I('position_'.I('random')),
-                'flag' => I('flag_'.I('random')),
+        $base_data=array(
+            'truename' => I('truename_'.I('random')),
+            'mobile' => I('mobile_'.I('random')),
+            'qq' => I('qq_'.I('random')),
+            'email' => I('email_'.I('random')),
+            'major' => I('major_'.I('random')),
+        );
+        /** 
+         * 社团信息
+         */
+        $extend_data=array(
+            'type' => I('type_'.I('random')),
+            'dep' => I('dep_'.I('random')),
+            'position' =>I('position_'.I('random')),
+            'flag' => I('flag_'.I('random')),
             );
         /**
          * 上传头像
@@ -119,7 +124,7 @@ class UserManageController extends AdminController {
             $info = $upload->uploadOne($_FILES['img']);
 
             if($info) {// 头像上传成功则保存头像
-                $data['img'] = $info['savepath'].$info['savename'];
+                $extend_data['img'] = $info['savepath'].$info['savename'];
             }else{
                 //上传失败，显示失败信息
                 $this->error($upload->getError());
@@ -132,114 +137,116 @@ class UserManageController extends AdminController {
         $password_id='password_'.I('random');
 
         if(!(I($password_id)==''||I($password_id)=='留空则不修改密码')){
-            $data['salt']=md5(time());
+            $base_data['salt']=md5(time());
             $password = I($password_id,'','md5');
-            $data['password']=md5($data['salt'].$password);
+            $base_data['password']=md5($base_data['salt'].$password);
         }
         /**
          * 保存修改
          */
-        $result=M('garden_users')->where(array('uid' => I('uid') ))->save($data);
-        if ($result===false) {
+        $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+        $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+        if ($result1===false||$result2===false) {
             $this->error('保存失败！');
         }else{
             $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
         }
     }
 
-    /**
-     * adduser方法显示添加用户页面
-     */
-    public function adduser(){
-        if (session('admin') == '0') {
-                $this->error('没有权限');
-            }else{
-                $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
-                $map['status'] = array('gt',0);
-        		$this->departments=M('common_departments')->where($map)->select();
-                $this->display();
-        }
-    }
+    // /**
+    //  * adduser方法显示添加用户页面
+    //  */
+    // public function adduser(){
+    //     if (session('admin') == '0') {
+    //             $this->error('没有权限');
+    //         }else{
+    //             $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
+    //             $map['status'] = array('gt',0);
+    //     		$this->departments=M('common_departments')->where($map)->select();
+    //             $this->display();
+    //     }
+    // }
 
     /**
      * adduserpost方法处理提交的添加用户表单
      */
-    public function adduserpost(){
-        if (IS_POST){
+    // public function adduserpost(){
+    //     if (IS_POST){
 
-            $data = array(
-                'truename' => I('truename'),
-                'username' => I('username'),
-                'mobile' => I('mobile'),
-                'qq' => I('qq'),
-                'email' => I('email'),
-                'major' => I('major'),
-                'dep' => I('dep'),
-                'position' => I('position'),
-                'address' => I('address'),
-                'flag' => I('flag'),
-            );
+    //         $data = array(
+    //             'truename' => I('truename'),
+    //             'username' => I('username'),
+    //             'mobile' => I('mobile'),
+    //             'qq' => I('qq'),
+    //             'email' => I('email'),
+    //             'major' => I('major'),
+    //             'dep' => I('dep'),
+    //             'position' => I('position'),
+    //             'address' => I('address'),
+    //             'flag' => I('flag'),
+    //         );
 
-            /**
-             * 上传头像
-             */
-            if(($_FILES['img']['type'])){
+    //         /**
+    //          * 上传头像
+    //          */
+    //         if(($_FILES['img']['type'])){
                 
-                $upload = new \Think\Upload();// 实例化上传类
-                $upload->maxSize   =     205800;// 设置附件上传大小
-                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-                $upload->rootPath  =     './Public'; // 设置附件上传根目录
-                $upload->savePath  =     '/Uploads/'; // 设置附件上传（子）目录
+    //             $upload = new \Think\Upload();// 实例化上传类
+    //             $upload->maxSize   =     205800;// 设置附件上传大小
+    //             $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+    //             $upload->rootPath  =     './Public'; // 设置附件上传根目录
+    //             $upload->savePath  =     '/Uploads/'; // 设置附件上传（子）目录
                 
-                $info = $upload->uploadOne($_FILES['img']);
+    //             $info = $upload->uploadOne($_FILES['img']);
 
-                if($info) {// 头像上传成功则保存头像
-                    $data['img'] = $info['savepath'].$info['savename'];
-                }else{
-                    //上传失败，显示失败信息
-                    $this->error($upload->getError());
-                }
-            }
-            $checkExis=M('garden_users')->where(array('username' => I('username')))->find();
-            if(!$checkExis){
-                $data['salt']=md5(time());
-                $password = I('password','','md5');
-                $data['password']=md5($data['salt'].$password);
-                $result=M('garden_users')->add($data);
-                if (!$result===false) {
-                    $this->success('添加用户成功！',U('/Garden/User/look/',array('uid' => $result)));
-                }else{
-                    $this->error('添加失败！');
-                }
-            }else{
-                $this->error('该用户名已存在！');
-            }
-        }else{
-            $this->error('页面不存在');
-        }
-    }
+    //             if($info) {// 头像上传成功则保存头像
+    //                 $data['img'] = $info['savepath'].$info['savename'];
+    //             }else{
+    //                 //上传失败，显示失败信息
+    //                 $this->error($upload->getError());
+    //             }
+    //         }
+    //         $checkExis=M('garden_users')->where(array('username' => I('username')))->find();
+    //         if(!$checkExis){
+    //             $data['salt']=md5(time());
+    //             $password = I('password','','md5');
+    //             $data['password']=md5($data['salt'].$password);
+    //             $result=M('garden_users')->add($data);
+    //             if (!$result===false) {
+    //                 $this->success('添加用户成功！',U('/Garden/User/look/',array('uid' => $result)));
+    //             }else{
+    //                 $this->error('添加失败！');
+    //             }
+    //         }else{
+    //             $this->error('该用户名已存在！');
+    //         }
+    //     }else{
+    //         $this->error('页面不存在');
+    //     }
+    // }
     /**
      * retire方法将用户设置为干部卸任状态
      */
     public function retireuser(){
-        if($user=M('garden_users')->where(array('uid'=>I('uid')))->find()){
+        if($user=M('garden_users_extend')->where(array('uid'=>I('uid')))->find()){
             $user['status']=3;
             $user['type']=1;//置为普通用户，撤销管理员权限
             $user['status_info']='干部卸任';
-            M('garden_users')->where(array('uid'=>I('uid')))->save($user);
+            M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
             $this->success('已将'.$user['truename'].'标记为干部卸任！');
         }else{
             $this->error('输入非法，没有找到对应用户！');
         }
     }
     /**
-     * reneging_post方法将用户设置为干部卸任状态
+     * reneging_post方法将用户设置为中途退会状态
      */
     public function reneging_post(){
-        if($user=M('garden_users')->where(array('uid'=>I('uid')))->find()){
+        if($user=M('garden_users_extend')->where(array('uid'=>I('uid')))->find()){
+            $user['type']=1;//置为普通用户，撤销管理员权限
             $user['status']=0;//退会用户状态为0，封号，不可再登陆后花园
             $user['status_info']='中途退会';
-            M('garden_users')->where(array('uid'=>I('uid')))->save($user);
+            M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
             $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
         }else{
             $this->error('没有找到对应用户！');

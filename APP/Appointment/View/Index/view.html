@@ -53,29 +53,29 @@
                 </div>
 
                 <notempty name='appointment.fixer_name'>
-                    <h1>请给本次帮助你的{$appointment.fixer_name}同学一个评价</h1>
-                    <foreach name='comments' item='v' key='i'>
+                    <notempty name='comments'>
+                        <h1>你的评价</h1>
                         <li>
                             <div class="rzck-txt-box">
-                                <h2>{$v.guest_name}</h2>
-                                <p>{$v.comment}</p>
+                                <h2>{$comments.guest_name}</h2>
+                                <p>{$comments.comment}</p>
                                 <div align="right">
-                                        <a href="{:U('/Appointment/Index/delcomment', array('cid' => $v['cid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
-                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d H:i")}
+                                        <a href="{:U('/Appointment/Index/delcomment', array('cid' => $comments['cid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
+                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($comments['addtime']),"Y-m-d H:i")}
                                 </div>
                             </div>
                         </li>
-                    </foreach>
-                    <div class="msg-edit">
-                        <h3>添加评价</h3>
-                        <textarea name="content"  cols="20" wrap="hard" required></textarea>
-                        <input type="hidden" name="aid" value="{$appointment.aid}"/>
-                        <input type="hidden" name="fixer_id" value="{$appointment.fixer_id}"/>
-                        <input type="submit" class="msg-btn" id="AddAppointmentComBnt" id="submit-button" value="提&nbsp;&nbsp;交">
-                    </div>
+                    <else />
+                        <h1>请给本次帮助你的{$appointment.fixer_name}同学一个评价</h1>
+                        <div class="msg-edit">
+                            <h3>添加评价</h3>
+                            <textarea name="content"  cols="20" wrap="hard" required></textarea>
+                            <input type="hidden" name="aid" value="{$appointment.aid}"/>
+                            <input type="hidden" name="fixer_id" value="{$appointment.fixer_id}"/>
+                            <input type="submit" class="msg-btn" id="AddAppointmentComBnt" id="submit-button" value="提&nbsp;&nbsp;交">
+                        </div>
+                    </notempty>
                 </notempty>
-            <foreach name='comments' item='v'>
-            </foreach>
         </div>
     </div>
     <div style="height: 50px"></div>   

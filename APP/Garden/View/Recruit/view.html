@@ -39,7 +39,7 @@ function del(){
                     </span>
                 </div>
                 <div class="xrz-input-box">
-                    <label id="xrz-tit">学号： {$recruit.number}</label>
+                    <label id="xrz-tit">学号： {$recruit.username}</label>
                 </div>
                 <div class="xrz-input-box">
                     <label id="xrz-tit">姓名： {$recruit.truename}</label>
@@ -87,7 +87,7 @@ function del(){
 		                            <tr>
 		                                <td class="vip-title">接受申请并纳新到：</td>
 		                                <td class="vip-input">
-		                                    <input type="hidden" name="recruit_id" value="{$recruit.recruit_id}">
+		                                    <input type="hidden" name="uid" value="{$recruit.uid}">
 		                                    <select name=dep>
 		                                        <foreach name='departments' item='v'>
 		                                                <option value ="{$v.did}">{$v.dname}</option>
@@ -140,7 +140,7 @@ function del(){
             <if condition="$recruit['status'] neq '1'">
                 <div class="msg-edit">
                         <h3>添加印象</h3>
-                        <input type="hidden" name="recruit_id" value="{$recruit.recruit_id}">
+                        <input type="hidden" name="recruit_uid" value="{$recruit['uid']}"/>
                         <textarea name="content"  cols="20" wrap="hard" required></textarea>
                         <input type="submit" class="msg-btn" id="AddRecruitCommBnt" value="提&nbsp;&nbsp;交">
                 </div>

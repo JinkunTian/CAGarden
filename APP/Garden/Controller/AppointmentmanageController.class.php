@@ -15,7 +15,7 @@ class AppointmentManageController extends AdminController {
 	 */
     public function index(){
 
-        $count = D('AppointmentView')->count();
+        $count = M('appointment_view')->count();
         $page = new \Think\Page($count,200);
         $page->setConfig('header','条数据');
         $page->setConfig('prev','<');
@@ -27,7 +27,7 @@ class AppointmentManageController extends AdminController {
         $show = $page->show();// 分页显示输出
         $limit = $page->firstRow.','.$page->listRows;
 
-        $appointments= D('AppointmentView')->order('addtime DESC')->limit($limit)->select();
+        $appointments= M('appointment_view')->order('addtime DESC')->limit($limit)->select();
 
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('appointments',$appointments);
@@ -42,23 +42,21 @@ class AppointmentManageController extends AdminController {
 
 			$aid=I('aid');
 
-	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid))->find()){
+	        if($appointment=M('appointment_view')->where(array('aid'=>$aid))->find()){
 
-                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
 
                 $shift_count=0;
 
                 for ($i=4; $i > 1; $i--) { 
 
                     if($appointment['fixer'.$i.'_id']){
-                        $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
+                        $shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
                     }
                 }
 
                 $this->assign('shift',$shift);
                 $this->assign('shift_count',$shift_count);
                 $this->assign('appointment',$appointment);
-                $this->assign('comments',$comments);
             }else{
                 $this->error('记录不存');
             }        
@@ -97,7 +95,7 @@ class AppointmentManageController extends AdminController {
 	            if(I('shift_to_id')!=''){
 
 	                $str=$source['fixer_id'].','.$source['fixer2_id'].','.$source['fixer3_id'].','.$source['fixer4_id'];
-	                $shift_count=M('garden_users')->where(array('uid'=>array('in',$str)))->count();
+	                $shift_count=M('garden_user_view')->where(array('uid'=>array('in',$str)))->count();
 
 	                /**
 	                 * fixer右移插入，保证fixer_id为最移交后的最终负责人
@@ -134,9 +132,7 @@ class AppointmentManageController extends AdminController {
 
 			$aid=I('aid');
 
-	        if($appointment=D('AppointmentView')->where(array('aid'=>$aid))->find()){
-
-                $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->select();
+	        if($appointment=M('appointment_view')->where(array('aid'=>$aid))->find()){
 
                 $shift_count=0;
               $shift[0]['truename']='';
@@ -146,10 +142,10 @@ class AppointmentManageController extends AdminController {
                 for ($i=4; $i > 1; $i--) { 
 
                     if($appointment['fixer'.$i.'_id']){
-                        $shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
+                        $shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer'.$i.'_id']))->find();
                     }	
                 }
-				$shift[$shift_count++]=M('garden_users')->where(array('uid'=>$appointment['fixer_id']))->find();
+				$shift[$shift_count++]=M('garden_user_view')->where(array('uid'=>$appointment['fixer_id']))->find();
                 $this->assign('shift_3',$shift[3]);
                 $this->assign('shift_2',$shift[2]);
                 $this->assign('shift_1',$shift[1]);
@@ -170,8 +166,8 @@ class AppointmentManageController extends AdminController {
 	public function add_reward()
 	{
 		$aid=I('aid');
-		if($add_info=D('AppointmentView')->where(array('aid'=>$aid,'reward'=>'未奖励'))->find()){
-          $user=M('garden_users')->where(array('uid'=>$add_info['fixer_id']))->find();
+		if($add_info=M('appointment_view')->where(array('aid'=>$aid,'reward'=>'未奖励'))->find()){
+            $user=M('garden_user_view')->where(array('uid'=>$add_info['fixer_id']))->find();
 			$add_reward_info=array(
               'user_id'=>$add_info['fixer_id'],
               'truename'=>$add_info['fixer_name'],
@@ -182,7 +178,7 @@ class AppointmentManageController extends AdminController {
               'datetime'=>date('y-m-d H:i:s'));
 			M('garden_reward_log')->add($add_reward_info);
           	$data=array('uid'=>$add_info['fixer_id'],'reward_sum'=>($user['reward_sum']+1));
-          	M('garden_users')->where(array('uid'=>$add_info['fixer_id']))->save($data);
+          	M('garden_users_extend')->where(array('uid'=>$add_info['fixer_id']))->save($data);
 			M('appointment')->where(array('aid'=>$aid))->save(array('aid'=>$aid,'reward'=>'已奖励'));
 			$this->success('成功！');
 		}else{

@@ -87,7 +87,7 @@ class DistributeController extends AdminController {
                 $data[$i]['password']= $objPHPExcel->getActiveSheet()->getCell("D".$i)->getValue();
                 $data[$i]['note']= $objPHPExcel->getActiveSheet()->getCell("E".$i)->getValue();
                 $data[$i]['type']= '2';
-                $user=M('garden_users')->where(array('uid' => $data[$i]['uid']))->find();
+                $user=M('garden_user_view')->where(array('uid' => $data[$i]['uid']))->find();
                 if($user){
                     M('garden_personal_password')->add($data[$i]);
                     $data[$i]['result']='成功';

@@ -131,7 +131,7 @@
     //纳新面试
     $(".vip-main").delegate("#AddRecruitCommBnt","click",function() {
             //console.log('ok');
-            var recruit_id = $('input[name=recruit_id]');
+            var recruit_uid = $('input[name=recruit_uid]');
             var content = $('textarea[name=content]');
             if (content.val()=='') {
                 $('#info').show();
@@ -142,7 +142,7 @@
             }
            $("#AddRecruitCommBnt").val("正在处理...");
            $("#AddRecruitCommBnt").attr("disabled", "disabled");
-        $.post(AddRecruitCommUrl, {recruit_id:recruit_id.val(),content:content.val()}, function(data){
+        $.post(AddRecruitCommUrl, {recruit_uid:recruit_uid.val(),content:content.val()}, function(data){
             if (data.status) {
                 $('#info').show();
                 $('#info').html(data.info);

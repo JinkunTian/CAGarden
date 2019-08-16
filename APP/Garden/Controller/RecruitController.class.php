@@ -70,14 +70,14 @@ class RecruitController extends AdminController {
      */
     public function view(){
 
-        $RecruitView=D('RecruitView');
-        $recruit=$RecruitView->where(array('recruit_id'=>I('recruit_id')))->find();
+        $RecruitView=M('recruit_view');
+        $recruit=$RecruitView->where(array('uid'=>I('uid')))->find();
 
         if(!$recruit){
             $this->error('找不到对象');
         }
         if($recruit['status']!='0'){
-        	$garden_info=M('garden_users')->where(array('username' => $recruit['number']))->find();
+        	$garden_info=M('garden_users_extend')->where(array('username' => $recruit['username']))->find();
 
         	$recruit['recruited_dep']=M('common_departments')->where(array('did' => $garden_info['dep']))->find();
         }
@@ -85,7 +85,7 @@ class RecruitController extends AdminController {
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
 
         $commentView=D('RecruitCommentView');
-        $comments=$commentView->where(array('recruit_id'=>$recruit['recruit_id']))->select();
+        $comments=$commentView->where(array('recruit_uid'=>$recruit['uid']))->select();
 
         $this->assign('departments',$departments);
         $this->assign('comments',$comments);
@@ -98,38 +98,40 @@ class RecruitController extends AdminController {
      */
     public function recive(){
         
-        $recruit = M('recruit')->where(array('recruit_id'=>I('recruit_id')))->find();
+        $recruit = M('recruit')->where(array('uid'=>I('uid')))->find();
         if($recruit['status']=='0'){
             //$recruit['dep']=I('dep'); 
             $recruit['status']='1';/*    更新纳新数据库状态   */
-            $change=M('recruit')->save($recruit);
+            $change=M('recruit')->where(array('uid'=>I('uid')))->save($recruit);
             $newuser = array(
-                'username' => $recruit['number'],
-                'truename' => $recruit['truename'],
-                'password' => $recruit['password'],
-                'salt' => $recruit['salt'],
+                'uid' => $recruit['uid'],
+                'username' => $recruit['username'],
+                // 'truename' => $recruit['truename'],
+                // 'password' => $recruit['password'],
+                // 'salt' => $recruit['salt'],
                 'img' => $recruit['img'],
-                'reg_ip' => $recruit['reg_ip'],
-                'addtime' => $recruit['addtime'],
-                'qq' => $recruit['qq'],
-                'mobile' => $recruit['mobile'],
-                'email' => $recruit['email'],
-                'major' => $recruit['major'],
+                // 'reg_ip' => $recruit['reg_ip'],
+                // 'addtime' => $recruit['addtime'],
+                // 'qq' => $recruit['qq'],
+                // 'mobile' => $recruit['mobile'],
+                // 'email' => $recruit['email'],
+                // 'major' => $recruit['major'],
                 'position' => '新成员',
                 'dep' =>  I('dep'),
                 'flag' => $recruit['flag'],
                 'status' => '1',
-		'status_info'=>'正常在任',
+		        'status_info'=>'正常在任',
                 'type' => '1',
                 );
             /***    社团管理网站基于ProjectTree搭建，将新成员信息添加到ProjectTree数据库user表  ***/
-            $checkExis=M('garden_users')->where(array('username' => $recruit['number']))->find();
+            $checkExis=M('garden_users_extend')->where(array('username' => $recruit['username']))->find();
             if(!$checkExis){
-                $result=M('garden_users')->add($newuser);
+                $result=M('garden_users_extend')->add($newuser);
+                $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
                 if (!$result===false) {
-                    $this->success('纳新成功！',U('/Garden/Recruit/listRecruit',array('grade'=>$recruit['grade'])));
+                    //$this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                 }else{
-                    $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listRecruit',array('grade'=>$recruit['grade'])));
+                    $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                 }
             }else{
                 $this->error('该用户名已存在！');
@@ -143,7 +145,7 @@ class RecruitController extends AdminController {
         if (!IS_AJAX) $this->error('页面不存在');
         $content=str_replace("\n","<br>",I('content')); //去回车
         $data = array(
-            'recruit_id' =>intval(I('recruit_id')), //项目所属ID
+            'recruit_uid' =>intval(I('recruit_uid')), //项目所属ID
             'uid' => intval(session('id')),//日志创建者ID
             'content' =>str_replace(" ","&nbsp;",$content),    //日志内容
             'addtime' =>date('y-m-d H:i:s'),    //日志内容
@@ -166,7 +168,7 @@ class RecruitController extends AdminController {
             $comment=M('recruit_comment')->where(array('cid'=>$cid,'uid'=>$uid))->find();
             if($comment){
                 M('recruit_comment')->where(array('cid'=>$cid))->delete();
-                $this->redirect('/Garden/Recruit/view/recruit_id/'.$comment['recruit_id']);
+                $this->redirect('/Garden/Recruit/view/uid/'.$comment['recruit_uid']);
             }else{
                 $this->error('无权操纵！');
             }
@@ -198,8 +200,8 @@ class RecruitController extends AdminController {
         $show = $page->show();// 分页显示输出
         $limit = $page->firstRow.','.$page->listRows;
 
-        $RecruitView=D('RecruitView');
-        $users=$RecruitView->where(array('grade'=>$grade))->order('recruit_id DESC')->limit($limit)->select();
+        $RecruitView=M('recruit_view');
+        $users=$RecruitView->where(array('grade'=>$grade))->order('addtime DESC')->limit($limit)->select();
 
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('gname',$Recruit['gname']);

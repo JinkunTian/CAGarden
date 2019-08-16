@@ -27,7 +27,7 @@ var ue = UE.getEditor('editor');
         <h1><i class="fa fa-pencil"></i>编辑公告</h1>
         <div class="xrz-box">
     <if condition = 'ACTION_NAME eq "edit"'>
-        <form action="{:U('/Garden/BlackBoard/editpost')}" method="post">
+        <form action="{:U('/Garden/Blackboard/editpost')}" method="post">
                 <div class="xrz-input-box">
                     <label id="xrz-tit">标&nbsp;&nbsp;题:</label>
                     <input type="text" name="title" value="{:isset($edit['title'])?$edit['title']:''}" required/>
@@ -38,7 +38,7 @@ var ue = UE.getEditor('editor');
                 </div>
                 <input type="hidden" name="id" value="{$edit.id}"/>
     <else/>
-        <form action="{:U('/Garden/BlackBoard/articlepost')}" method="post">
+        <form action="{:U('/Garden/Blackboard/articlepost')}" method="post">
                 <div class="xrz-input-box">
                     <label id="xrz-tit">标&nbsp;&nbsp;题:</label>
                     <input type="text" name="title" required/>

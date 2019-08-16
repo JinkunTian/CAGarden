@@ -51,7 +51,7 @@
 									</switch></td>
                               <if condition="$v.status eq 3">
                                   <if condition="$v.reward eq '未奖励'">
-                                      <td><a href="{:U('/Garden/AppointmentManage/add_reward',array('aid'=>$v['aid']))}">点击奖励</td>
+                                      <td><a href="{:U('/Garden/Appointmentmanage/add_reward',array('aid'=>$v['aid']))}">点击奖励</td>
                                         <else/>
                                     <td>{$v.reward}</td>
                                 </if>
@@ -59,7 +59,7 @@
                                 <td></td>
                               </if>
 								<td>{$v.fixer_name}</td>
-								<td><a href="{:U('/Garden/AppointmentManage/edit',array('aid'=>$v['aid']))}" target="_blank">编辑</td>
+								<td><a href="{:U('/Garden/Appointmentmanage/edit',array('aid'=>$v['aid']))}" target="_blank">编辑</td>
 							</tr>
 						</foreach>
 					</tbody>

@@ -38,7 +38,7 @@ class IndexController extends CommonController {
          * 检查当前用户是否为管理员
          */
         if($pr_id==1){
-            $userinfo=M('garden_users')->where(array('uid'=>$uid))->find();
+            $userinfo=M('garden_user_view')->where(array('uid'=>$uid))->find();
             if($userinfo['type']=='2'){
                 $project['manage_right_check']=true;
             }
@@ -308,11 +308,5 @@ class IndexController extends CommonController {
         }else {
             $this->error('非法参数！');
         }
-    }
-    //退出登录并跳转到登录页面
-    public function logout () {
-        session_unset();
-        session_destroy();
-        $this->redirect('/Garden/Login');
     }
 }

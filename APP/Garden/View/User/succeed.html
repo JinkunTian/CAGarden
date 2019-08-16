@@ -19,27 +19,57 @@
     <div class="container">
         <include file='Common:header'/>
         <div class="vip-main cgx-txt">
-            <h1 class="center-h1"><i class="fa fa-user"></i>申请留任协会</h1>
+            <h1 class="center-h1"><i class="fa fa-user"></i>退留任申请</h1>
             <div class="vip-content">
-                <notempty name="user_data">
                     <form action="{:U('/Garden/User/succeed_post')}"  enctype="multipart/form-data" method="post">
                         <div class="vip-txt-box">
                             <table>
                                 <tr>
                                     <td class="vip-title">学号：</td>
-                                    <td class="vip-input">{$user_data.username}</td>
+                                    <td class="vip-input">{:session('username')}</td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td class="vip-input">{$user_data.truename}</td>
+                                    <td class="vip-input">{:session('name')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">申请：</td>
+                                    <td class="vip-input">
+                                        <select name='type' style="width: 128px">
+                                        <notempty name="user_data">
+                                            <if condition="$user_data['type'] eq 'secede' ">
+                                                <option value ="secede" selected="selected">退出协会</option>
+                                                <option value ="succeed">留任干事</option>
+                                                <option value ="succeed_manager">留任干部</option>
+                                            <elseif condition="$user_data['type'] eq 'succeed' "/>
+                                                <option value ="secede">退出协会</option>
+                                                <option value ="succeed" selected="selected">留任干事</option>
+                                                <option value ="succeed_manager">留任干部</option>
+                                            <elseif condition="$user_data['type'] eq 'succeed_manager' "/>
+                                                <option value ="secede">退出协会</option>
+                                                <option value ="succeed" >留任干事</option>
+                                                <option value ="succeed_manager" selected="selected">留任干部</option>
+                                            <else />
+                                                <option value ="secede">退出协会</option>
+                                                <option value ="succeed">留任干事</option>
+                                                <option value ="succeed_manager">留任干部</option>
+                                            </if>
+                                        <else />
+                                            <option value ="secede" selected="selected">退出协会</option>
+                                            <option value ="succeed">留任干事</option>
+                                            <option value ="succeed_manager">留任干部</option>
+                                        </notempty>
+                                        </select>
+                                    </td>
                                 </tr>
                             </table>
-                            <span>年度总结及留任想法：</span>
+                           
                         </div>
                         <div class="vip-text">
-                            <table>
+                        <table>
                                 <tr>
-                                    <td class="vip-input"><textarea name="succeed_info" required></textarea></td>
+                                    <td class="vip-title">原因及想法：</td>
+                                    <td class="vip-input"><textarea name="succeed_info" required><notempty name="user_data">{$user_data['succeed_info']}</notempty></textarea></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -47,11 +77,9 @@
                                     <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
                                 </tr>
                             </table>
-                        </div>
+</div>
                     </form>
-                <else />
-                    你已经提交了申请，正在审核中
-                </notempty>
+
             </div>
         </div>
     </div>

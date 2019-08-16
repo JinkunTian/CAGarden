@@ -129,7 +129,7 @@ function del(){
                     </div>
                     <div class="xrz-input-box">
                         <label id="xrz-tit">时间：{:date_format(date_create($appointment['addtime']),"Y-m-d H:i")}</label>
-                        <input type="hidden" name="addtime" value="{$appointment.addtime|date='Y-m-d H:i', ###}" readonly="readonly" />
+                        <input type="hidden" name="addtime" value="{:date_format(date_create($appointment['addtime']),'Y-m-d H:i')}" readonly="readonly" />
                     </div>
                     <div class="xrz-input-box"> <!-- 项目状态 -->
                         <label id="xrz-tit" style="margin-right:-5px">状态：</label>
@@ -205,6 +205,20 @@ function del(){
                         </if>
                     </div>
                 </div>
+                
+                <notempty name='appointment.comment'>
+                    <h1>收到的评价</h1>
+                        <li>
+                            <div class="rzck-txt-box">
+                                <h2>{$appointment.guest_name}</h2>
+                                <p>{$appointment.comment}</p>
+                                <div align="right">
+                                        <!-- <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a> -->
+                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($appointment['comment_addtime']),"Y-m-d H:i")}
+                                </div>
+                            </div>
+                        </li>
+                </notempty>
                 <if condition="$appointment['status'] neq '4' ">
                     <div class="btn-div">
                         <input type="hidden" name="aid" value="{$appointment.aid}">
@@ -213,21 +227,6 @@ function del(){
                 </if>
                 </form>
                 <br><br>
-                <notempty name='comments'>
-                    <h1>收到的评价</h1>
-                    <foreach name='comments' item='v' key='i'>
-                        <li>
-                            <div class="rzck-txt-box">
-                                <h2>{$v.guest_name}</h2>
-                                <p>{$v.comment}</p>
-                                <div align="right">
-                                        <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
-                                    <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d H:i")}
-                                </div>
-                            </div>
-                        </li>
-                    </foreach>
-                </notempty>
         </div>
     </div> 
     <div style="height: 100px"></div>  

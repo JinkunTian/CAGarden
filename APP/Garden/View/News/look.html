@@ -6,7 +6,7 @@
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
-    <title>{$look.title} - {:C('SITE_NAME')}后花园</title>
+    <title>{$look.title} - {:C('SITE_NAME')}坎花园</title>
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
     <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
@@ -27,7 +27,7 @@
                 {$look.title}
             </h1>
                 <p class="look-blog-ico">
-                <span><i class="fa fa-user"></i><a href="{:U('/Garden/User/look',array('uid'=>$look['author_id']))}">{$look.truename}</a></span>
+                <span><i class="fa fa-user"></i><a href="{:U('/Garden/User/look',array('uid'=>$look['author_id']))}">{$look.author_name}</a></span>
                 <span class="blog-box-ico"><i class="fa fa-eye"></i>{$look.visits}</span>
                 <span class="blog-box-ico"><i class="fa fa-clock-o"></i>{:date_format(date_create($look['addtime']),"Y-m-d")}</span>
                 </p>
