@@ -4,7 +4,8 @@ use Think\Controller;
 class CommonController extends Controller {
     //自动运行，判断如果没有登录则跳转到登录页面
     public function _initialize() {
-        if (!(isset($_SESSION['id'])&&isset($_SESSION[C('PASSWORD_KEY')])&&isset($_SESSION['name']))) {
+        if (!(isset($_SESSION['id'])&&isset($_SESSION[C('PASSWORD_KEY')])&&isset($_SESSION['name'])&& ($_SESSION['userType']=='garden') )) {
+            session('req_url',$_SERVER["REQUEST_URI"]);
             $this->redirect('/Login');
         }
         $logs=array(

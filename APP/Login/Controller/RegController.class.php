@@ -66,7 +66,13 @@ class RegController extends CommonController {
                     $result=M('users')->where(array('uid'=>$checkExis['uid']))->save($data);
                     if (!($result===false)) {
                         session('id',$checkExis['uid']);
-                        $this->success('注册成功！',U('/Appointment'));
+                        if(session('req_url')){
+                            $url=session('req_url');
+                            session('req_url',null);
+                            $this->success('注册成功！',$url);
+                        }else{
+                            $this->success('注册成功！',U('/Appointment'));
+                        }
                     }else{
                         $this->error('注册失败！请联系管理员');
                     }

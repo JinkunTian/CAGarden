@@ -113,6 +113,10 @@ return array(
     'CAPTCHA_ID'            =>  'YOUR_CAPTCHA_ID',
     'PRIVATE_KEY'           =>  'YOUR_PRIVATE_KEY',
     'ERROR_PAGE' =>'/Public/error.html',
+    /**
+     * iKuai WiFi接入审计
+     */
+    'iKuai_APPKEY'  =>  '22222222222222222222222222',
 );
 php;
 

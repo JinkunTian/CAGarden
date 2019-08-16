@@ -14,6 +14,7 @@ class CommonController extends Controller {
                 'url'=>$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
                 'date' => date('y-m-d H:i:s'));
             M('system_logs')->add($logs);
+            session('req_url',$_SERVER["REQUEST_URI"]);
             $this->redirect('/Login');
         }else{
             $logs=array(

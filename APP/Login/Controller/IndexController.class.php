@@ -44,6 +44,15 @@ class IndexController extends Controller {
     }
     // 显示登录页面
     public function index(){
+
+        if ((isset($_SESSION['id'])&&isset($_SESSION[C('PASSWORD_KEY')])&&isset($_SESSION['name'])&& isset($_SESSION['userType']) )) {
+            switch($login_data['userType']){
+                case 'guest':
+                    $this->redirect('/Appointment/Index');break;
+                case 'garden':
+                    $this->redirect('/Garden/Index');break;
+            }
+        }
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->display();
     }
@@ -99,7 +108,7 @@ class IndexController extends Controller {
                 'username'=>$username,
             );
 
-            session_unset();
+            //session_unset();
             
             if($user){//有该用户信息
                 if($user['userType']=='garden'){//协会成员必须使用账户密码认证
@@ -142,11 +151,16 @@ class IndexController extends Controller {
                     session('name',$login_data['name']);
                     session('userType',$login_data['userType']);
                     session(C('PASSWORD_KEY'),true);//防止跨站
-                    switch($login_data['userType']){
-                        case 'guest':
-                            $this->redirect('/Appointment/Index');break;
-                        case 'garden':
-                            $this->redirect('/Garden/Index');break;
+                    if($url=session('req_url')){
+                        session('req_url',null);
+                        $this->redirect($url);
+                    }else{
+                        switch($login_data['userType']){
+                            case 'guest':
+                                $this->redirect('/Appointment/Index');break;
+                            case 'garden':
+                                $this->redirect('/Garden/Index');break;
+                        }
                     }
                 }
             }else{//协会没有该用户的信息，走强智学工认证，添加新用户
@@ -160,7 +174,8 @@ class IndexController extends Controller {
                         'addtime'=>date('y-m-d H:i:s'),
                         'userType'=>'guest',
                     );
-                   
+                    session('userType','guest');
+                    session(C('PASSWORD_KEY'),true);//防止跨站
                     session('username',$login_data['username']);
                     session('name',$login_data['name']);
                     $user=M('users')->add($new_user);
