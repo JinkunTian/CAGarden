@@ -160,11 +160,11 @@ class RecruitController extends CommonController {
                 $password = I('password','','md5');
                 $data['password']=md5($data['salt'].$password);
                 if($checkExis){
-                    $result1=M('recruit')->where(array('uid'=>session('id'))->save($recruit_info);
-                    $result2=M('users')->where(array('uid'=>session('id'))->save($base_data);
+                    $result1=M('recruit')->where(array('uid'=>session('id')))->save($recruit_info);
+                    $result2=M('users')->where(array('uid'=>session('id')))->save($base_data);
                 }else{
                     $result1=M('recruit')->add($recruit_info);
-                    $result2=M('users')->where(array('uid'=>session('id'))->save($base_data);
+                    $result2=M('users')->where(array('uid'=>session('id')))->save($base_data);
                 }
                 
                 if (!($result===false||$result2===false)) {

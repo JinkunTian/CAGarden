@@ -8,14 +8,14 @@ class IndexController extends CommonController {
 		 * 基础数据，在老系统中，不再做数据导入，只将老记录相加后展示
 		*/
 		$common_count['comment_count']=M('appointment_comment')->count();
-      	$common_count['members_count']=M('appointment_users')->count()+M('garden_users')->count();
+      	$common_count['members_count']=M('users')->count();
       	$common_count['fix_count']=M('appointment')->where(array('status'=>3))->count();
       	$common_count['visit_count']=M('system_logs')->count();    
 
 		/**	
 		 * 展示协会成员风采 
 		*/  
-		$best=M('garden_users')->where(array('status'=>1))->order('rand()')->limit(3)->select();
+		$best=M('garden_user_view')->where(array('status'=>1))->order('rand()')->limit(3)->select();
 
 		/**
 		 * 首页大图标语
