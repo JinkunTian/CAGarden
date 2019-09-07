@@ -157,7 +157,7 @@ class RecruitController extends CommonController {
              */
             $checkExis=M('recruit')->where(array('username' => session('username')))->find();
             
-            $checkExis_garden=M('garden_users_extend')->where(array('username' => I('username')))->find();
+            $checkExis_garden=M('garden_users_extend')->where(array('username' => session('username')))->find();
             if(!($checkExis_garden)){
                 $data['salt']=md5(time());
                 $password = I('password','','md5');
