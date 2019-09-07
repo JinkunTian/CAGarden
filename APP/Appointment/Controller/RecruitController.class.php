@@ -107,8 +107,8 @@ class RecruitController extends CommonController {
                 //'number' => session('newmember_xh'),
                 //'truename' => session('newmember_xm'),
                 //'college' => session('newmember_xy'),
-                'username' => I('username'),
-                'truename' => I('truename'),
+                'username' => session('username'),
+                'truename' => session('name'),
                 'college' => I('college'),
                 'class' => I('class'),
                 'major' => I('major'),
@@ -118,7 +118,7 @@ class RecruitController extends CommonController {
             );
             $recruit_info=array(
                 'uid' => session('id'),
-                'username' => I('username'),
+                'username' => session('username'),
                 'dep' => I('dep'),
                 'flag' => I('flag'),
                 'github' => I('github'),
@@ -155,7 +155,7 @@ class RecruitController extends CommonController {
             /**
              * 检查用户是否存在
              */
-            $checkExis=M('recruit')->where(array('username' => I('username')))->find();
+            $checkExis=M('recruit')->where(array('username' => session('username')))->find();
             
             $checkExis_garden=M('garden_users_extend')->where(array('username' => I('username')))->find();
             if(!($checkExis_garden)){
