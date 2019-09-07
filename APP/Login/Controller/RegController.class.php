@@ -58,7 +58,7 @@ class RegController extends CommonController {
                     'reg_ip' => get_client_ip(),
                     'addtime'   =>  date('y-m-d H:i:s')
                 );
-                $checkExis=M('users')->where(array('username'=>I('username')))->find();
+                $checkExis=M('users')->where(array('username'=>session('username')))->find();
                 if($checkExis){
                     $data['salt']=md5(time());
                     $password = I('password','','md5');
