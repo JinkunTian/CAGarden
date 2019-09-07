@@ -29,8 +29,11 @@ class RecruitController extends CommonController {
 
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
+        if(M('garden_users_extend')->where(array('uid'=>session('id')))->find()){
+            $this->error('你已经加入过计算机协会了！');
+        }
 
-        if($recruit_info=M('recruit_view')->where(array('uid'=>session('id')))->find()){
+        if($recruit_info=M('recruit_view')->where(array('uid'=>session('id'),'grade'=>$Recruit['gid']))->find()){
             $this->assign('recruit_info',$recruit_info);
         }elseif($user_info=M('users')->where(array('uid'=>session('id')))->find()){
             $this->assign('recruit_info',$user_info);
