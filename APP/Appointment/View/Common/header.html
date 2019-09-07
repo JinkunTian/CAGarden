@@ -18,9 +18,12 @@
                         <if condition="session('userType') eq 'garden'">
                             <li><a href="{:U('/Garden/')}">后花园</a></li>
                         </if>
-                        <li><a href="{:U('/Appointment/User/index')}">个人资料</a></li>
-                        <li><a href="{:U('/Appointment/User/changgepwd')}">修改密码</a></li>
-                        <li><a href="{:U('/Appointment/User/logout')}">退出登录</a></li>
+                        <if condition="session('userType') eq 'guest'">
+                            <li><a href="{:U('/Appointment/User/index')}">个人资料</a></li>
+                            <li><a href="{:U('/Appointment/User/changgepwd')}">修改密码</a></li>
+                        </if>
+                        
+                        <li><a href="{:U('/Login/Index/logout')}">退出登录</a></li>
                 </ul>
             </li>
         </ul>
