@@ -100,6 +100,10 @@ class RecruitController extends CommonController {
                 $Recruit=M('recruit_grade')->order(array('gid'=>'desc'))->find();
             }
 
+            if($Recruit['status']!='1'){
+                $this->error('当前纳新已经关闭了！');
+            }
+
             /**
              * 基础信息
              */
@@ -153,9 +157,9 @@ class RecruitController extends CommonController {
 		    }
 
             /**
-             * 检查用户是否存在
+             * 检查本届纳新中该用户是否提交了申请
              */
-            $checkExis=M('recruit')->where(array('username' => session('username')))->find();
+            $checkExis=M('recruit')->where(array('username' => session('username'),'grade'=>$Recruit['gid']))->find();
             
             $checkExis_garden=M('garden_users_extend')->where(array('username' => session('username')))->find();
             if(!($checkExis_garden)){
@@ -184,6 +188,6 @@ class RecruitController extends CommonController {
     }
     public function message(){
     	$Recruit=M('recruit_grade')->order(array('gid'=>'desc'))->find();
-    	$this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>你的信息我们已经收到！<br/>请牢记你的密码！</p>[ '.$Recruit['message'].'] <br/>[<a href="/"> 返回首页 </a>]</div>','utf-8');
+    	$this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>你的信息我们已经收到！<br/>请牢记你的密码！</p>[ '.$Recruit['message'].'] <br/>[<a href="/"> 返回首页 </a>] [<a href="/Appointment/Recruit.html"> 查看申请 </a>]</div>','utf-8');
     }
 }

@@ -35,7 +35,7 @@ CREATE TABLE `pt_appointment_comment` (
   `fixer_id` int(10) NOT NULL COMMENT '对应维修用户ID',
   PRIMARY KEY (`cid`,`aid`),
   UNIQUE KEY `aid` (`aid`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='计算机协会义修评价表';
 
 -- ----------------------------
 -- Table structure for pt_common_departments
@@ -74,7 +74,7 @@ CREATE TABLE `pt_garden_blackboard` (
   `visits` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '查看量',
   `addtime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_comment
@@ -113,7 +113,7 @@ CREATE TABLE `pt_garden_msg` (
   `content` text,
   `addtime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_personal_password
@@ -187,7 +187,7 @@ CREATE TABLE `pt_garden_public_password` (
   `project_mamager_permit` tinyint(1) NOT NULL DEFAULT '1' COMMENT '允许密码所在项目组管理员管理密码',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '密码状态',
   PRIMARY KEY (`pw_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_public_password_addition
@@ -201,7 +201,7 @@ CREATE TABLE `pt_garden_public_password_addition` (
   `is_secret` int(11) DEFAULT '0' COMMENT '是否为敏感信息',
   `key_classify` int(11) NOT NULL DEFAULT '1' COMMENT '附加密码分类',
   PRIMARY KEY (`addition_password_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_reward_log
@@ -249,36 +249,6 @@ CREATE TABLE `pt_garden_succeed` (
   `addtime` datetime NOT NULL COMMENT '提交时间',
   PRIMARY KEY (`succeed_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='退会申请表';
-
--- ----------------------------
--- Table structure for pt_garden_users_copy
--- ----------------------------
-DROP TABLE IF EXISTS `pt_garden_users_copy`;
-CREATE TABLE `pt_garden_users_copy` (
-  `uid` int(10) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `username` varchar(255) NOT NULL COMMENT '工号/用户名',
-  `truename` varchar(30) NOT NULL COMMENT '真实姓名',
-  `password` varchar(256) NOT NULL COMMENT '密码',
-  `salt` varchar(256) NOT NULL COMMENT '盐值加密',
-  `img` varchar(255) NOT NULL DEFAULT '/images/img.jpg' COMMENT '用户头像',
-  `last_login` datetime DEFAULT NULL COMMENT '最后一次登录时间',
-  `last_ip` varchar(64) DEFAULT NULL COMMENT '最后一次登录IP',
-  `addtime` datetime NOT NULL,
-  `reg_ip` varchar(64) DEFAULT NULL COMMENT '注册IP',
-  `qq` varchar(20) DEFAULT NULL COMMENT 'QQ',
-  `mobile` varchar(20) DEFAULT NULL COMMENT '电话',
-  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
-  `dep` int(10) DEFAULT NULL COMMENT '部门代码',
-  `major` int(10) DEFAULT NULL COMMENT '专业代码',
-  `position` varchar(255) DEFAULT NULL COMMENT '职位',
-  `flag` text COMMENT '个人签名',
-  `type` int(1) NOT NULL DEFAULT '1' COMMENT '用户类型[1用户/2管理员]',
-  `reward_sum` int(11) NOT NULL DEFAULT '0' COMMENT '总积分',
-  `status` int(1) NOT NULL DEFAULT '1' COMMENT '用户状态[1正常/0禁用]',
-  `status_info` varchar(255) DEFAULT NULL COMMENT '状态说明',
-  PRIMARY KEY (`uid`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_garden_users_extend
@@ -347,6 +317,7 @@ CREATE TABLE `pt_index_news` (
 -- ----------------------------
 DROP TABLE IF EXISTS `pt_recruit`;
 CREATE TABLE `pt_recruit` (
+  `rid` int(255) NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL,
@@ -358,8 +329,9 @@ CREATE TABLE `pt_recruit` (
   `grade` varchar(255) DEFAULT NULL,
   `reg_ip` varchar(255) DEFAULT NULL,
   `addtime` varchar(255) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`rid`)
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_recruit_comment
@@ -367,12 +339,12 @@ CREATE TABLE `pt_recruit` (
 DROP TABLE IF EXISTS `pt_recruit_comment`;
 CREATE TABLE `pt_recruit_comment` (
   `cid` int(10) NOT NULL AUTO_INCREMENT,
-  `recruit_uid` int(10) NOT NULL,
+  `rid` int(10) NOT NULL,
   `uid` int(10) NOT NULL,
   `content` text NOT NULL,
   `addtime` datetime NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_recruit_grade
@@ -402,7 +374,7 @@ CREATE TABLE `pt_system_logs` (
   `url` text NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`lid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7711 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8636 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for pt_users
@@ -427,7 +399,19 @@ CREATE TABLE `pt_users` (
   `certify` varchar(255) DEFAULT NULL,
   `userType` varchar(255) NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=570 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=568 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for pt_wifi
+-- ----------------------------
+DROP TABLE IF EXISTS `pt_wifi`;
+CREATE TABLE `pt_wifi` (
+  `mac` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) DEFAULT NULL,
+  `timestamp` datetime DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `truename` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- View structure for pt_appointment_view
@@ -445,4 +429,4 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`mecca_org_cn`@`%` SQL SECURITY DEFINER VIEW 
 -- View structure for pt_recruit_view
 -- ----------------------------
 DROP VIEW IF EXISTS `pt_recruit_view`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`mecca_org_cn`@`%` SQL SECURITY DEFINER VIEW `pt_recruit_view` AS select `pt_recruit`.`uid` AS `uid`,`pt_recruit`.`username` AS `username`,`pt_recruit`.`img` AS `img`,`pt_recruit`.`dep` AS `dep`,`pt_recruit`.`flag` AS `flag`,`pt_recruit`.`github` AS `github`,`pt_recruit`.`website` AS `website`,`pt_recruit`.`info` AS `info`,`pt_recruit`.`grade` AS `grade`,`pt_recruit`.`addtime` AS `addtime`,`pt_recruit`.`status` AS `status`,`pt_users`.`truename` AS `truename`,`pt_users`.`college` AS `college`,`pt_users`.`class` AS `class`,`pt_users`.`password` AS `password`,`pt_users`.`salt` AS `salt`,`pt_users`.`major` AS `major`,`pt_users`.`qq` AS `qq`,`pt_users`.`email` AS `email`,`pt_users`.`mobile` AS `mobile`,`pt_users`.`reg_ip` AS `reg_ip`,`pt_users`.`last_ip` AS `last_ip`,`pt_users`.`last_login` AS `last_login`,`pt_users`.`certify` AS `certify`,`pt_users`.`userType` AS `userType`,`pt_common_majors`.`mname` AS `mname`,`pt_common_departments`.`dname` AS `dname`,`pt_recruit_grade`.`gid` AS `gid`,`pt_recruit_grade`.`gname` AS `gname`,`pt_recruit_grade`.`year` AS `year`,`pt_recruit_grade`.`status` AS `grade_status` from ((((`pt_recruit` left join `pt_users` on((`pt_recruit`.`uid` = `pt_users`.`uid`))) left join `pt_recruit_grade` on((`pt_recruit_grade`.`gid` = `pt_recruit`.`grade`))) left join `pt_common_majors` on((`pt_common_majors`.`mid` = `pt_users`.`major`))) left join `pt_common_departments` on((`pt_common_departments`.`did` = `pt_recruit`.`dep`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`mecca_org_cn`@`%` SQL SECURITY DEFINER VIEW `pt_recruit_view` AS select `pt_recruit`.`rid` AS `rid`,`pt_recruit`.`uid` AS `uid`,`pt_recruit`.`username` AS `username`,`pt_recruit`.`img` AS `img`,`pt_recruit`.`dep` AS `dep`,`pt_recruit`.`flag` AS `flag`,`pt_recruit`.`github` AS `github`,`pt_recruit`.`website` AS `website`,`pt_recruit`.`info` AS `info`,`pt_recruit`.`grade` AS `grade`,`pt_recruit`.`addtime` AS `addtime`,`pt_recruit`.`status` AS `status`,`pt_users`.`truename` AS `truename`,`pt_users`.`college` AS `college`,`pt_users`.`class` AS `class`,`pt_users`.`password` AS `password`,`pt_users`.`salt` AS `salt`,`pt_users`.`major` AS `major`,`pt_users`.`qq` AS `qq`,`pt_users`.`email` AS `email`,`pt_users`.`mobile` AS `mobile`,`pt_users`.`reg_ip` AS `reg_ip`,`pt_users`.`last_ip` AS `last_ip`,`pt_users`.`last_login` AS `last_login`,`pt_users`.`certify` AS `certify`,`pt_users`.`userType` AS `userType`,`pt_common_majors`.`mname` AS `mname`,`pt_common_departments`.`dname` AS `dname`,`pt_recruit_grade`.`gid` AS `gid`,`pt_recruit_grade`.`gname` AS `gname`,`pt_recruit_grade`.`year` AS `year`,`pt_recruit_grade`.`status` AS `grade_status` from ((((`pt_recruit` left join `pt_users` on((`pt_recruit`.`uid` = `pt_users`.`uid`))) left join `pt_recruit_grade` on((`pt_recruit_grade`.`gid` = `pt_recruit`.`grade`))) left join `pt_common_majors` on((`pt_common_majors`.`mid` = `pt_users`.`major`))) left join `pt_common_departments` on((`pt_common_departments`.`did` = `pt_recruit`.`dep`))) ;

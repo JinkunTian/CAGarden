@@ -41,14 +41,14 @@
 						<foreach name="users" item="v">
 							<tr>
 								<td>{$v.username}</td>
-								<td><a href="{:U('/Garden/Recruit/view',array('uid'=>$v['uid']))}" target="_blank">{$v.truename}</a></td>
+								<td><a href="{:U('/Garden/Recruit/view',array('rid'=>$v['rid']))}" target="_blank">{$v.truename}</a></td>
 								<td>{$v.mobile}</td>
 								<td>{$v.qq}</td>
 								<td>{$v.email}</td>
 								<td>{$v.mname}</td>
 								<td>{$v.dname}</td>
 								<td><if condition="$v['status'] eq '1'">已纳<else /><font color="red">未纳</font></if></td>
-								<td><a href="{:U('/Garden/Recruit/view',array('uid'=>$v['uid']))}" target="_blank">编辑</a></td>
+								<td><a href="{:U('/Garden/Recruit/view',array('rid'=>$v['rid']))}" target="_blank">编辑</a></td>
 							</tr>
 						</foreach>
 					</tbody>

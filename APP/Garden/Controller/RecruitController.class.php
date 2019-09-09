@@ -71,7 +71,7 @@ class RecruitController extends AdminController {
     public function view(){
 
         $RecruitView=M('recruit_view');
-        $recruit=$RecruitView->where(array('uid'=>I('uid')))->find();
+        $recruit=$RecruitView->where(array('rid'=>I('rid')))->find();
 
         if(!$recruit){
             $this->error('找不到对象');
@@ -85,7 +85,7 @@ class RecruitController extends AdminController {
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
 
         $commentView=D('RecruitCommentView');
-        $comments=$commentView->where(array('recruit_uid'=>$recruit['uid']))->select();
+        $comments=$commentView->where(array('rid'=>$recruit['rid']))->select();
 
         $this->assign('departments',$departments);
         $this->assign('comments',$comments);
@@ -98,7 +98,7 @@ class RecruitController extends AdminController {
      */
     public function recive(){
         
-        $recruit = M('recruit')->where(array('uid'=>I('uid')))->find();
+        $recruit = M('recruit')->where(array('rid'=>I('rid')))->find();
         if($recruit['status']=='0'){
             //$recruit['dep']=I('dep'); 
             $recruit['status']='1';/*    更新纳新数据库状态   */
@@ -145,7 +145,7 @@ class RecruitController extends AdminController {
         if (!IS_AJAX) $this->error('页面不存在');
         $content=str_replace("\n","<br>",I('content')); //去回车
         $data = array(
-            'recruit_uid' =>intval(I('recruit_uid')), //项目所属ID
+            'rid' =>intval(I('rid')), //项目所属ID
             'uid' => intval(session('id')),//日志创建者ID
             'content' =>str_replace(" ","&nbsp;",$content),    //日志内容
             'addtime' =>date('y-m-d H:i:s'),    //日志内容
@@ -168,7 +168,7 @@ class RecruitController extends AdminController {
             $comment=M('recruit_comment')->where(array('cid'=>$cid,'uid'=>$uid))->find();
             if($comment){
                 M('recruit_comment')->where(array('cid'=>$cid))->delete();
-                $this->redirect('/Garden/Recruit/view/uid/'.$comment['recruit_uid']);
+                $this->redirect('/Garden/Recruit/view/rid/'.$comment['rid']);
             }else{
                 $this->error('无权操纵！');
             }
