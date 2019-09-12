@@ -2,10 +2,16 @@
 namespace Index\Controller;
 use Think\Controller;
 class IndexController extends CommonController {
+	/************************************************* 
+	Author: 田津坤
+	QQ    : 2961165914
+	GitHub: https://github.com/JinkunTian
+	Date:2018-8-19 
+	Description:首页信息控制器
+	**************************************************/ 
 	public function index(){
 		/**
 		 * 获取协会访问量，注册用户数量等统计信息
-		 * 基础数据，在老系统中，不再做数据导入，只将老记录相加后展示
 		*/
 		$common_count['comment_count']=M('appointment_comment')->count();
       	$common_count['members_count']=M('users')->count();

@@ -27,7 +27,7 @@ class IndexController extends CommonController {
     }
     
     /**
-     * index方法列出用户所有预约信息
+     * index方法根据用户信息登记审计并放行WiFi接入
      */
     public function index(){
         $wifi_log=array(
