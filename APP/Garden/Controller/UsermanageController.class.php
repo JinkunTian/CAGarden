@@ -124,7 +124,7 @@ class UserManageController extends AdminController {
             $info = $upload->uploadOne($_FILES['img']);
 
             if($info) {// 头像上传成功则保存头像
-                $extend_data['img'] = $info['savepath'].$info['savename'];
+                $base_data['img'] = $info['savepath'].$info['savename'];
             }else{
                 //上传失败，显示失败信息
                 $this->error($upload->getError());
@@ -229,8 +229,10 @@ class UserManageController extends AdminController {
      */
     public function retireuser(){
         if($user=M('garden_users_extend')->where(array('uid'=>I('uid')))->find()){
-            $user['status']=3;
+            M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            $user['position']='干部卸任';
             $user['type']=1;//置为普通用户，撤销管理员权限
+            $user['status']=3;//1正常用户/0禁用/3干部卸任
             $user['status_info']='干部卸任';
             M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
             $this->success('已将'.$user['truename'].'标记为干部卸任！');
@@ -243,11 +245,29 @@ class UserManageController extends AdminController {
      */
     public function reneging_post(){
         if($user=M('garden_users_extend')->where(array('uid'=>I('uid')))->find()){
+            M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            $user['position']='中途退会';
             $user['type']=1;//置为普通用户，撤销管理员权限
             $user['status']=0;//退会用户状态为0，封号，不可再登陆后花园
             $user['status_info']='中途退会';
             M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
             $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
+        }else{
+            $this->error('没有找到对应用户！');
+        }
+    }
+    /**
+     * normal_exit方法将用户设置为中途退会状态
+     */
+    public function normal_exit(){
+        if($user=M('garden_users_extend')->where(array('uid'=>I('uid')))->find()){
+            M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            $user['position']='正常退会';
+            $user['type']=1;//置为普通用户，撤销管理员权限
+            $user['status']=0;//退会用户状态为0，封号，不可再登陆后花园
+            $user['status_info']='正常退会';
+            M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
+            $this->success('已将'.$user['truename'].'标记为正常退会！');
         }else{
             $this->error('没有找到对应用户！');
         }
