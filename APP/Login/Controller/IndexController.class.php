@@ -54,6 +54,7 @@ class IndexController extends Controller {
             }
         }
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
+        $this->assign('USE_QIANGZHI_JIAOWU',C('USE_QIANGZHI_JIAOWU'));
         $this->display();
     }
 

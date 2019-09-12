@@ -25,13 +25,17 @@
 						<span class="login-user-span">
 							<i class="fa fa-user"></i>
 						</span>
-					<input type="text" name="username" id="user" placeholder="请输入用户名" required>
+					<input type="text" name="username" id="user" placeholder="请输入学号" required>
 					</div>
 					<div class="login-user">
 						<span class="login-user-span">
 							<i class="fa fa-lock"></i>
-						</span>
-						<input type="password" name="password" id="psw" placeholder="请输入密码" required>
+                        </span>
+                        <if condition="$USE_QIANGZHI_JIAOWU eq true">
+                            <input type="password" name="password" id="psw" placeholder="请输入计协密码/强智教务密码" required>
+                        <else />
+                            <input type="password" name="password" id="psw" placeholder="请输入计协密码" required>
+                        </if>
 					</div>
 
                     <if condition="$ENABLE_GEETEST eq true">
