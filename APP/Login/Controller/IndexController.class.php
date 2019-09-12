@@ -32,7 +32,6 @@ class IndexController extends Controller {
             if($data['token'] == -1){
                 $login_data['success']=false;
                 $login_data['err_info']=$data['msg'];
-                var_dump($data['msg']);
             }else{
                 $login_data['success']=$data['success'];
                 $login_data['name']=$data['userrealname'];
@@ -176,6 +175,7 @@ class IndexController extends Controller {
                         session('userType','guest');
                         session(C('PASSWORD_KEY'),true);//防止跨站
                         session('username',$login_data['username']);
+                        session('college',$login_data['college']);
                         session('name',$login_data['name']);
                         $this->redirect('/Login/Reg');
                     }else{

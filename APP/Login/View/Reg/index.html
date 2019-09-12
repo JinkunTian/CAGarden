@@ -79,7 +79,11 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                     <td class="vip-input">
                                         <select name=college  style="width: 210px;">
                                             <foreach name='institute' item='v'>
-                                                    <option value ="{$v.institute}">{$v.institute}</option>
+                                                <if condition="$v['institute'] eq $student_institute">
+                                                    <option value ="{$v.institute}" selected="selected">{$v.institute}</option>
+                                                <else />
+                                                    <option value ="{$v.institute}" >{$v.institute}</option>
+                                                </if>
                                             </foreach>
                                         </select>
                                     </td>
@@ -89,7 +93,11 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                     <td class="vip-input">
                                         <select name=major  style="width: 210px;">
                                             <foreach name='majors' item='v'>
-                                                    <option value ="{$v.mid}">{$v.mname}</option>
+                                                <if condition="$v['mid'] eq $student_major">
+                                                    <option value ="{$v.mid}" selected="selected">{$v.mname}</option>
+                                                <else />
+                                                    <option value ="{$v.mid}" >{$v.mname}</option>
+                                                </if>
                                             </foreach>
                                         </select>
                                     </td>

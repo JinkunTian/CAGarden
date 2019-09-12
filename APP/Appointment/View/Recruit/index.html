@@ -69,7 +69,7 @@
                                     <td class="vip-input">
                                         <select name=college>
                                             <foreach name='institute' item='v'>
-                                                <if condition="$v['mid'] eq $recruit_info['college']">
+                                                <if condition="$v['institute'] eq $recruit_info['college']">
                                                     <option value ="{$v.institute}" selected="selected">{$v.institute}</option>
                                                 <else />
                                                     <option value ="{$v.institute}" >{$v.institute}</option>

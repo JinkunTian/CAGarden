@@ -6,6 +6,12 @@ class RegController extends CommonController {
     public function index(){
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
         $institute=M('common_majors')->distinct(true)->field('institute')->select();
+        if(C('USE_QIANGZHI_JIAOWU')){
+            $this->assign('student_institute',session('college'));
+            var_dump(session('college'));
+        }else{
+            $this->assign('student_institute','');
+        }
         $this->assign('institute',$institute);
         $this->assign('majors',$majors);
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
@@ -69,7 +75,7 @@ class RegController extends CommonController {
                     $this->error('用户已经存在！');
                 }
                 if(C('USE_QIANGZHI_JIAOWU')){
-                    $data['truename']=session('truename');
+                    $data['truename']=session('name');
                 }else{
                     $data['truename']=I('truename');
                 }
