@@ -192,4 +192,31 @@ class RecruitController extends CommonController {
     	$Recruit=M('recruit_grade')->order(array('gid'=>'desc'))->find();
     	$this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>你的信息我们已经收到！<br/>请牢记你的密码！</p>[ '.$Recruit['message'].'] <br/>[<a href="/"> 返回首页 </a>] [<a href="/Appointment/Recruit.html"> 查看申请 </a>]</div>','utf-8');
     }
+    /**
+     * 初始化行为验证
+     */
+    public function StartCaptchaServlet(){
+
+        if(C('ENABLE_GEETEST')){
+
+            require_once './ThinkPHP/Library/Vendor/Geetest/class.geetestlib.php';
+
+            $GtSdk = new \GeetestLib(C('CAPTCHA_ID'),C('PRIVATE_KEY'));
+
+            session_start();
+
+            $data = array(
+                    "user_id" => microtime(), # 网站用户id
+                    "client_type" => "h5", #web:电脑上的浏览器；h5:手机上的浏览器，包括移动应用内完全内置的web_view；native：通过原生SDK植入APP应用的方式
+                    "ip_address" => "127.0.0.1" # 请在此处传输用户请求验证时所携带的IP
+                );
+
+            $status = $GtSdk->pre_process($data, 1);
+            $_SESSION['gtserver'] = $status;
+            $_SESSION['gt_user_id'] = $data['user_id'];
+            echo $GtSdk->get_response_str();
+        }
+
+        
+    }
 }

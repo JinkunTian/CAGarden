@@ -135,8 +135,22 @@
                         <table>
                             <tr>
                                 <td class="vip-title">入会申请：</td>
-                                <td class="vip-input"><textarea name="apply" required><notempty name='recruit_info.apply'>{$recruit_info.apply}</notempty></textarea></td>
+                                <td class="vip-input"><textarea name="apply" required placeholder="讲讲你为什么想加入计算机协会。"><notempty name='recruit_info.apply'>{$recruit_info.apply}</notempty></textarea></td>
                             </tr>
+                            <tr>
+                                    <td>
+                                        <if condition="$ENABLE_GEETEST eq true">
+                                            验证码
+                                        </if>
+                                    </td>
+                                    <td>
+                                        <if condition="$ENABLE_GEETEST eq true">
+                                            <div id="embed-captcha" style="width: 100%"></div>
+                                            <p id="wait" class="show">正在加载验证码......</p>
+                                            <p id="notice" class="hide">请先完成验证</p>
+                                        </if>
+                                    </td>
+                                </tr>
                             <tr>
                                 <td></td>
                                 <input type="hidden" name="uid" value="{$v.uid}"/>
@@ -149,5 +163,50 @@
         </div>
     </div>
     <script src="__PUBLIC__/js/index.js"></script>
+    <if condition="$ENABLE_GEETEST eq true">
+        <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+        <script src="__PUBLIC__/js/gt.js"></script>
+        <script>
+            var handlerEmbed = function (captchaObj) {
+                $("#embed-submit").click(function (e) {
+                    var validate = captchaObj.getValidate();
+                    if (!validate) {
+                        $("#notice")[0].className = "show";
+                        setTimeout(function () {
+                            $("#notice")[0].className = "hide";
+                        }, 2000);
+                        e.preventDefault();
+                    }
+                });
+                // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+                captchaObj.appendTo("#embed-captcha");
+                captchaObj.onReady(function () {
+                    $("#wait")[0].className = "hide";
+                });
+                // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+            };
+            $.ajax({
+                // 获取id，challenge，success（是否启用failback）
+                url: "{:U('/Appointment/Recruit/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    // 使用initGeetest接口
+                    // 参数1：配置参数
+                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+                    initGeetest({
+                        width: '388px',
+                        https: true,
+                        gt: data.gt,
+                        challenge: data.challenge,
+                        new_captcha: data.new_captcha,
+                        product: "popup", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                        offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                    }, handlerEmbed);
+                }
+            });
+        </script>
+    </if>
 </body>
 </html>

@@ -50,34 +50,34 @@ function isEmail(strEmail) { var flag = strEmail.search(/^\w+((-\w+)|(\.\w+))*\@
                             <table>
                                 <tr>
                                     <td class="vip-title">学号：</td>
-                                    <td class="vip-input"><input  style="width: auto" type="text" name="username" value="{:session('username')}" required="required" readonly="readonly"/></td>
+                                    <td class="vip-input"><input  style="width: 210px" type="text" name="username" value="{:session('username')}" required="required" readonly="readonly"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
                                     <if condition="$USE_QIANGZHI_JIAOWU eq true">
-                                        <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="{:session('name')}" required="required" readonly="readonly"/></td>
+                                        <td class="vip-input"><input  style="width: 210px;" type="text" name="truename" placeholder="请输入你的姓名" value="{:session('name')}" required="required" readonly="readonly"/></td>
                                     <else />
-                                        <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="" required="required"/></td>
+                                        <td class="vip-input"><input  style="width: 210px;" type="text" name="truename" placeholder="请输入你的姓名" value="" required="required"/></td>
                                     </if>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
-                                    <td ><input style="width: auto;max-width: 260px;min-width: 20px;" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                    <td ><input style="width: 210px;max-width: 260px;min-width: 20px;" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
 onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" id="mobile" name="mobile" value="" placeholder="请输入联系电话" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">QQ：</td>
-                                    <td class="vip-input"><input style="width: auto;" maxlength="11" id="QQ" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                    <td class="vip-input"><input style="width: 210px;" maxlength="11" id="QQ" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"
 onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeholder="请输入联系QQ" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">邮箱：</td>
-                                    <td class="vip-input"><input  style="width: auto;" type="text" name="email" id="email" value="" placeholder="请输入找回密码邮箱" onblur="isEmail(this.value);" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: 210px;" type="text" name="email" id="email" value="" placeholder="请输入找回密码邮箱" onblur="isEmail(this.value);" required="required"/></td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">学院：</td>
                                     <td class="vip-input">
-                                        <select name=college  style="width: auto;">
+                                        <select name=college  style="width: 210px;">
                                             <foreach name='institute' item='v'>
                                                     <option value ="{$v.institute}">{$v.institute}</option>
                                             </foreach>
@@ -87,7 +87,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 <tr>
                                     <td class="vip-title">专业：</td>
                                     <td class="vip-input">
-                                        <select name=major  style="width: auto;">
+                                        <select name=major  style="width: 210px;">
                                             <foreach name='majors' item='v'>
                                                     <option value ="{$v.mid}">{$v.mname}</option>
                                             </foreach>
@@ -100,7 +100,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 </tr> -->
                                 <tr>
                                     <td class="vip-title">密码：</td>
-                                    <td class="vip-input"><input  style="width: auto;" type="text" name="password" value="" placeholder="请设置一个登陆计协密码" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: 210px;" type="text" name="password" value="" placeholder="请设置一个登陆计协密码" required="required"/></td>
                                 </tr>
                             </table>
                             <table style="width: 100%">
@@ -155,7 +155,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
             };
             $.ajax({
                 // 获取id，challenge，success（是否启用failback）
-                url: "{:U('/Appointment/Login/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
+                url: "{:U('/Login/Reg/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
                 type: "get",
                 dataType: "json",
                 success: function (data) {
