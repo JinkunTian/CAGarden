@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--
-求个前端大神
--->
-<html lang="zh-cn">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
@@ -10,63 +7,33 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
     <title>欢迎加入我们！ - {:C('SITE_NAME')}</title>
-    <link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
-    <link rel="stylesheet" href="__PUBLIC__/css/styleForRecruit.css" media="screen" type="text/css" />
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
     <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
     <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
     <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
     <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
-    <script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
-    <style type="text/css">
-        #embed-captcha {
-            width: 300px;
-            margin: 0 auto;
-        }
-        .show {
-            display: block;
-        }
-        .hide {
-            display: none;
-        }
-        #notice {
-            color: red;
-        }
-        .avatar-btns button {
-            height: 35px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <include file='Common:header'/>
         <div class="vip-main cgx-txt">
-            <h1 class="center-h1">{$recruit_name}-欢迎加入我们！</h1>
-            
+            <h1 class="center-h1"><i class="fa fa-user"></i>{$recruit_name}-欢迎加入我们！</h1>
+            <div class="recruit-content">
                 <form action="{:U('/Appointment/Recruit/save')}"  enctype="multipart/form-data" method="post">
-                    <h1>上传照片</h1>
-                    <div >
-                            <input type="file" name="img" class="file-btn"/>
-                            <i class="fa fa-cloud-upload"></i>上传照片(最大{:C('MAX_PHOTO_POST_SIZE')/1024/1024}MB)
-            
-                    请上传本人照片！不可以上传卡通头像噢！
-                    </div>
-                    <h1 style="margin-top:225px">完善信息</h1>
                     <div class="vip-txt-box">
                         <table>
                             <tr>
                                 <td class="vip-title">学号：</td>
-                                <td class="vip-input"><input type="text" name="username" value="<notempty name='recruit_info.username'>{$recruit_info.username}</notempty>" placeholder="请输入你的学号" required/></td>
-                                <input type="hidden" name="grade" value="{$grade}" /></td>
+                                <td class="vip-input">
+                                    <input type="text" name="username" value="<notempty name='recruit_info.username'>{$recruit_info.username}</notempty>" placeholder="请输入你的学号" required/></td>
+                                    <input type="hidden" name="grade" value="{$grade}" />
+                                </td>
                             </tr>
                             <tr>
                                 <td class="vip-title">姓名：</td>
                                 <td class="vip-input"><input type="text" name="truename" value="<notempty name='recruit_info.truename'>{$recruit_info.truename}</notempty>" placeholder="请输入你的名字" required/></td>
-                            </tr>
-                            <tr>
-                                <td class="vip-title">学院：</td>
-                                <td class="vip-input"><input type="text" name="college" value="<notempty name='recruit_info.college'>{$recruit_info.college}</notempty>" placeholder="请输入你的学院" required/></td>
                             </tr>
                             <tr>
                                 <td class="vip-title">电话：</td>
@@ -97,6 +64,20 @@
                                 <td class="vip-title">寝室：</td>
                                 <td class="vip-input"><input type="text" name="address" value="" placeholder="请输入你的寝室"/></td>
                             </tr> -->
+                            <tr>
+                                    <td class="vip-title">学院：</td>
+                                    <td class="vip-input">
+                                        <select name=college>
+                                            <foreach name='institute' item='v'>
+                                                <if condition="$v['mid'] eq $recruit_info['college']">
+                                                    <option value ="{$v.institute}" selected="selected">{$v.institute}</option>
+                                                <else />
+                                                    <option value ="{$v.institute}" >{$v.institute}</option>
+                                                </if>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                </tr>
                             <tr>
                                 <td class="vip-title">专业：</td>
                                 <td class="vip-input">
@@ -133,13 +114,15 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="vip-title">密码：</td>
-                                <td class="vip-input"><input type="text" name="password" value="" placeholder="设置你的密码" required/></td>
-                            </tr>
                         </table>
                     </div>
-                    
+                    <div class="vip-img-box">
+                        <span class="vip-img">
+                            <img src="<notempty name='recruit_info.img'>{$recruit_info.img}</notempty>" alt="">
+                            <input type="file" name="img" class="file-btn"/>
+                            <span class="span-btn"><i class="fa fa-cloud-upload"></i>上传(最大{:C('MAX_PHOTO_POST_SIZE')/1024/1024}MB)</span>
+                        </span>
+                    </div>
                     <div class="vip-text">
                         <table>
                             <tr>
@@ -148,72 +131,23 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="vip-text">
+                <div class="vip-text">
                         <table>
                             <tr>
-                                <td></td>
-                                <td><if condition="$ENABLE_GEETEST eq true">
-                                        <div id="embed-captcha" style="width: 100%;"></div>
-                                        <p id="wait" class="show">正在加载验证码......</p>
-                                        <p id="notice" class="hide">请先完成验证(若加载不出来验证码请先确保连入校园网并登录了网号！)</p>
-                                    </if></td>
+                                <td class="vip-title">入会申请：</td>
+                                <td class="vip-input"><textarea name="apply" required><notempty name='recruit_info.apply'>{$recruit_info.apply}</notempty></textarea></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td></td>
+                                <input type="hidden" name="uid" value="{$v.uid}"/>
+                                <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
                             </tr>
                         </table>
                     </div>
                 </form>
+            </div>
         </div>
     </div>
-    <div style="height:100px"></div>
     <script src="__PUBLIC__/js/index.js"></script>
-    <if condition="$ENABLE_GEETEST eq true">
-        <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
-        <script src="__PUBLIC__/js/gt.js"></script>
-        <script>
-            var handlerEmbed = function (captchaObj) {
-                $("#embed-submit").click(function (e) {
-                    var validate = captchaObj.getValidate();
-                    if (!validate) {
-                        $("#notice")[0].className = "show";
-                        setTimeout(function () {
-                            $("#notice")[0].className = "hide";
-                        }, 2000);
-                        e.preventDefault();
-                    }
-                });
-                // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
-                captchaObj.appendTo("#embed-captcha");
-                captchaObj.onReady(function () {
-                    $("#wait")[0].className = "hide";
-                });
-                // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
-            };
-            $.ajax({
-                // 获取id，challenge，success（是否启用failback）
-                url: "{:U('/Appointment/Login/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
-                type: "get",
-                dataType: "json",
-                success: function (data) {
-                    //console.log(data);
-                    // 使用initGeetest接口
-                    // 参数1：配置参数
-                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
-                    initGeetest({
-                        //width: "300px",
-                        https: true,
-                        gt: data.gt,
-                        challenge: data.challenge,
-                        new_captcha: data.new_captcha,
-                        product: "popup", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
-                        offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
-                    }, handlerEmbed);
-                }
-            });
-        </script>
-    </if>
- 
 </body>
 </html>

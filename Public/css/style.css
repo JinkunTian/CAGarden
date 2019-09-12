@@ -151,9 +151,9 @@ a{
 }
 .recruit-content{
 	box-shadow: 1px 1px 6px #EAEAEA;
-	min-height: 640px;
+	min-height: 850px;
 	max-width: 800px;
-	margin: 0 auto;
+	margin: 20px auto;
 	padding: 30px;
 	background: #FDFDFD;
 	border: 1px solid #EDEDED;

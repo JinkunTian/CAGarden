@@ -41,7 +41,8 @@ class RecruitController extends CommonController {
             $this->assign('recruit_info',NULL);
         }
         
-
+        $institute=M('common_majors')->distinct(true)->field('institute')->select();
+        $this->assign('institute',$institute);
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->assign('departments',$departments);
         $this->assign('majors',$majors);
@@ -127,6 +128,7 @@ class RecruitController extends CommonController {
                 'flag' => I('flag'),
                 'github' => I('github'),
                 'website' => I('website'),
+                'apply' => I('apply'),
                 'info' => I('info'),
                 'grade' => $Recruit['gid'],
                 'reg_ip' => get_client_ip(),
@@ -147,7 +149,7 @@ class RecruitController extends CommonController {
                 $info = $upload->uploadOne($_FILES['img']);
 
                 if($info) {// 头像上传成功则保存头像
-                    $recruit_info['img'] = $info['savepath'].$info['savename'];
+                    $base_data['img'] = '/Public/'.$info['savepath'].$info['savename'];
                 }else{
                     //上传失败，显示失败信息
                     $this->error($upload->getError());
