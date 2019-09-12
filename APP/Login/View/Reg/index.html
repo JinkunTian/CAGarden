@@ -43,7 +43,7 @@ function isEmail(strEmail) { var flag = strEmail.search(/^\w+((-\w+)|(\.\w+))*\@
 <body>
     <div class="container">
         <div class="vip-main cgx-txt">
-            <h1 class="center-h1">请完善相关信息</h1>
+            <h1 class="center-h1">注册 - 计协通行证</h1>
             <div class="new_guest-content">
                 <form action="{:U('/Login/Reg/registerpost')}"  enctype="multipart/form-data" method="post">
                         <div class="vip-txt-box">
@@ -54,7 +54,11 @@ function isEmail(strEmail) { var flag = strEmail.search(/^\w+((-\w+)|(\.\w+))*\@
                                 </tr>
                                 <tr>
                                     <td class="vip-title">姓名：</td>
-                                    <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="{:session('name')}" required="required" readonly="readonly"/></td>
+                                    <if condition="$USE_QIANGZHI_JIAOWU eq true">
+                                        <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="{:session('name')}" required="required" readonly="readonly"/></td>
+                                    <else />
+                                        <td class="vip-input"><input  style="width: auto" type="text" name="truename" value="" required="required"/></td>
+                                    </if>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">电话：</td>
@@ -69,6 +73,16 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 <tr>
                                     <td class="vip-title">邮箱：</td>
                                     <td class="vip-input"><input  style="width: auto;" type="text" name="email" id="email" value="" placeholder="请输入找回密码邮箱" onblur="isEmail(this.value);" required="required"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">学院：</td>
+                                    <td class="vip-input">
+                                        <select name=college  style="width: auto;">
+                                            <foreach name='institute' item='v'>
+                                                    <option value ="{$v.institute}">{$v.institute}</option>
+                                            </foreach>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="vip-title">专业：</td>
@@ -86,7 +100,7 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 </tr> -->
                                 <tr>
                                     <td class="vip-title">密码：</td>
-                                    <td class="vip-input"><input  style="width: auto;" type="text" name="password" value="" placeholder="请设置一个登陆密码" required="required"/></td>
+                                    <td class="vip-input"><input  style="width: auto;" type="text" name="password" value="" placeholder="请设置一个登陆计协密码" required="required"/></td>
                                 </tr>
                             </table>
                             <table style="width: 100%">

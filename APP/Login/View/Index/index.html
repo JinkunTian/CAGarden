@@ -16,7 +16,7 @@
 		<div class="login-input-box">
 			<div class="login-logo">
 				<div class="login-title">
-				<h1>登 录</h1>
+				<h1>计协通行证</h1>
 				</div>
 			</div>
 			<div class="login-input">
@@ -42,7 +42,7 @@
     				    </div>
                     </if>
     				<div class="login-btn-box">
-    				    <input type="submit" class="subpost" id="embed-submit" value="登&nbsp;&nbsp;录">
+    				    <input type="submit" class="subpost" id="embed-submit" value="登录/注册">
     				</div>
 
 				</form>
@@ -75,7 +75,7 @@
             };
             $.ajax({
                 // 获取id，challenge，success（是否启用failback）
-                url: "{:U('/Garden/Login/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
+                url: "{:U('/Login/Index/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
                 type: "get",
                 dataType: "json",
                 success: function (data) {

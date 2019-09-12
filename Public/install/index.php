@@ -117,6 +117,10 @@ return array(
      * iKuai WiFi接入审计
      */
     'iKuai_APPKEY'  =>  '22222222222222222222222222',
+    /**
+     * 是否使用强智教务进行身份认证
+     */
+    'USE_QIANGZHI_JIAOWU' =>false,
 );
 php;
 

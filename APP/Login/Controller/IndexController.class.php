@@ -26,12 +26,13 @@ class IndexController extends Controller {
                 $i=12;
             }
         }
-        if($i==12){
+        if($i==10){
             $this->error('强智教务系统响应超时，请稍后重试');
         }else{
             if($data['token'] == -1){
                 $login_data['success']=false;
                 $login_data['err_info']=$data['msg'];
+                var_dump($data['msg']);
             }else{
                 $login_data['success']=$data['success'];
                 $login_data['name']=$data['userrealname'];
@@ -124,24 +125,28 @@ class IndexController extends Controller {
                     }else{
                         $this->error('CA帐号或者密码错误');
                     }
-                }else{
-                    //一般用户既可以使用强智登陆
+                    //其他身份认证
+                }else if($user['password'] == md5($user['salt'].$pwd)) {
+                    $log_data['certify']='password';
+                    $login_data['success']=true;
+                    $login_data['id']=$user['uid'];
+                    $login_data['name']=$user['truename'];
+                    $login_data['username']=$username;
+                    $login_data['userType']=$user['userType']; 
+                }else if(C('USE_QIANGZHI_JIAOWU')){
+                    //如果启用了强智教务认证，一般用户既可以使用强智登陆
                     $login_data=$this->login_by_qz(I('username'),I('password'));
                     if($login_data['success']){
                         $log_data['certify']='qiangzhi';
                         $login_data['id']=$user['uid'];
                         $login_data['userType']=$user['userType'];
                         //也可以使用密码登陆
-                    }else if($user['password'] == md5($user['salt'].$pwd)) {
-                        $log_data['certify']='password';
-                        $login_data['success']=true;
-                        $login_data['id']=$user['uid'];
-                        $login_data['name']=$user['truename'];
-                        $login_data['username']=$username;
-                        $login_data['userType']=$user['userType']; 
-                    }else{
+                    }else {
                         $this->error('帐号或者密码错误！强智教务系统请到教务处找回密码！'.$login_data['err_info']);
                     }
+                }else{
+                    $login_data['success']=false;
+                    $this->error('用户名或密码错误');
                 }//登陆成功
                 if($login_data['success']){
                     M('users')->save($log_data);
@@ -163,22 +168,22 @@ class IndexController extends Controller {
                         }
                     }
                 }
-            }else{//协会没有该用户的信息，走强智学工认证，添加新用户
-                $login_data=$this->login_by_qz(I('username'),I('password')); //var_dump($login_data);
-                if($login_data['success']){
-                    $new_user=array(
-                        'username'=>$login_data['username'],
-                        'truename'=>$login_data['name'],
-                        'college'=>$login_data['college'],
-                        'reg_ip'=>get_client_ip(),
-                        'addtime'=>date('y-m-d H:i:s'),
-                        'userType'=>'guest',
-                    );
-                    session('userType','guest');
+            }else{//协会没有该用户的信息，添加新用户
+                //如果启用了强智学工认证则走强智学工认证，
+                if(C('USE_QIANGZHI_JIAOWU')){
+                    $login_data=$this->login_by_qz(I('username'),I('password')); //var_dump($login_data);
+                    if($login_data['success']){
+                        session('userType','guest');
+                        session(C('PASSWORD_KEY'),true);//防止跨站
+                        session('username',$login_data['username']);
+                        session('name',$login_data['name']);
+                        $this->redirect('/Login/Reg');
+                    }else{
+                        $this->error('强智教务系统：'.$login_data['err_info']);
+                    }
+                }else{
+                    session('username',I('username'));
                     session(C('PASSWORD_KEY'),true);//防止跨站
-                    session('username',$login_data['username']);
-                    session('name',$login_data['name']);
-                    $user=M('users')->add($new_user);
                     $this->redirect('/Login/Reg');
                 }
             }

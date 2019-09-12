@@ -4,7 +4,7 @@ use Think\Controller;
 class CommonController extends Controller {
     //自动运行，判断如果没有登录则跳转到登录页面
     public function _initialize() {
-        if (!(isset($_SESSION['username']) && isset($_SESSION['id']) && isset($_SESSION['name']) )) {
+        if (!(isset($_SESSION['username']) && isset($_SESSION['id']) && isset($_SESSION['name']) && isset($_SESSION[C('PASSWORD_KEY')]) )) {
             $logs=array(
                 'part'=>3,
                 'truename'=>'游客',

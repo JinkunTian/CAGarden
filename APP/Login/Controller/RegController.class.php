@@ -5,8 +5,11 @@ class RegController extends CommonController {
     // 显示登录页面
     public function index(){
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
+        $institute=M('common_majors')->distinct(true)->field('institute')->select();
+        $this->assign('institute',$institute);
         $this->assign('majors',$majors);
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
+        $this->assign('USE_QIANGZHI_JIAOWU',C('USE_QIANGZHI_JIAOWU'));
         $this->display();
     }
 
@@ -50,31 +53,39 @@ class RegController extends CommonController {
             if($validate_response){
                 $data = array(
                     //'truename' => I('truename'),
-                    //'username' => I('username'),
+                    'username' => session('username'),
+                    'img'   => '/Public/images/hi.png',
                     'mobile' => I('mobile'),
                     'qq' => I('qq'),
                     'email' => I('email'),
                     'major' => I('major'),
                     'reg_ip' => get_client_ip(),
-                    'addtime'   =>  date('y-m-d H:i:s')
+                    'addtime'   =>  date('y-m-d H:i:s'),
+                    'college'=> I('college'),
+                    'userType'=>'guest',
                 );
                 $checkExis=M('users')->where(array('username'=>session('username')))->find();
                 if($checkExis){
-                    $data['salt']=md5(time());
-                    $password = I('password','','md5');
-                    $data['password']=md5($data['salt'].$password);
-                    $result=M('users')->where(array('uid'=>$checkExis['uid']))->save($data);
-                    if (!($result===false)) {
-                        session('id',$checkExis['uid']);
-                        if(session('req_url')){
-                            $url=session('req_url');
-                            session('req_url',null);
-                            $this->success('注册成功！',$url);
-                        }else{
-                            $this->success('注册成功！',U('/Appointment'));
-                        }
+                    $this->error('用户已经存在！');
+                }
+                if(C('USE_QIANGZHI_JIAOWU')){
+                    $data['truename']=session('truename');
+                }else{
+                    $data['truename']=I('truename');
+                }
+                $data['salt']=md5(time());
+                $password = I('password','','md5');
+                $data['password']=md5($data['salt'].$password);
+                $result=M('users')->add($data);
+                if (!($result===false)) {
+                    session('id',$result);
+                    session('name',I('truename'));
+                    if(session('req_url')){
+                        $url=session('req_url');
+                        session('req_url',null);
+                        $this->success('注册成功！',$url);
                     }else{
-                        $this->error('注册失败！请联系管理员');
+                        $this->success('注册成功！',U('/Appointment'));
                     }
                 }else{
                     $this->error('注册失败！请联系管理员');
