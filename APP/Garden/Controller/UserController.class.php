@@ -86,7 +86,7 @@ class UserController extends CommonController {
             $info = $upload->uploadOne($_FILES['img']);
 
             if($info) {// 头像上传成功则保存头像
-                $extend_data['img'] = $info['savepath'].$info['savename'];
+                $base_data['img'] = $info['savepath'].$info['savename'];
             }else{
                 //上传失败，显示失败信息
                 $this->error($upload->getError());

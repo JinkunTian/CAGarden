@@ -8,7 +8,6 @@ class RegController extends CommonController {
         $institute=M('common_majors')->distinct(true)->field('institute')->select();
         if(C('USE_QIANGZHI_JIAOWU')){
             $this->assign('student_institute',session('college'));
-            var_dump(session('college'));
         }else{
             $this->assign('student_institute','');
         }
@@ -60,7 +59,7 @@ class RegController extends CommonController {
                 $data = array(
                     //'truename' => I('truename'),
                     'username' => session('username'),
-                    'img'   => '/Public/images/hi.png',
+                    'img'   => '/images/hi.png',
                     'mobile' => I('mobile'),
                     'qq' => I('qq'),
                     'email' => I('email'),

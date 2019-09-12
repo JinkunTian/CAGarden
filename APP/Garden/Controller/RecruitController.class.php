@@ -109,7 +109,6 @@ class RecruitController extends AdminController {
                 // 'truename' => $recruit['truename'],
                 // 'password' => $recruit['password'],
                 // 'salt' => $recruit['salt'],
-                'img' => $recruit['img'],
                 // 'reg_ip' => $recruit['reg_ip'],
                 // 'addtime' => $recruit['addtime'],
                 // 'qq' => $recruit['qq'],
