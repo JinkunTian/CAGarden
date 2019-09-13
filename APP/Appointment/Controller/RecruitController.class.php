@@ -30,7 +30,7 @@ class RecruitController extends CommonController {
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
         if(M('garden_users_extend')->where(array('uid'=>session('id')))->find()){
-            $this->error('你已经加入过计算机协会了！');
+            $this->error('你已经加入过计算机协会了！','/Appointment');
         }
 
         if($recruit_info=M('recruit_view')->where(array('uid'=>session('id'),'grade'=>$Recruit['gid']))->find()){
@@ -51,6 +51,35 @@ class RecruitController extends CommonController {
         $this->display();
     }
 
+    public function save_img(){
+        $base64_image_content = $_POST['file'];
+        $root_path="Public";
+        $sub_path="/Uploads";
+        
+        //匹配出图片的格式
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)){
+            $type = $result[2];
+            $file_name=substr(md5($_POST['file']),0,13).".{$type}";
+            $file_url=$sub_path."/".date('Y-m-d',time())."/";
+            $new_file = $root_path.$file_url;
+
+            if(!file_exists($new_file)){
+                //检查是否有该文件夹，如果没有就创建，并给予最高权限
+                if(!(mkdir($new_file, 0777,true))){
+                    $this->error('目录不可写，上传失败！');
+                }
+            }
+            $new_file = $root_path.$file_url.$file_name;
+            if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64_image_content)))){
+                echo 'success';
+                $result2=M('users')->where(array('uid'=>session('id')))->save(array('img'=>$file_url.$file_name));
+            }else{
+                echo false;
+            }
+        }else{
+            echo false;
+        }
+    }
     /**
      * save方法保存纳新表格
      */
@@ -136,27 +165,12 @@ class RecruitController extends CommonController {
             );
 
             /**
-             * 上传头像
+             * 检查头像是否上传
              */
-            if(($_FILES['img']['type'])){
-                
-                $upload = new \Think\Upload();// 实例化上传类
-                $upload->maxSize   =     C('MAX_PHOTO_POST_SIZE');
-                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-                $upload->rootPath  =     './Public'; // 设置附件上传根目录
-                $upload->savePath  =     '/Uploads/'; // 设置附件上传（子）目录
-                
-                $info = $upload->uploadOne($_FILES['img']);
-
-                if($info) {// 头像上传成功则保存头像
-                    $base_data['img'] = $info['savepath'].$info['savename'];
-                }else{
-                    //上传失败，显示失败信息
-                    $this->error($upload->getError());
-                }
-            }else{
-			    $this->error("请上传头像");
-		    }
+            $user_info=M('users')->where(array('username' => session('username')))->find();
+            if($user_info['img']=='/images/hi.png'){
+                $this->error('请先上传本人照片！');
+            }
 
             /**
              * 检查本届纳新中该用户是否提交了申请
@@ -177,15 +191,15 @@ class RecruitController extends CommonController {
                 }
                 
                 if (!($result===false||$result2===false)) {
-                    $this->success('提交成功！',U('/Appointment/Recruit/message/'));
+                    return_json(array('result'=>'success','msg'=>$Recruit['message']));
                 }else{
-                    $this->error('添加失败！');
+                    return_json(array('result'=>'failure','msg'=>'提交失败（CODE1），请联系管理员解决！'));
                 }
             }else{
-                $this->error('你已经加入了计算机协会！');
+                return_json(array('result'=>'failure','msg'=>'你已经加入了计算机协会！'));
             }
         }else{
-            $this->error('验证码错误！');
+            return_json(array('result'=>'failure','msg'=>'验证码错误！'));
         }  
     }
     public function message(){

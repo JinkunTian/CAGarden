@@ -227,8 +227,9 @@ a{
 }
 .vip-img-box .vip-img img{
 	max-width: 150px;
-	max-height: 150px;
-	min-width: 80px;
+	max-height: 200px;
+	min-width: 90px;
+	min-height: 120px;
 	width: 100%;
 	border: 1px solid #D8D8D8;
 	border-radius: 3px;

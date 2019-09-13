@@ -10,10 +10,43 @@
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
     <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/cropper/cropper.min.css" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/cropper/ImgCropping.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
     <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <link rel='stylesheet' href='__PUBLIC__/css/sweetalert.css' type='text/css' media='all' />
     <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/sweetalert.min.js'></script>
     <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type="text/javascript">
+        function submit_form(){
+            var cont = $("#ajax_input").serialize();
+            $.ajax({
+                url:"{:U('/Appointment/Recruit/save')}",
+                type:'post',
+                data:cont,
+                success:function (result) {
+                    if(result.result=='success'){
+                        swal({
+                            title:"成功！",
+                            text:result.msg, 
+                            type:"success"},
+
+                            function(conform) {
+                            window.location.href="{:U('/Appointment/Recruit')}";
+                        });
+                    }else if(result.result=='failure'){
+                        swal("出错！", result.msg, "error");
+                    }else{
+                        swal("服务器错误！","请稍后再尝试或联系系统管理员", "error");
+                    }
+                },
+                error:function () {
+                    swal("服务器错误！","请稍后再尝试或联系系统管理员", "error");
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -21,7 +54,7 @@
         <div class="vip-main cgx-txt">
             <h1 class="center-h1"><i class="fa fa-user"></i>{$recruit_name}-欢迎加入我们！</h1>
             <div class="recruit-content">
-                <form action="{:U('/Appointment/Recruit/save')}"  enctype="multipart/form-data" method="post">
+                <form action="" id="ajax_input" enctype="multipart/form-data" method="post">
                     <div class="vip-txt-box">
                         <table>
                             <tr>
@@ -118,11 +151,40 @@
                     </div>
                     <div class="vip-img-box">
                         <span class="vip-img">
-                            <img src="<notempty name='recruit_info.img'>__PUBLIC__{$recruit_info.img}</notempty>" alt="">
-                            <input type="file" name="img" class="file-btn"/>
-                            <span class="span-btn"><i class="fa fa-cloud-upload"></i>上传(最大{:C('MAX_PHOTO_POST_SIZE')/1024/1024}MB)</span>
+                            <img id="finalImg" src="<notempty name='recruit_info.img'>__PUBLIC__{$recruit_info.img}</notempty>" alt="">
+                            <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)" />
+                            <label title="上传图片" for="chooseImg" class="l-btn choose-btn">上传本人照片</label>
                         </span>
                     </div>
+                    <!--图片裁剪框 start-->
+                    <div style="display: none" class="tailoring-container">
+                        <div class="black-cloth" onclick="closeTailor(this)"></div>
+                        <div class="tailoring-content">
+                            <div class="tailoring-content-one">
+            
+                                <div class="close-tailoring" onclick="closeTailor(this)">×</div>
+                            </div>
+            
+                            <div class="tailoring-content-two">
+                                <div class="tailoring-box-parcel">
+                                    <img id="tailoringImg">
+                                </div>
+                                <div class="preview-box-parcel">
+                                    <p>图片预览：</p>
+                                    <div class="square previewImg"></div>
+                                    <!--  <div class="circular previewImg"></div>-->
+                                </div>
+                            </div>
+            
+                            <div class="tailoring-content-three">
+                                <button class="l-btn cropper-reset-btn">复位</button>
+                                <button class="l-btn cropper-rotate-btn">旋转</button>
+                                <button class="l-btn cropper-scaleX-btn">换向</button>
+                                <button class="l-btn sureCut" id="sureCut">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--图片裁剪框 end-->
                     <div class="vip-text">
                         <table>
                             <tr>
@@ -154,7 +216,7 @@
                             <tr>
                                 <td></td>
                                 <input type="hidden" name="uid" value="{$v.uid}"/>
-                                <td class="vip-input"><input type="submit" class="vip-btn" id="submit-button" value="提&nbsp;&nbsp;交"></td>
+                                <td class="vip-input"><input type="button" class="vip-btn"   onclick="submit_form(this)" id="submit-button" value="提&nbsp;&nbsp;交"></td>
                             </tr>
                         </table>
                     </div>
@@ -208,5 +270,120 @@
             });
         </script>
     </if>
+
+
+    <!-- Cooper -->
+    <script src="__PUBLIC__/cropper/cropper.min.js"></script>
+    <script type="text/javascript">  
+        //弹出框水平垂直居中  
+        (window.onresize = function() {  
+            var win_height = $(window).height();  
+            var win_width = $(window).width();  
+            if (win_width <= 768) {  
+                $(".tailoring-content").css(  
+                        {  
+                            "top" : (win_height - $(".tailoring-content")  
+                                    .outerHeight()) / 2,  
+                            "left" : 0  
+                        });  
+            } else {  
+                $(".tailoring-content").css(  
+                        {  
+                            "top" : (win_height - $(".tailoring-content")  
+                                    .outerHeight()) / 2,  
+                            "left" : (win_width - $(".tailoring-content")  
+                                    .outerWidth()) / 2  
+                        });  
+            }  
+        })();  
+          
+        // 选择文件触发事件  
+        function selectImg(file) {  
+            //文件为空，返回  
+            if (!file.files || !file.files[0]) {  
+                return;  
+            }  
+            $(".tailoring-container").toggle();  
+            var reader = new FileReader();  
+            reader.onload = function(evt) {  
+                var replaceSrc = evt.target.result;  
+                // 更换cropper的图片  
+                $('#tailoringImg').cropper('replace', replaceSrc, false);// 默认false，适应高度，不失真  
+            }  
+            reader.readAsDataURL(file.files[0]);  
+        }  
+        // cropper图片裁剪  
+        $('#tailoringImg').cropper({  
+            aspectRatio : 3 / 4,// 默认比例  
+            preview : '.previewImg',// 预览视图  
+            guides : false, // 裁剪框的虚线(九宫格)  
+            autoCropArea : 0.5, // 0-1之间的数值，定义自动剪裁区域的大小，默认0.8  
+            movable : false, // 是否允许移动图片  
+            dragCrop : true, // 是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域  
+            movable : true, // 是否允许移动剪裁框  
+            resizable : true, // 是否允许改变裁剪框的大小  
+            zoomable : false, // 是否允许缩放图片大小  
+            mouseWheelZoom : false, // 是否允许通过鼠标滚轮来缩放图片  
+            touchDragZoom : true, // 是否允许通过触摸移动来缩放图片  
+            rotatable : true, // 是否允许旋转图片  
+            crop : function(e) {  
+                // 输出结果数据裁剪图像。  
+            }  
+        });  
+        // 旋转  
+        $(".cropper-rotate-btn").on("click", function() {  
+            $('#tailoringImg').cropper("rotate", 45);  
+        });  
+        // 复位  
+        $(".cropper-reset-btn").on("click", function() {  
+            $('#tailoringImg').cropper("reset");  
+        });  
+        // 换向  
+        var flagX = true;  
+        $(".cropper-scaleX-btn").on("click", function() {  
+            if (flagX) {  
+                $('#tailoringImg').cropper("scaleX", -1);  
+                flagX = false;  
+            } else {  
+                $('#tailoringImg').cropper("scaleX", 1);  
+                flagX = true;  
+            }  
+            flagX != flagX;  
+        });  
+          
+        // 确定按钮点击事件  
+        $("#sureCut").on("click", function() {  
+            if ($("#tailoringImg").attr("src") == null) {  
+                return false;  
+            } else {  
+                var cas = $('#tailoringImg').cropper('getCroppedCanvas');// 获取被裁剪后的canvas  
+                var base64 = cas.toDataURL('image/jpeg'); // 转换为base64  
+          
+                    $("#finalImg").prop("src", base64);// 显示图片  
+                uploadFile(encodeURIComponent(base64))//编码后上传服务器  
+                closeTailor();// 关闭裁剪框  
+            }  
+        });  
+        
+        // 关闭裁剪框  
+        function closeTailor() {  
+            $(".tailoring-container").toggle();  
+        }  
+        
+        //ajax请求上传  
+        function uploadFile(file) {  
+            $.ajax({  
+                url : '/Appointment/Recruit/save_img',  
+                type : 'POST',  
+                data : "file=" + file,  
+                async : true,  
+                success : function(data) {  
+                    console.log(data)  
+                }  
+            });  
+        }  
+    </script>  
+    
+    
 </body>
 </html>

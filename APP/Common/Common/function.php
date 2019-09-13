@@ -1,4 +1,9 @@
 <?php
+    function return_json($return_array){
+        header('Content-Type:text/json;charset=utf-8');
+        echo json_encode($return_array);
+        die();
+    }
     function project_manage_right_check_by_pr_id($pr_id){
         $uid=intval(session('id'));
         $project=D('ProjectView')->where(array('pr_id'=>$pr_id))->find();
