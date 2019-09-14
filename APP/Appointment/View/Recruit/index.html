@@ -191,30 +191,32 @@
                                 <td class="vip-title">个人简介：</td>
                                 <td class="vip-input"><textarea name="info" required placeholder="讲讲你的爱好、特长，你与计算机之间的故事，向大家介绍一下自己。"><notempty name='recruit_info.info'>{$recruit_info.info}</notempty></textarea></td>
                             </tr>
-                        </table>
-                    </div>
-                <div class="vip-text">
-                        <table>
                             <tr>
                                 <td class="vip-title">入会申请：</td>
                                 <td class="vip-input"><textarea name="apply" required placeholder="讲讲你为什么想加入计算机协会。"><notempty name='recruit_info.apply'>{$recruit_info.apply}</notempty></textarea></td>
                             </tr>
+                        </table>
+                    </div>
+                    <div class="vip-text">
+                        <table>
+                            
+                        
                             <tr>
-                                    <td>
-                                        <if condition="$ENABLE_GEETEST eq true">
-                                            验证码
-                                        </if>
-                                    </td>
-                                    <td>
-                                        <if condition="$ENABLE_GEETEST eq true">
-                                            <div id="embed-captcha" style="width: 100%"></div>
-                                            <p id="wait" class="show">正在加载验证码......</p>
-                                            <p id="notice" class="hide">请先完成验证</p>
-                                        </if>
-                                    </td>
-                                </tr>
+                                <td>
+                                    <if condition="$ENABLE_GEETEST eq true">
+                                        验证码：
+                                    </if>
+                                </td>
+                                <td>
+                                    <if condition="$ENABLE_GEETEST eq true">
+                                        <div id="embed-captcha" style="width: 100%"></div>
+                                        <p id="wait" class="show">正在加载验证码......</p>
+                                        <p id="notice" class="hide">请先完成验证</p>
+                                    </if>
+                                </td>
+                            </tr>
                             <tr>
-                                <td></td>
+                                <td><div style="width: 60px;"></div></td>
                                 <input type="hidden" name="uid" value="{$v.uid}"/>
                                 <td class="vip-input"><input type="button" class="vip-btn"   onclick="submit_form(this)" id="submit-button" value="提&nbsp;&nbsp;交"></td>
                             </tr>
@@ -258,7 +260,7 @@
                     // 参数1：配置参数
                     // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
                     initGeetest({
-                        width: '388px',
+                        width: '180px',
                         https: true,
                         gt: data.gt,
                         challenge: data.challenge,
