@@ -169,7 +169,7 @@ class RecruitController extends CommonController {
              */
             $user_info=M('users')->where(array('username' => session('username')))->find();
             if($user_info['img']=='/images/hi.png'){
-                $this->error('请先上传本人照片！');
+                return_json(array('result'=>'failure','msg'=>'请先上传本人照片！'));
             }
 
             /**
