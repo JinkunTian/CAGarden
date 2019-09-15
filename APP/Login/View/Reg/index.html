@@ -108,8 +108,13 @@ onafterpaste="this.value=this.value.replace(/\D/g,'')" name="qq" value="" placeh
                                 </tr> -->
                                 <tr>
                                     <td class="vip-title">密码：</td>
-                                    <td class="vip-input"><input  style="width: 210px;" type="text" name="password" value="" placeholder="请设置一个登陆计协密码" required="required"/></td>
-                                </tr>
+                                    
+                                    <if condition="$USE_QIANGZHI_JIAOWU eq true">
+                                        <td class="vip-input"><input  style="width: 210px;" type="text" name="password" value="" placeholder="请设置一个登陆计协密码" required="required"/></td>
+                                    <else />
+                                        <td class="vip-input"><input  style="width: 210px;" type="text" name="password" value="{:session('password')}" placeholder="请设置一个登陆计协密码" required="required"/></td>                                    </if>
+                                    </if>
+                                    </tr>
                             </table>
                             <table style="width: 100%">
                                 <tr></tr>

@@ -184,6 +184,7 @@ class IndexController extends Controller {
                     }
                 }else{
                     session('username',I('username'));
+                    session('password',I('password'));
                     session(C('PASSWORD_KEY'),true);//防止跨站
                     $this->redirect('/Login/Reg');
                 }
