@@ -134,6 +134,15 @@ class RecruitController extends CommonController {
                 $this->error('当前纳新已经关闭了！');
             }
 
+            if(I('flag')==''){
+                return_json(array('result'=>'warning','msg'=>'签名填写完整才能提交哦！'));
+            }else if(I('class')==''){
+                return_json(array('result'=>'warning','msg'=>'班级信息要填写哦！'));
+            }else if(I('info')==''){
+                return_json(array('result'=>'warning','msg'=>'个人简介要填写哦！'));
+            }else if(I('apply')==''){
+                return_json(array('result'=>'warning','msg'=>'入会申请是一定要填写的哦！'));
+            }
             /**
              * 基础信息
              */

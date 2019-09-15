@@ -35,6 +35,8 @@
                             function(conform) {
                             window.location.href="{:U('/Appointment/Recruit')}";
                         });
+                    }else if(result.result=='warning'){
+                        swal("等等！",result.msg,"warning");
                     }else if(result.result=='failure'){
                         swal("出错！", result.msg, "error");
                     }else{
