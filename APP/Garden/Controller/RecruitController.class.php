@@ -102,7 +102,7 @@ class RecruitController extends AdminController {
         if($recruit['status']=='0'){
             //$recruit['dep']=I('dep'); 
             $recruit['status']='1';/*    更新纳新数据库状态   */
-            $change=M('recruit')->where(array('uid'=>I('uid')))->save($recruit);
+            $change=M('recruit')->where(array('uid'=>$recruit['uid']))->save(array('status'=>1));
             $newuser = array(
                 'uid' => $recruit['uid'],
                 'username' => $recruit['username'],
@@ -128,7 +128,7 @@ class RecruitController extends AdminController {
                 $result=M('garden_users_extend')->add($newuser);
                 $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
                 if (!$result===false) {
-                    //$this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                    $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                 }else{
                     $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                 }
