@@ -135,6 +135,8 @@ class RecruitController extends AdminController {
             }else{
                 $this->error('该用户名已存在！');
             }
+        }else {
+            $this->error('当前用户状态不可参加纳新');
         }
     }
     /**

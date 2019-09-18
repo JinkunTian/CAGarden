@@ -171,6 +171,7 @@ class RecruitController extends CommonController {
                 'grade' => $Recruit['gid'],
                 'reg_ip' => get_client_ip(),
                 'addtime' =>date('y-m-d H:i:s'),
+                'status'    =>  0,
             );
 
             /**
