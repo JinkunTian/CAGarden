@@ -20,10 +20,10 @@ class RecruitController extends CommonController {
         }
 
         if(!$Recruit){
-            $this->error('对应年度的纳新不存在！');
+            $this->error('对应年度的纳新不存在！','/Appointment');
         }else{
             if($Recruit['status']!='1'){
-                $this->error('当前纳新已经关闭了！');
+                $this->error('当前纳新已经关闭了！','/Appointment');
             }
         }
 
