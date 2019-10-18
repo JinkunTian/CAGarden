@@ -30,23 +30,30 @@ class IndexController extends CommonController {
      * index方法根据用户信息登记审计并放行WiFi接入
      */
     public function index(){
-        $wifi_log=array(
-            'mac'=>I('mac'),
-            'ip'=>I('user_ip'),
-            'timestamp'=>date("Y-m-d H:i:s",I('timestamp')),
-            'username'=>session('username'),
-            'truename'=>session('name')
-        );
-        M('wifi')->add($wifi_log);
-        $base_url='https://portal.ikuai8-wifi.com/Action/webauth-up?type=20';
-        $token=md5('user_ip='.$wifi_log['ip'].'&timestamp='.I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&key='.C('iKuai_APPKEY'));
-        $url=$base_url.'&user_id='.$wifi_log['username'].'&custom_name='.$wifi_log['name'].'&user_ip='.$wifi_log['ip']."&timestamp=".I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&token='.$token;
-        $resault=$this->getData($url);
-        if($resault['errmsg']=='认证成功'){
-            $this->success('WiFi接入成功！','http://www.mecca.org.cn',2);
+        if( I('mac') && I('user_ip') && I('timestamp') ){
+            $wifi_log=array(
+                'mac'=>I('mac'),
+                'ip'=>I('user_ip'),
+                'timestamp'=>date("Y-m-d H:i:s",I('timestamp')),
+                'username'=>session('username'),
+                'truename'=>session('name')
+            );
+            M('wifi')->add($wifi_log);
+            $base_url='https://portal.ikuai8-wifi.com/Action/webauth-up?type=20';
+            $token=md5('user_ip='.$wifi_log['ip'].'&timestamp='.I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&key='.C('iKuai_APPKEY'));
+            $url=$base_url.'&user_id='.$wifi_log['username'].'&custom_name='.$wifi_log['name'].'&user_ip='.$wifi_log['ip']."&timestamp=".I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&token='.$token;
+            $this->assign('url',$url);
+            $this->display();
         }else{
-            $this->error('WiFi接入失败，请暂时访问内网资源！','http://www.mecca.org.cn');
+            $this->error('参数错误！','/');
         }
+        
+        // $resault=$this->getData($url);
+        // if($resault['errmsg']=='认证成功'){
+        //     $this->success('WiFi接入成功！','http://www.mecca.org.cn',2);
+        // }else{
+        //     $this->error('WiFi接入失败，请暂时访问内网资源！','http://www.mecca.org.cn');
+        // }
     }
     
     /**

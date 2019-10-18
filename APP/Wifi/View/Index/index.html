@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>WiFi接入认证 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <link rel='stylesheet' href='__PUBLIC__/css/sweetalert.css' type='text/css' media='all' />
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/sweetalert.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type="text/javascript">
+        $.ajax({
+            url:"{$url}",
+            type:'get',
+            success:function (result) {
+                if(result.errmsg=='认证成功'){
+                    swal({
+                        title:"WiFi接入成功！",
+                        text:'WiFi接入成功！现下您可以访问互联网了！', 
+                        type:"success"},
+
+                        function(conform) {
+                        window.location.href="/";
+                    });
+                }else{
+                    swal("WiFi接入认证出错！","请稍后再尝试或联系系统管理员", "error");
+                }
+            },
+            error:function () {
+                swal("WiFi接入认证出错！","请稍后再尝试或联系系统管理员", "error");
+            }
+        });
+    </script>
+</head>
