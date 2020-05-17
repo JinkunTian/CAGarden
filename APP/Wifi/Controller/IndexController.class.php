@@ -41,7 +41,10 @@ class IndexController extends CommonController {
             M('wifi')->add($wifi_log);
             $base_url='https://portal.ikuai8-wifi.com/Action/webauth-up?type=20';
             $token=md5('user_ip='.$wifi_log['ip'].'&timestamp='.I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&key='.C('iKuai_APPKEY'));
-            $url=$base_url.'&user_id='.$wifi_log['username'].'&custom_name='.$wifi_log['name'].'&user_ip='.$wifi_log['ip']."&timestamp=".I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&token='.$token;
+            $url=$base_url.'&user_id='.$wifi_log['username'].'&name='.$wifi_log['name'].'&user_ip='.$wifi_log['ip']."&timestamp=".I('timestamp').'&mac='.$wifi_log['mac'].'&upload=0&download=0&token='.$token;
+header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type');
             $this->assign('url',$url);
             $this->display();
         }else{
