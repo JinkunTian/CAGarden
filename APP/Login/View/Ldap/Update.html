@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>升级账户 - {:C('SITE_NAME')}</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+    <script type='text/javascript'>
+      function check(){
+        $newpassword = document.getElementById("newpassword");
+        $checkpassword = document.getElementById("checkpassword");
+        if($newpassword.value != $checkpassword.value){
+              alert("两次输入的密码不相符");
+              return false;
+         }
+      }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="vip-main cgx-txt">
+            <h1 class="center-h1">升级账户 - 计协通行证</h1>
+            
+            <div class="new_guest-content">
+                <h4>为了为同学们提供更优的体验，需要将你的账户升级为域账户。</h4>
+                <h4>只需要重新设置一次密码即可，其他的工作交给我们就OK啦！</h4>
+                <form action="{:U('/Login/Ldap/Updatepost')}"  enctype="multipart/form-data" method="post">
+                        <div class="vip-txt-box">
+                            <table>
+                                <tr>
+                                    <td class="vip-title">新密码：</td>
+                                    <td class="vip-input"><input  style="width: 210px" type="password" id="newpassword" name="newpassword" value="" required="required"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title">确认一遍：</td>
+                                    <td class="vip-input"><input  style="width: 210px" type="password" id="checkpassword" name="checkpassword" value="" required="required" /></td>
+                                </tr>
+                               
+                            </table>
+                            <table style="width: 100%">
+                                <tr></tr>
+                                <tr>
+                                    <td>
+                                        <if condition="$ENABLE_GEETEST eq true">
+                                            <div id="embed-captcha" style="width: 100%"></div>
+                                            <p id="wait" class="show">正在加载验证码......</p>
+                                            <p id="notice" class="hide">请先完成验证</p>
+                                        </if>
+                                    </td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <td><input style="width: 100%" type="submit" onclick="return check()" id="embed-submit" value="保存"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="vip-img-box">
+                            <span class="vip-img">
+                                <img src="__PUBLIC__/images/hi.png" alt="欢迎加入计算机协会">
+                            </span>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="height: 100px"></div>
+    <script src="__PUBLIC__/js/index.js"></script>
+    <if condition="$ENABLE_GEETEST eq true">
+        <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+        <script src="__PUBLIC__/js/gt.js"></script>
+        <script>
+            var handlerEmbed = function (captchaObj) {
+                $("#embed-submit").click(function (e) {
+                    var validate = captchaObj.getValidate();
+                    if (!validate) {
+                        $("#notice")[0].className = "show";
+                        setTimeout(function () {
+                            $("#notice")[0].className = "hide";
+                        }, 2000);
+                        e.preventDefault();
+                    }
+                });
+                // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+                captchaObj.appendTo("#embed-captcha");
+                captchaObj.onReady(function () {
+                    $("#wait")[0].className = "hide";
+                });
+                // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+            };
+            $.ajax({
+                // 获取id，challenge，success（是否启用failback）
+                url: "{:U('/Login/Reg/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    // 使用initGeetest接口
+                    // 参数1：配置参数
+                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+                    initGeetest({
+                        width: '198px',
+                        https: true,
+                        gt: data.gt,
+                        challenge: data.challenge,
+                        new_captcha: data.new_captcha,
+                        product: "popup", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                        offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                    }, handlerEmbed);
+                }
+            });
+        </script>
+    </if>
+</body>
+</html>
