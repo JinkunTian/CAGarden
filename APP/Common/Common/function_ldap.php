@@ -1,4 +1,45 @@
 <?php
+function ldap_create_link_identifier($LDAP_SERVER_HOST,$LDAP_USER,$LDAP_PWD,$DOMAIN){
+    $result['result']=false;
+    $ds=ldap_connect($LDAP_SERVER_HOST);
+    if($ds){
+        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);//声明使用版本3
+        ldap_set_option($ds, LDAP_OPT_REFERRALS, 0); // Binding to ldap server
+        $r=@ldap_bind($ds,$LDAP_USER.'@'.$DOMAIN,$LDAP_PWD);
+        ldap_get_option($ds, LDAP_OPT_DIAGNOSTIC_MESSAGE, $extended_error);
+        //验证账号是否过期
+        if(!$extended_error){
+            $result['result']=true;
+            $result['resource']=$ds;
+        }else{
+            $result['result']=false;
+            ldap_close($ds);
+        }
+    }
+    return $result;
+}
+function ldap_change_password($ds,$target_user,$BASE_DN,$newPass){
+    $target_user_dn='CN='.$target_user.','.$BASE_DN;
+    $passdata["unicodepwd"] = $newPass; 
+    $result = ldap_mod_replace($ds,$target_user_dn,$passdata);
+    return $result; 
+}
+function ldap_add_user_to_group($ds,$BASE_DN, $target_user,$target_group){
+    $target_user_dn='CN='.$target_user.','.$BASE_DN;
+    $target_group_dn='CN='.$target_group.','.$BASE_DN;
+
+    $entry['member']=$target_user_dn;
+    $res=ldap_mod_add($ds,$target_group_dn,$entry);
+    return $res;
+}
+function ldap_del_user_from_group($ds,$BASE_DN, $target_user,$target_group){
+    $target_user_dn='CN='.$target_user.','.$BASE_DN;
+    $target_group_dn='CN='.$target_group.','.$BASE_DN;
+
+    $entry['member']=$target_user_dn;
+    $res=ldap_mod_del($ds,$target_group_dn,$entry);
+    return res;
+}
 function myldap_delete($ds,$dn,$recursive=false){
     if($recursive == false){
         return(ldap_delete($ds,$dn));
@@ -208,7 +249,18 @@ function ldap_add_user($LDAP_SERVER_HOST,$BASE_DN,$LDAP_ADMIN_USER,$LDAP_ADMIN_P
                     $entry['member']=$target_user_dn;
                     $res=ldap_mod_add($ds,$UserInfo['memberOf'],$entry);
                     if($res){
-                        $add_result['result']=true;
+                        if($UserInfo['is_admin']){
+                            $entry['member']=$target_user_dn;
+                            $res=ldap_mod_add($ds,"CN=Managers,".$BASE_DN,$entry);
+                            if($res){
+                                $add_result['result']=true;
+                            }else{
+                                $add_result['result']=false;
+                                $add_result['info']='设置管理分组时出错。';
+                            }
+                        }else{
+                            $add_result['result']=true;
+                        }
                     }else{
                         $add_result['result']=false;
                         $add_result['info']='设置账户分组时出错。';

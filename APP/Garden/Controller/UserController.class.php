@@ -131,11 +131,29 @@ class UserController extends CommonController {
       if ($newpws!=$newpwss || $user['password'] != $old_pass) {
           $this->error('旧密码错误或者新密码不一致');
       }else{
-            //写入密码
-            if (M('users')->where(array('uid' => session('id')))->save($data)) {
-                $this->success('修改成功');
+            if(C('USE_LDAP')){
+                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                if($ds['result']){
+                    $res=ldap_change_password($ds['resource'],$user['username'],C('BASE_DN'),$newpws);
+                    if($res){
+                        if (M('users')->where(array('uid' => session('id')))->save($data)) {
+                            $this->success('修改成功');
+                        }else{
+                            $this->error('修改网站账户失败');
+                        } 
+                    }else{
+                        $this->error('修改域账户失败');
+                    }
+                }else{
+                    $this->error('与LDAP服务器通信失败！');
+                }
             }else{
-                $this->error('修改失败');
+                //写入密码
+                if (M('users')->where(array('uid' => session('id')))->save($data)) {
+                    $this->success('修改成功');
+                }else{
+                    $this->error('修改失败');
+                } 
             }
         }
     }

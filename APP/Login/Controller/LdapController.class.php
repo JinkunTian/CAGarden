@@ -39,7 +39,8 @@ class LdapController extends Controller {
                 $UserInfo['position']=$user_extend['position'];
                 $UserInfo['company'] = C('SITE_NAME');
                 $UserInfo['office'] = $user_extend['mname'];
-                $UserInfo['memberOf'] = "CN=Students,".C('BASE_DN');
+                $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
+                $UserInfo['is_admin']=$user_extend['is_admin']; 
             }else{
                 $UserInfo['description']='注册用户';
                 $UserInfo['memberOf'] = "CN=Students,".C('BASE_DN');
