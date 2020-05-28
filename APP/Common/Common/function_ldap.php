@@ -290,8 +290,3 @@ function ldap_add_user($LDAP_SERVER_HOST,$BASE_DN,$LDAP_ADMIN_USER,$LDAP_ADMIN_P
     }
     return $add_result;
 }
-
-function ldap_add_user_to_group($LDAP_SERVER_HOST,$BASE_DN,$LDAP_ADMIN_USER,$LDAP_ADMIN_PWD,$DOMAIN,$UserInfo){
-    
-    
-}
