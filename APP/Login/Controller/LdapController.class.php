@@ -1,25 +1,20 @@
 <?php
 namespace Login\Controller;
 use Think\Controller;
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020年4月21日
+ * @Description: LDAP域控支持模块，将用户从普通数据库添加至LDAP目录
+ ***/
 class LdapController extends Controller {
-    // 显示登录页面
+    
     public function index(){
-        $majors=M('common_majors')->where(array('status'=>'1'))->select();
-        $institute=M('common_majors')->distinct(true)->field('institute')->select();
-        if(C('USE_QIANGZHI_JIAOWU')){
-            $this->assign('student_institute',session('college'));
-        }else{
-            $this->assign('student_institute','');
-        }
-        $this->assign('institute',$institute);
-        $this->assign('majors',$majors);
-        $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
-        $this->assign('USE_QIANGZHI_JIAOWU',C('USE_QIANGZHI_JIAOWU'));
-        $this->display();
+         
     }
 
     public function Update(){
-        // var_dump(session('upgrade_to_ldap_user'));
         $this->display();
     }
     public function Updatepost(){

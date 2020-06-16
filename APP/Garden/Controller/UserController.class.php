@@ -94,13 +94,52 @@ class UserController extends CommonController {
         }
 
         if(I('uid')==intval(session('id'))){
-            $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
-            $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
-            if ($result1===false||$result2===false) {
-                $this->error('保存失败！');
+
+            /** 
+             * 启用了LDAP就将密码同时写入LDAP和数据库
+             */
+            if(C('USE_LDAP')){
+
+                $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
+                $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
+
+                $UserInfo['truename']=$base_data['truename'];
+                $UserInfo['mail']=$base_data['email'];
+                $UserInfo['telephone']=$base_data['mobile'];
+                $UserInfo['qq']=$base_data['qq'];
+                $UserInfo['description']='协会成员';
+                $UserInfo['department']= $dep['dname']
+                $UserInfo['position']=$extend_data['position'];
+                $UserInfo['company'] = C('SITE_NAME');
+                $UserInfo['office'] = $major['mname'];
+
+                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                if($ds['result']){
+                    $res=ldap_change_user_info($ds['resource'],$base_data['username'],C('BASE_DN'),$UserInfo);
+                    if($res){
+                        $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+                        $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+                        if ($result1===false||$result2===false) {
+                            $this->error('保存失败！');
+                        }else{
+
+                            $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+                        }   
+                    }else{
+                        $this->error('保存到LDAP目录失败！');
+                    }
+                }
             }else{
-                $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+                $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+                $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+                if ($result1===false||$result2===false) {
+                    $this->error('保存失败！');
+                }else{
+
+                    $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+                }  
             }
+
         }else{
             $this->error('你不能编辑别人的信息');
         }
@@ -142,7 +181,7 @@ class UserController extends CommonController {
                             $this->error('修改网站账户失败');
                         } 
                     }else{
-                        $this->error('修改域账户失败');
+                        $this->error('修改域账户失败，密码不够安全，请设置一个安全性较强的密码！');
                     }
                 }else{
                     $this->error('与LDAP服务器通信失败！');

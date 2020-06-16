@@ -3,7 +3,7 @@ namespace Wifi\Controller;
 use Think\Controller;
 /***
  * @Author:      田津坤
- * @Email:       tianjinkun@spyder.link
+ * @Email:       me@tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日14:45:47
  * @Description: 计算机协会WiFi接入审计控制器

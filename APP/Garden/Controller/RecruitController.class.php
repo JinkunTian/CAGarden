@@ -100,10 +100,11 @@ class RecruitController extends AdminController {
         
         $recruit = M('recruit')->where(array('rid'=>I('rid')))->find();
         if($recruit['status']=='0'){
-            //$recruit['dep']=I('dep'); 
             $recruit['status']='1';/*    更新纳新数据库状态   */
             $change=M('recruit')->where(array('uid'=>$recruit['uid']))->save(array('status'=>1));
-            $newuser = array(
+
+
+            $extend_data = array(
                 'uid' => $recruit['uid'],
                 'username' => $recruit['username'],
                 // 'truename' => $recruit['truename'],
@@ -125,12 +126,52 @@ class RecruitController extends AdminController {
             /***    社团管理网站基于ProjectTree搭建，将新成员信息添加到ProjectTree数据库user表  ***/
             $checkExis=M('garden_users_extend')->where(array('username' => $recruit['username']))->find();
             if(!$checkExis){
-                $result=M('garden_users_extend')->add($newuser);
-                $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
-                if (!$result===false) {
-                    $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+
+                /** 
+                 * 启用了LDAP就将密码同时写入LDAP和数据库
+                 */
+                if(C('USE_LDAP')){
+
+                    $base_data=M('users')->->where(array('uid'=>$recruit['uid']))->find();
+                    $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
+                    $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
+
+                    $UserInfo['truename']=$base_data['truename'];
+                    $UserInfo['mail']=$base_data['email'];
+                    $UserInfo['telephone']=$base_data['mobile'];
+                    $UserInfo['qq']=$base_data['qq'];
+                    $UserInfo['description']='协会成员';
+                    $UserInfo['department']= $dep['dname']
+                    $UserInfo['position']=$extend_data['position'];
+                    $UserInfo['company'] = C('SITE_NAME');
+                    $UserInfo['office'] = $major['mname'];
+                    // $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
+
+                    $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                    if($ds['result']){
+                        $res=ldap_add_user_to_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+                        if($res){
+                            $result=M('garden_users_extend')->add($newuser);
+                            $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
+                            if (!$result===false) {
+                                $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                            }else{
+                                $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                            }        
+                        }else{
+                            $this->error('纳新失败！将用户添加到LDAP目录时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                        }
+                    }else{
+                        $this->error('与LDAP服务器通信失败！');
+                    }
                 }else{
-                    $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                    $result=M('garden_users_extend')->add($newuser);
+                    $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
+                    if (!$result===false) {
+                        $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                    }else{
+                        $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                    }   
                 }
             }else{
                 $this->error('该用户名已存在！');

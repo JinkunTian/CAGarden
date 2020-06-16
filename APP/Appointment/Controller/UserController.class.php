@@ -3,7 +3,7 @@ namespace Appointment\Controller;
 use Think\Controller;
 /***
  * @Author:      田津坤
- * @Email:       tianjinkun@spyder.link
+ * @Email:       me@tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日15:04:47
  * @Description: 计算机协会预约维修平台（前台）用户控制器

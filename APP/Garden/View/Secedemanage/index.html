@@ -39,12 +39,12 @@
 					<tbody>
 						<foreach name="users" item="v">
 							<tr>
-								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.truename}</a></td>
-								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.username}</a></td>
-								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.mobile}</a></td>
-								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.qq}</a></td>
-								<td><a href="{:U('/Garden/UserManage/index',array('dep'=>$v['dep']))}" target="_blank">{$v.dname}</a></td>
-								<td><a href="{:U('/Garden/UserManage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.position}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.truename}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.username}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.mobile}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.qq}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/index',array('dep'=>$v['dep']))}" target="_blank">{$v.dname}</a></td>
+								<td><a href="{:U('/Garden/Usermanage/edit',array('uid'=>$v['uid']))}" target="_blank">{$v.position}</a></td>
 								<eq name="v.status" value="1">
 									<td>需审核</td>
 									<td><a href="{:U('/Garden/Secedemanage/view_secede',array('uid'=>$v['uid']))}" target="_blank">审核</a></td>

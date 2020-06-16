@@ -24,21 +24,84 @@ function ldap_change_password($ds,$target_user,$BASE_DN,$newPass){
     $result = ldap_mod_replace($ds,$target_user_dn,$passdata);
     return $result; 
 }
-function ldap_add_user_to_group($ds,$BASE_DN, $target_user,$target_group){
+function ldap_change_user_info($ds,$target_user,$BASE_DN,$NewInfo){
     $target_user_dn='CN='.$target_user.','.$BASE_DN;
-    $target_group_dn='CN='.$target_group.','.$BASE_DN;
+    $result = ldap_mod_replace($ds,$target_user_dn,$NewInfo);
+    return $result; 
+}
+function ldap_user_esixt($ds,$BASE_DN,$USER){
+//    function ldap_user_esixt($LDAP_SERVER_HOST,$BASE_DN,$LDAP_ADMIN_USER,$LDAP_ADMIN_PWD,$USER,$DOMAIN){
 
-    $entry['member']=$target_user_dn;
-    $res=ldap_mod_add($ds,$target_group_dn,$entry);
+    $check_esixt=array();
+    // //创建一个LDAP连接
+    // $ds=ldap_connect($LDAP_SERVER_HOST);
+    // if ($ds) {
+    //     ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);//声明使用版本3
+    //     ldap_set_option($ds, LDAP_OPT_REFERRALS, 0); // Binding to ldap server
+    //     $r=@ldap_bind($ds,$LDAP_ADMIN_USER.'@'.$DOMAIN,$LDAP_ADMIN_PWD);
+    //     ldap_get_option($ds, LDAP_OPT_DIAGNOSTIC_MESSAGE, $extended_error);
+    //     //验证账号是否过期
+    //     if(!$extended_error){
+    $sr=ldap_search($ds,$BASE_DN,"CN=".$USER);
+    $info = ldap_get_entries($ds, $sr);
+    if($info['count']){
+        $check_esixt['result']=true;
+        $check_esixt['info']="success";
+        $length=$info[0]['memberof']['count'];
+        for($i=0;$i<$length;$i++){
+            $temp=explode(',',$info[0]['memberof'][$i]);
+            $group_temp=explode('=',$temp[0]);
+            $check_esixt['MemberOf'][]=$group_temp[1];
+        }
+    }else{
+        $check_esixt['result']=false;
+        $check_esixt['info']="用户不存在";
+    }            
+        // }else{
+        //     $check_esixt['result']=false;
+        //     $check_esixt['info']="系统错误：无法与域控制器完成认证。".$extended_error;
+        // }
+        // ldap_close($ds);
+    // }else{
+    //     $check_esixt['result']=false;
+    //     $check_esixt['info']="系统错误：无法与域控制器进行通信。";
+    // }
+    return $check_esixt;
+}
+function ldap_check_user_in_group($ds,$BASE_DN, $target_user,$target_group){
+    $res=ldap_user_esixt($ds,$BASE_DN,$target_user);
+    if(in_array($target_group,$res['MemberOf'])){
+        $result=true;
+    }else{
+        $result=false;
+    }
+    return $result;
+}
+function ldap_add_user_to_group($ds,$BASE_DN, $target_user,$target_group){
+    $res=ldap_check_user_in_group($ds,$BASE_DN, $target_user,$target_group);
+    if(!$res){
+        $target_user_dn='CN='.$target_user.','.$BASE_DN;
+        $target_group_dn='CN='.$target_group.','.$BASE_DN;
+
+        $entry['member']=$target_user_dn;
+        $res=ldap_mod_add($ds,$target_group_dn,$entry);
+    }else{
+        $res=true;
+    }
     return $res;
 }
 function ldap_del_user_from_group($ds,$BASE_DN, $target_user,$target_group){
-    $target_user_dn='CN='.$target_user.','.$BASE_DN;
-    $target_group_dn='CN='.$target_group.','.$BASE_DN;
+    $res=ldap_check_user_in_group($ds,$BASE_DN, $target_user,$target_group);
+    if($res){
+        $target_user_dn='CN='.$target_user.','.$BASE_DN;
+        $target_group_dn='CN='.$target_group.','.$BASE_DN;
 
-    $entry['member']=$target_user_dn;
-    $res=ldap_mod_del($ds,$target_group_dn,$entry);
-    return res;
+        $entry['member']=$target_user_dn;
+        $res=ldap_mod_del($ds,$target_group_dn,$entry);
+    }else{
+        $res=true;
+    }
+    return $res;
 }
 function myldap_delete($ds,$dn,$recursive=false){
     if($recursive == false){
@@ -61,43 +124,7 @@ function myldap_delete($ds,$dn,$recursive=false){
     }
 }
 
-function ldap_user_esixt($LDAP_SERVER_HOST,$BASE_DN,$LDAP_ADMIN_USER,$LDAP_ADMIN_PWD,$USER,$DOMAIN){
-    $check_esixt=array();
-    //创建一个LDAP连接
-    $ds=ldap_connect($LDAP_SERVER_HOST);
-    if ($ds) {
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);//声明使用版本3
-        ldap_set_option($ds, LDAP_OPT_REFERRALS, 0); // Binding to ldap server
-        $r=@ldap_bind($ds,$LDAP_ADMIN_USER.'@'.$DOMAIN,$LDAP_ADMIN_PWD);
-        ldap_get_option($ds, LDAP_OPT_DIAGNOSTIC_MESSAGE, $extended_error);
-        //验证账号是否过期
-        if(!$extended_error){
-            $sr=ldap_search($ds,$BASE_DN,"CN=".$USER);
-            $info = ldap_get_entries($ds, $sr);
-            if($info['count']){
-                $check_esixt['result']=true;
-                $check_esixt['info']="success";
-                $length=$info[0]['memberof']['count'];
-                for($i=0;$i<$length;$i++){
-                    $temp=explode(',',$info[0]['memberof'][$i]);
-                    $group_temp=explode('=',$temp[0]);
-                    $check_esixt['MemberOf'][]=$group_temp[1];
-                }
-            }else{
-                $check_esixt['result']=false;
-                $check_esixt['info']="用户不存在";
-            }            
-        }else{
-            $check_esixt['result']=false;
-            $check_esixt['info']="系统错误：无法与域控制器完成认证。".$extended_error;
-        }
-        ldap_close($ds);
-    }else{
-        $check_esixt['result']=false;
-        $check_esixt['info']="系统错误：无法与域控制器进行通信。";
-    }
-    return $check_esixt;
-}
+
 function ldap_login($LDAP_SERVER_HOST,$BASE_DN,$USER,$PASSWORD,$DOMAIN){
     $login_success=false;
     //创建一个LDAP连接

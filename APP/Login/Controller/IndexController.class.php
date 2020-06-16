@@ -113,51 +113,55 @@ class IndexController extends Controller {
             if($user){
                 if(C('USE_LDAP')){
                     //使用域控登录
-                    $check_esixt=ldap_user_esixt(C('LDAP_SERVER_HOST'),C('BASE_DN'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),$username,C('DOMAIN'));
-                    // var_dump($check_esixt);die();
-                    if($check_esixt['result']){
-                        //用户已升级为域账号
-                        $ldap_login_result=ldap_login(C('LDAP_SERVER_HOST'),C('BASE_DN'),$username,I('password'),C('DOMAIN'));
-                        // var_dump($ldap_login_result);die();
-                        //账密验证成功
-                        if($ldap_login_result){
-                            
-                            if(in_array('Members',$check_esixt['MemberOf'])){
-                                $user_extend=M('garden_users_extend')->where(array('username'=>$username))->find();
-                                $log_data['certify']='ldap';
-                                $login_data['success']=true;
-                                $login_data['id']=$user['uid'];
-                                $login_data['name']=$user['truename'];
-                                $login_data['userType']=$user['userType'];
-                                session('admin',$user_extend['type']); 
-                            //普通学生，非协会成员
-                            }elseif(in_array('Students',$check_esixt['MemberOf'])){
-                                $log_data['certify']='ldap';
-                                $login_data['success']=true;
-                                $login_data['id']=$user['uid'];
-                                $login_data['name']=$user['truename'];
-                                $login_data['username']=$username;
-                                $login_data['userType']=$user['userType']; 
+                    $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                    if($ds['result']){
+                        $check_esixt=ldap_user_esixt($ds['resource'],C('BASE_DN'),$username);
+                        if($check_esixt['result']){
+                            //用户已升级为域账号
+                            $ldap_login_result=ldap_login(C('LDAP_SERVER_HOST'),C('BASE_DN'),$username,I('password'),C('DOMAIN'));
+                            // var_dump($ldap_login_result);die();
+                            //账密验证成功
+                            if($ldap_login_result){
+                                
+                                if(in_array('Members',$check_esixt['MemberOf'])){
+                                    $user_extend=M('garden_users_extend')->where(array('username'=>$username))->find();
+                                    $log_data['certify']='ldap';
+                                    $login_data['success']=true;
+                                    $login_data['id']=$user['uid'];
+                                    $login_data['name']=$user['truename'];
+                                    $login_data['userType']=$user['userType'];
+                                    session('admin',$user_extend['type']); 
+                                //普通学生，非协会成员
+                                }elseif(in_array('Students',$check_esixt['MemberOf'])){
+                                    $log_data['certify']='ldap';
+                                    $login_data['success']=true;
+                                    $login_data['id']=$user['uid'];
+                                    $login_data['name']=$user['truename'];
+                                    $login_data['username']=$username;
+                                    $login_data['userType']=$user['userType']; 
+                                }else{
+                                    //未分组账户
+                                    $this->error('账户未正常匹配分组信息，联系管理员将你添加到相应分组！');
+                                }
+                            //账密验证失败
                             }else{
-                                //未分组账户
-                                $this->error('账户未正常匹配分组信息，联系管理员将你添加到相应分组！');
+                                $this->error('LDAP域账户或密码输入错误，请重新尝试或尝试找回密码。');
                             }
-                        //账密验证失败
+                        }else if($check_esixt['info']=="用户不存在"){
+                            //先验证用户原有账密是否正确
+                            if ($user['password'] == md5($user['salt'].$pwd)) {
+                                //用户未升级至域账号，引导升级
+                                session('upgrade_to_ldap_user',$user);
+                                $this->redirect('/Login/Ldap/Update');
+                            }else{
+                                sleep(3);
+                                $this->error('密码错误','/Login',3);
+                            }
                         }else{
-                            $this->error('LDAP域账户或密码输入错误，请重新尝试或尝试找回密码。');
-                        }
-                    }else if($check_esixt['info']=="用户不存在"){
-                        //先验证用户原有账密是否正确
-                        if ($user['password'] == md5($user['salt'].$pwd)) {
-                            //用户未升级至域账号，引导升级
-                            session('upgrade_to_ldap_user',$user);
-                            $this->redirect('/Login/Ldap/Update');
-                        }else{
-                            sleep(3);
-                            $this->error('密码错误','/Login',3);
+                            $this->error($check_esixt['info']);
                         }
                     }else{
-                        $this->error($check_esixt['info']);
+                        $this->error('与LDAP服务器通信失败！');
                     }
                 }else{
                     //不使用域控登录

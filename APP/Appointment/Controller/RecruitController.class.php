@@ -3,7 +3,7 @@ namespace Appointment\Controller;
 use Think\Controller;
 /***
  * @Author:      田津坤
- * @Email:       tianjinkun@spyder.link
+ * @Email:       me@tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日16:30:58
  * @Description: 社团纳新控制器

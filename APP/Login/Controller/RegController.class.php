@@ -1,6 +1,14 @@
 <?php
 namespace Login\Controller;
 use Think\Controller;
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018年8月21日
+ * @Description: 用户注册控制器
+ * @Update：2020/6/16 添加域控支持，将注册信息同步到LDAP目录
+ ***/
 class RegController extends CommonController {
     // 显示登录页面
     public function index(){
@@ -81,19 +89,62 @@ class RegController extends CommonController {
                 $data['salt']=md5(time());
                 $password = I('password','','md5');
                 $data['password']=md5($data['salt'].$password);
-                $result=M('users')->add($data);
-                if (!($result===false)) {
-                    session('id',$result);
-                    session('name',I('truename'));
-                    if(session('req_url')){
-                        $url=session('req_url');
-                        session('req_url',null);
-                        $this->success('注册成功！',$url);
+
+                if(C('USE_LDAP')){
+                    $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                    if($ds['result']){
+                        /**
+                         * 构建用户信息
+                         */
+                        $major=M('common_majors')->where(array('mid'=>$data['major']))->find();
+
+                        $UserInfo['username']=$data['username'];    //用户名
+                        $UserInfo['truename']=$data['truename'];    //昵称、真实姓名、显示名称
+                        $UserInfo['password']=I('password');    //密码
+                        $UserInfo['mail']=$data['email'];
+                        $UserInfo['telephone']=$data['mobile'];
+                        $UserInfo['qq']=$data['qq'];
+                        $UserInfo['office'] = $major['mname'];
+                        $UserInfo['memberOf'] = "CN=Students,".C('BASE_DN');
+
+                        $user_add=ldap_add_user(C('LDAP_SERVER_HOST'),C('BASE_DN'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'),$UserInfo);
+                        if($user_add['result']){
+                            $result=M('users')->add($data);
+                            if (!($result===false)) {
+                                session('id',$result);
+                                session('name',I('truename'));
+                                if(session('req_url')){
+                                    $url=session('req_url');
+                                    session('req_url',null);
+                                    $this->success('注册成功！',$url);
+                                }else{
+                                    $this->success('注册成功！',U('/Appointment'));
+                                }
+                            }else{
+                                $this->error('注册失败！请联系管理员');
+                            } 
+                        }else{
+                            $this->error('注册失败！'.$user_add['info'],'/Login/Ldap/Update',5);
+                        }
                     }else{
-                        $this->success('注册成功！',U('/Appointment'));
+                        $this->error('与LDAP服务器通信失败！');
                     }
                 }else{
-                    $this->error('注册失败！请联系管理员');
+                    //只写入信息到数据库
+                    $result=M('users')->add($data);
+                    if (!($result===false)) {
+                        session('id',$result);
+                        session('name',I('truename'));
+                        if(session('req_url')){
+                            $url=session('req_url');
+                            session('req_url',null);
+                            $this->success('注册成功！',$url);
+                        }else{
+                            $this->success('注册成功！',U('/Appointment'));
+                        }
+                    }else{
+                        $this->error('注册失败！请联系管理员');
+                    } 
                 }
             }else{
                 $this->error('验证码错误');
