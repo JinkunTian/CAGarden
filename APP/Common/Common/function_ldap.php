@@ -20,13 +20,34 @@ function ldap_create_link_identifier($LDAP_SERVER_HOST,$LDAP_USER,$LDAP_PWD,$DOM
 }
 function ldap_change_password($ds,$target_user,$BASE_DN,$newPass){
     $target_user_dn='CN='.$target_user.','.$BASE_DN;
+    $target_pass='"'.$newPass.'"';
+    $newPass = iconv( 'UTF-8', 'UTF-16LE', $target_pass );
     $passdata["unicodepwd"] = $newPass; 
+    var_dump($ds);
+    var_dump($target_user_dn);
+    var_dump($passdata);
     $result = ldap_mod_replace($ds,$target_user_dn,$passdata);
     return $result; 
 }
 function ldap_change_user_info($ds,$target_user,$BASE_DN,$NewInfo){
-    $target_user_dn='CN='.$target_user.','.$BASE_DN;
-    $result = ldap_mod_replace($ds,$target_user_dn,$NewInfo);
+
+    // $target_user_dn='CN='.$target_user.','.$BASE_DN;
+    $result = true;
+    // foreach($NewInfo as $key=>$value){
+    //     if(is_array($value)){
+    //         ldap_change_user_info($ds,'CN='.$key.','.$target_user,$BASE_DN,$value);
+    //     }else{
+    //         $change_data[$key]=$value;
+    //         $change_res=ldap_mod_replace($ds,$target_user_dn,$change_data);
+    //         if(!$change_res){
+    //             $result = false;
+    //         }
+    //     }
+    // }
+    // var_dump($ds);
+    // var_dump($target_user_dn);
+    // var_dump($NewInfo);
+    // $result=ldap_mod_replace($ds,$target_user_dn,$NewInfo);
     return $result; 
 }
 function ldap_user_esixt($ds,$BASE_DN,$USER){

@@ -153,7 +153,7 @@ class UserManageController extends AdminController {
             if(C('USE_LDAP')){
                 $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
                 if($ds['result']){
-                    $res=ldap_change_password($ds['resource'],$user['username'],C('BASE_DN'),$newpws);
+                    $res=ldap_change_password($ds['resource'],session('username'),C('BASE_DN'),$newpws);
                     if($res){
                         if (M('users')->where(array('uid' => session('id')))->save($base_data)) {
                             $this->success('修改成功');
@@ -174,10 +174,11 @@ class UserManageController extends AdminController {
                     $this->error('修改失败');
                 } 
             }
+            //不修改密码
         }else{
             
             /** 
-             * 启用了LDAP就将密码同时写入LDAP和数据库
+             * 启用了LDAP就将信息同时写入LDAP和数据库
              */
             if(C('USE_LDAP')){
 
@@ -189,7 +190,7 @@ class UserManageController extends AdminController {
                 $UserInfo['telephone']=$base_data['mobile'];
                 $UserInfo['qq']=$base_data['qq'];
                 $UserInfo['description']='协会成员';
-                $UserInfo['department']= $dep['dname']
+                $UserInfo['department']= $dep['dname'];
                 $UserInfo['position']=$extend_data['position'];
                 $UserInfo['company'] = C('SITE_NAME');
                 $UserInfo['office'] = $major['mname'];
@@ -197,12 +198,12 @@ class UserManageController extends AdminController {
 
                 $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
                 if($ds['result']){
-                    $res=ldap_change_user_info($ds['resource'],$base_data['username'],C('BASE_DN'),$UserInfo);
+                    $res=ldap_change_user_info($ds['resource'],session('username'),C('BASE_DN'),$UserInfo);
                     if($res){
                         if($extend_data['is_admin']==1){
-                            ldap_add_user_to_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+                            ldap_add_user_to_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
                         }else{
-                            ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+                            ldap_del_user_from_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
                         }
                         $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
                         $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);

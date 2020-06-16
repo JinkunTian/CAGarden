@@ -108,14 +108,14 @@ class UserController extends CommonController {
                 $UserInfo['telephone']=$base_data['mobile'];
                 $UserInfo['qq']=$base_data['qq'];
                 $UserInfo['description']='协会成员';
-                $UserInfo['department']= $dep['dname']
+                $UserInfo['department']= $dep['dname'];
                 $UserInfo['position']=$extend_data['position'];
                 $UserInfo['company'] = C('SITE_NAME');
                 $UserInfo['office'] = $major['mname'];
 
                 $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
                 if($ds['result']){
-                    $res=ldap_change_user_info($ds['resource'],$base_data['username'],C('BASE_DN'),$UserInfo);
+                    $res=ldap_change_user_info($ds['resource'],session('username'),C('BASE_DN'),$UserInfo);
                     if($res){
                         $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
                         $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);

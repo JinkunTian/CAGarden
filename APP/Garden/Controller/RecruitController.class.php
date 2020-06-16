@@ -132,7 +132,7 @@ class RecruitController extends AdminController {
                  */
                 if(C('USE_LDAP')){
 
-                    $base_data=M('users')->->where(array('uid'=>$recruit['uid']))->find();
+                    $base_data=M('users')->where(array('uid'=>$recruit['uid']))->find();
                     $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
                     $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
 
@@ -141,7 +141,7 @@ class RecruitController extends AdminController {
                     $UserInfo['telephone']=$base_data['mobile'];
                     $UserInfo['qq']=$base_data['qq'];
                     $UserInfo['description']='协会成员';
-                    $UserInfo['department']= $dep['dname']
+                    $UserInfo['department']= $dep['dname'];
                     $UserInfo['position']=$extend_data['position'];
                     $UserInfo['company'] = C('SITE_NAME');
                     $UserInfo['office'] = $major['mname'];
