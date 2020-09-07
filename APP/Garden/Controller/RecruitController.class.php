@@ -54,6 +54,7 @@ class RecruitController extends AdminController {
                     'gname' => I('gname'),
                     'year' => I('year'),
                     'message'=>I('message'),
+                    'status'=>I('status'),
                     
                 );
                 $result=M('recruit_grade')->add($data);
