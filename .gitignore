@@ -3,3 +3,5 @@
 /Public/Uploads/*
 /APP/Runtime/*
 ThinkPHP/Runtime/*
+.user.ini
+
