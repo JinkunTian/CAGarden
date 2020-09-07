@@ -1,4 +1,14 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Update：     2020-9-6
+ * @Description: ProjectTree碎语板块控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
 class MsgController extends CommonController {
@@ -29,7 +39,7 @@ class MsgController extends CommonController {
         $content=str_replace("\n","<br>",I('content')); //去回车
         $data = array(
             'content' =>str_replace(" ","&nbsp;",$content), //去空格
-            'uid' => (int)session('id'),
+            'uid' => (int)session('uid'),
             'addtime' => date('y-m-d H:i:s'),
         );
         //添加数据
@@ -43,7 +53,7 @@ class MsgController extends CommonController {
     //删除
     public function del(){
         $id = (int)$_GET['id'];
-        $uid=intval(session('id'));
+        $uid=intval(session('uid'));
         if (M('garden_msg')->where(array('id'=>$id,'uid'=>$uid))->delete()) {
             $this->success('删除成功');
         }else{

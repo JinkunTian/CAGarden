@@ -1,14 +1,16 @@
 <?php
-namespace Garden\Controller;
-use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
- * @DateTime:    2019年5月27日15:50
+ * @DateTime:    2020-8-31
+ * @Update：     2020-9-6
  * @Description: 退会管理（管理员）控制器
- * @Update: 2020/6/16 完善域控支持，退会时同步LDAP
  ***/
+namespace Garden\Controller;
+use Think\Controller;
 class SecedemanageController extends AdminController {
     
     /**
@@ -57,23 +59,23 @@ class SecedemanageController extends AdminController {
             /** 
              * 启用了LDAP就将密码同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+            // if(C('USE_LDAP')){
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
 
-                    M('garden_secede')->where(array('uid'=>$id))->save(array('status'=>2));
-                    M('garden_users_extend')->where(array('uid'=>$id))->save(array('status'=>0,'status_info'=>'正常退会'));
-                    $this->success('已批准'.$user['truename'].'的退会申请',U('/Garden/Secedemanage'));
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            //         M('garden_secede')->where(array('uid'=>$id))->save(array('status'=>2));
+            //         M('garden_users_extend')->where(array('uid'=>$id))->save(array('status'=>0,'status_info'=>'正常退会'));
+            //         $this->success('已批准'.$user['truename'].'的退会申请',U('/Garden/Secedemanage'));
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 M('garden_secede')->where(array('uid'=>$id))->save(array('status'=>2));
                 M('garden_users_extend')->where(array('uid'=>$id))->save(array('status'=>0,'status_info'=>'正常退会'));
                 $this->success('已批准'.$user['truename'].'的退会申请',U('/Garden/Secedemanage'));
-            }
+            // }
         }else{
             die('503 非法输入');
         }

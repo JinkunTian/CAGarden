@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>用户管理-{$dep_name}{:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+	<link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+	<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+</head>
+<body>
+	<div class="container">
+	<include file='Common:header'/>
+        <div id="info"></div>
+        <div class="cgx-txt">
+            关于首页配置的说明：
+            由于首页配置功能使用频率并不高且我的个人时间较为紧迫，对首页配置的功能暂时没有实现，如需修改首页配置，请在数据库中对index_config表手动修改以实现对首页的配置，现将相关字段含义说明：
+            <h2>首页标语</h2>
+                <p>config_name:association_slogan</br>
+                    config_value_1:对应的标语值</p>
+            <h2>大图按钮功能</h2>
+                <p>config_name:main_button</br>
+                    config_value_1:显示名称</br>
+                    config_value_2:跳转的链接</p> 
+            <h2>社团介绍</h2>
+                <p>config_name:association_info</br>
+                    config_value_1:社团介绍内容</br>
+                    config_value_2:跳转的链接</p> 
+            <h2>首页相册</h2>
+                <p>config_name:association_album</br>
+                    config_value_1:显示名称</br>
+                    config_value_2:图片地址 本地如“/upload/image/a.jpg”或远程“https://cdn.domain.com/xxx.jpg”</br>
+                    config_value_3:点击图片后跳转的链接  本地如“/local/message.html”或远程“https://blgo.tianjinkun.com/xxx.html”</br>
+                    注意：数量为6张</p> 
+            <h2>兄弟社团</h2>
+                <p>config_name:partner_association</br>
+                    config_value_1:兄弟社团Logo图片地址 本地如“/upload/image/a.png”或远程“https://cdn.domain.com/xxx.png”</br>
+            <h2>协会办公地址</h2>
+                <p>config_name:association_address</br>
+                    config_value_1:协会办公地址 本地如“图书馆407”</br>
+            <h2>联系方式</h2>
+                <p>config_name:contact_info</br>
+                    config_value_1:链接 比如加群链接“https://jq.qq.com/?_wv=1027&k=5o26do6”</br>
+                    config_value_1:联系方式 本地如“QQ群1群：303770202”</br>
+            <h2>导航栏</h2>
+                <p>config_name:navbar</br>
+                    config_value_1:跳转链接 比如博客链接“https://blog.tianjinkun.com”</br>
+                    config_value_1:显示名称 本地如“会长博客”</br>
+        </div>
+    </div>
+</body>
+</html>

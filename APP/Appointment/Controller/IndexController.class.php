@@ -4,6 +4,8 @@ use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日14:45:47
  * @Description: 计算机协会预约维修平台（前台）预约控制器
@@ -13,7 +15,7 @@ class IndexController extends CommonController {
      * index方法列出用户所有预约信息
      */
     public function index(){
-    	$uid = session('id');
+    	$uid = session('uid');
         $appointments=D('MyAppointmentView')->where(array('uid'=>$uid))->select();
 
         $this->assign('appointments',$appointments);
@@ -26,7 +28,7 @@ class IndexController extends CommonController {
 		if(isset($_GET['aid'])){
 
 			$aid=I('aid');
-            $uid = session('id');
+            $uid = session('uid');
 
             $appointment=D('MyAppointmentView')->where(array('aid'=>$aid,'uid'=>$uid))->find();
             $comments=D('AppointmentCommentView')->where(array('aid'=>$aid))->find();
@@ -42,7 +44,7 @@ class IndexController extends CommonController {
     /**
      * addAppointment方法添加新的预约
      */
-    public function addAppointment(){
+    public function addappointment(){
     	$this->display();
     }
 
@@ -50,7 +52,7 @@ class IndexController extends CommonController {
      * addpost方法保存用户提交的预约记录
      */
     public function addpost(){
-        $uid = session('id');
+        $uid = session('uid');
 
         if(I('issues')==''||I('model')==''){
         	$this->error('请填写型号与故障信息！');
@@ -67,9 +69,9 @@ class IndexController extends CommonController {
         );
         //添加数据
         if (M('appointment')->add($data)) {
-            $this->success('保存成功',U('/Appointment/'));
+            $this->success('保存成功',U('/Appointment'));
         }else{
-            $this->error('预约失败！',U('/Appointment/'));
+            $this->error('预约失败！',U('/Appointment'));
         }
     }
 
@@ -78,7 +80,7 @@ class IndexController extends CommonController {
      */
     public function addcomment(){
 
-    	$uid = session('id');
+    	$uid = session('uid');
 
         if (IS_AJAX){
 
@@ -106,7 +108,7 @@ class IndexController extends CommonController {
      */
     public function delcomment(){
 
-        $uid = session('id');
+        $uid = session('uid');
 
         if (M('appointment_comment')->where(array('cid'=>I('cid'),'uid'=>$uid))->find()) {
 
@@ -123,9 +125,9 @@ class IndexController extends CommonController {
     /**
      * cancelAppointment方法取消预约记录
      */
-    public function cancelAppointment(){
+    public function cancelappointment(){
 
-    	$uid = session('id');
+    	$uid = session('uid');
 
         if(isset($_GET['aid'])){
         	$aid=I('aid');

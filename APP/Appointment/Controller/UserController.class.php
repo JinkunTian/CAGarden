@@ -4,6 +4,8 @@ use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日15:04:47
  * @Description: 计算机协会预约维修平台（前台）用户控制器
@@ -13,7 +15,7 @@ class UserController extends CommonController {
      * index方法展示用户信息
      */
     public function index(){
-        $uid = session('id');
+        $uid = session('uid');
         $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
         $this->user_data = M('users')->where(array('uid'=>$uid))->select();
         $this->display();
@@ -23,7 +25,7 @@ class UserController extends CommonController {
      * datapost方法保存用户修改的个人信息
      */
     public function datapost(){
-        $uid = session('id');
+        $uid = session('uid');
         $data = array(
             'uid' => $uid,
             'username' => I('username'),
@@ -54,7 +56,7 @@ class UserController extends CommonController {
      * pwdpost方法保存用户修改过的密码
      */
     public function pwdpost(){
-        $uid = session('id');
+        $uid = session('uid');
         //对表单数据进行MD5加密
         $password = I('password','','md5');
         $newpws = I('newpws','','md5');

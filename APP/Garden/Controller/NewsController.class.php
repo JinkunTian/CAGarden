@@ -1,14 +1,16 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Update：     2020-9-6
+ * @Description: ProjectTree 新闻控制器，用于发布首页新闻
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:ProjectTree 新闻控制器，用于发布首页新闻
-**************************************************/ 
 class NewsController extends AdminController {
 
     /**
@@ -68,7 +70,7 @@ class NewsController extends AdminController {
      */
     public function edit(){
         $id =(int)$_GET['id'];
-        $uid = intval(session('id'));
+        $uid = intval(session('uid'));
         $result = M('index_news')->where(array('id'=>$id,'author_id'=>$uid))->find();
         if ($result){
             $this->assign('edit',$result);
@@ -82,12 +84,12 @@ class NewsController extends AdminController {
      * 编辑表单处理
      */
     public function editpost(){
-        if($article=M('index_news')->where(array('id'=>I('id'),'author_id'=>session('id')))->find()){
+        if($article=M('index_news')->where(array('id'=>I('id'),'author_id'=>session('uid')))->find()){
             $data = array(
                 'id'=>I('id'),
                 'title' =>  I('title'),
                 'content' => I('content'),
-                'author_name' => session('name'));
+                'author_name' => session('truename'));
             /**
              * 上传首页缩图
              */
@@ -127,8 +129,8 @@ class NewsController extends AdminController {
             'title' =>  I('title'),
             'picture'=>'',
             'content' => I('content'),
-            'author_id' => (int)session('id'),
-            'author_name' => session('name'),
+            'author_id' => (int)session('uid'),
+            'author_name' => session('truename'),
             'addtime' => date('y-m-d H:i:s'));
         /**
          * 上传首页缩图
@@ -161,11 +163,11 @@ class NewsController extends AdminController {
     }
 
     /**
-     * 删除公告
+     * 删除新闻
      */
     public function del(){
         $id = (int)$_GET['id'];
-        if(M('index_news')->where(array('id'=>$id,'author_id'=>session('id')))->find()){
+        if(M('index_news')->where(array('id'=>$id,'author_id'=>session('uid')))->find()){
             if (M('index_news')->where(array('id' => $id))->delete()) {
                 $this->success('删除成功');
             }else{

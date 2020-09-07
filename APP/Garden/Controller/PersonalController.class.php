@@ -1,16 +1,30 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020-8-31
+ * @Update：     2020-9-6
+ * @Description: 私人密码管理控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
 class PersonalController extends CommonController {
+
+    /**
+     * 列出所有密码、项目
+     **/
     public function index(){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
 
         $distribute_passwords = D('DistributePasswordsView')->where(array('uid' => $my_uid,'type'=> '2'))->select();
 
         $where['_string']='(pw_muser like "%:'.$my_uid.':%") OR (pw_cuser = "'.$my_uid.'") OR (pw_right like "%:'.$my_uid.':%")';
         $related_passwords=M('garden_public_password')->where($where)->select();
 
-        $personal_passwords=M('garden_personal_password')->where( array('uid' => intval(session('id')),'type'=> '1'))->select();
+        $personal_passwords=M('garden_personal_password')->where( array('uid' => intval(session('uid')),'type'=> '1'))->select();
 
         $where['_string']='(pr_muser like "%:'.$my_uid.':%") OR (pr_cuser = "'.$my_uid.'")';
         $where['pr_status']=array('lt',20);
@@ -29,7 +43,7 @@ class PersonalController extends CommonController {
 
     }
     public function view(){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
     	if(isset($_GET['pw_id']))
         {
             if(intval($_GET['pw_id'])>0)
@@ -64,7 +78,7 @@ class PersonalController extends CommonController {
     }
     public function edit(){
 
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
 
         if (isset($_GET['pw_id']))
         {
@@ -101,7 +115,7 @@ class PersonalController extends CommonController {
     public function del(){
         if (isset($_GET['pw_id'])) {
             $pw_info=M('garden_personal_password')->where(array('pw_id'=>I('pw_id')))->find();
-            if($pw_info['uid']==intval(session('id'))){
+            if($pw_info['uid']==intval(session('uid'))){
                 $a=M('garden_personal_password')->where(array('pw_id'=>$pw_info['pw_id']))->delete();
                 $b=M('garden_personal_password_addition')->where(array('original_password_id'=>$pw_info['pw_id']))->delete();
                 if((!($a===false))&&(!($b===false))){
@@ -119,7 +133,7 @@ class PersonalController extends CommonController {
     public function save(){
         $pw_id=intval(I('pw_id'));
 
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
 
         if(isset($_POST['edit'])){
             $data = array(

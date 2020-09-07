@@ -1,13 +1,15 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Description: 社团电脑义诊预约管理（管理权限）控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:社团电脑义诊预约管理（管理权限）控制器
-**************************************************/  
 class AppointmentManageController extends AdminController {
 
 	/**
@@ -110,7 +112,7 @@ class AppointmentManageController extends AdminController {
 	            }
 	            
 	        }else{
-	        	$data['fixer_id']=intval(session('id'));
+	        	$data['fixer_id']=intval(session('uid'));
 	        }
             $res=M('appointment')->where(array('aid'=>$aid))->save($data);
             if($res===false){

@@ -44,7 +44,7 @@ function del(){
                         </div>
                         <div class="cgx-sbox-bottom">
                             <p>
-                            <if condition="session('id') eq $v['author_id']">
+                            <if condition="session('uid') eq $v['author_id']">
                                 <span><a href="{:U('/Garden/News/edit', array('id' => $v['id']))}"><i class="fa fa-pencil"></i>编辑</a></span>
                                 <span class="blog-box-ico"><a href="{:U('/Garden/News/del', array('id' => $v['id']))}" onclick='return del();'><i class="fa fa-trash"></i>删除</a></span>
                             <else/>

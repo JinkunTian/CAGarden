@@ -30,15 +30,29 @@
                     <li><a href="{:U('/Garden/Personal/edit')}">新建私人密码</a></li>
                 </ul>
             </li>                    
-            <if condition="session('admin') eq '2'">
+            <if condition="session('admin') eq '1'">
                 <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<b class="caret"></b></a>
                     <ul class="dropdown-menu depth_0">
+                        <li><a href="{:U('/Garden/Organizationmanage/list_institutes')}">院系管理</a></li> 
+                        <li><a href="{:U('/Garden/Organizationmanage/list_majors')}">专业管理</a></li>
+                        <li><a href="{:U('/Garden/Organizationmanage/list_dep')}">部门管理</a></li>
                         <li><a href="{:U('/Garden/Distribute/')}">发布密码</a></li> 
                         <li><a href="{:U('/Garden/Usermanage/')}">用户管理</a></li>
                         <li><a href="{:U('/Garden/Appointmentmanage/')}">义修管理</a></li>
                         <li><a href="{:U('/Garden/Recruit/')}">纳新管理</a></li>
                         <li><a href="{:U('/Garden/Secedemanage/')}">退会管理</a></li>
                         <li><a href="{:U('/Garden/News/')}">新闻管理</a></li> 
+                    </ul>
+                </li>
+                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">首页<b class="caret"></b></a>
+                    <ul class="dropdown-menu depth_0">
+                            <li><a href="{:U('/Garden/Indexmanage/')}">导航栏</a></li>
+                        <li><a href="{:U('/Garden/Indexmanage/')}">首页标语</a></li> 
+                        <li><a href="{:U('/Garden/Indexmanage/')}">社团介绍</a></li>
+                        <li><a href="{:U('/Garden/Indexmanage/')}">社团活动</a></li>
+                        <li><a href="{:U('/Garden/Indexmanage/')}">首页相册</a></li>
+                        <li><a href="{:U('/Garden/Indexmanage/')}">兄弟社团</a></li>
+                        <li><a href="{:U('/Garden/Indexmanage/')}">社团活动</a></li>
                     </ul>
                 </li>
             </if>
@@ -48,11 +62,11 @@
                         <li><a href="{:U('/Garden/User/')}">修改资料</a></li>
                         <li><a href="{:U('/Garden/User/changgepwd')}">修改密码</a></li>
                         <li><a href="{:U('/Garden/User/succeed')}">退留会申请</a></li>
-                        <li><a href="{:U('/Login/Index/logout')}">退出登录</a></li>
+                        <li><a href="{:U('/Authentication/Index/logout')}">退出登录</a></li>
                 </ul>
             </li>
         </ul>
-        <span class="nav-r-user"><?php echo session('name'); ?>，欢迎你！<a href="{:U('/Login/Index/logout')}">退出登录</a></span>
+        <span class="nav-r-user"><?php echo session('truename'); ?>，欢迎你！<a href="{:U('/Authentication/Index/logout')}">退出登录</a></span>
     </div>
     </div><!-- /.navbar-collapse -->
 </nav>

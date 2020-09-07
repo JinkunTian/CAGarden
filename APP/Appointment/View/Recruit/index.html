@@ -95,33 +95,15 @@
                                 <td class="vip-title">网站：</td>
                                 <td class="vip-input"><input type="text" name="website" value="<notempty name='recruit_info.website'>{$recruit_info.website}</notempty>" placeholder="[选填]你的个人网站，格式为网址http://www.mecca.org.cn"/></td>
                             </tr>
-                        <!--    <tr>
-                                <td class="vip-title">寝室：</td>
-                                <td class="vip-input"><input type="text" name="address" value="" placeholder="请输入你的寝室"/></td>
-                            </tr> -->
-                            <tr>
-                                    <td class="vip-title">学院：</td>
-                                    <td class="vip-input">
-                                        <select name=college>
-                                            <foreach name='institute' item='v'>
-                                                <if condition="$v['institute'] eq $recruit_info['college']">
-                                                    <option value ="{$v.institute}" selected="selected">{$v.institute}</option>
-                                                <else />
-                                                    <option value ="{$v.institute}" >{$v.institute}</option>
-                                                </if>
-                                            </foreach>
-                                        </select>
-                                    </td>
-                                </tr>
                             <tr>
                                 <td class="vip-title">专业：</td>
                                 <td class="vip-input">
                                     <select name=major>
                                         <foreach name='majors' item='v'>
                                             <if condition="$v['mid'] eq $recruit_info['major']">
-                                                <option value ="{$v.mid}" selected="selected">{$v.mname}</option>
+                                                <option value ="{$v.mid}" selected="selected">{$v.institute} - {$v.mname}</option>
                                             <else />
-                                                <option value ="{$v.mid}" >{$v.mname}</option>
+                                                <option value ="{$v.mid}" >{$v.institute} - {$v.mname}</option>
                                             </if>
                                         </foreach>
                                     </select>

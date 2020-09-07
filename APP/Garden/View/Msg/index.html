@@ -49,7 +49,7 @@
                             <p class="msg-content">
                                 {$v.content}
                                 <span>
-                                <if condition="session('id') eq $v['uid']">
+                                <if condition="session('uid') eq $v['uid']">
                                 <a href="{:U('/Garden/Msg/del', array('id' => $v['id']))}" onclick='return del();'><i class='fa fa-trash'></i></a>
                                 </if>
                                 <i class="fa fa-clock-o"></i>{:date_format(date_create($v['addtime']),"Y-m-d")}

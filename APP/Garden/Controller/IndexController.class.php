@@ -1,14 +1,15 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Description: ProjectTree项目控制器，将团队项目，日志，密码统一组织管理
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:ProjectTree项目控制器，将团队项目，
-            日志，密码统一组织管理
-**************************************************/ 
 class IndexController extends CommonController {
     /**
      * index主方法，列出项目与子项目，密码，日志
@@ -17,7 +18,7 @@ class IndexController extends CommonController {
      */
     public function index(){
 
-        $uid=intval(session('id'));
+        $uid=intval(session('uid'));
 
         if(isset($_GET['pr_id']))
         {
@@ -130,7 +131,7 @@ class IndexController extends CommonController {
         $content=str_replace("\n","<br>",I('content')); 		//去回车
         $data = array(
             'log_prid' =>intval(I('prid')), 					//项目所属ID
-            'log_cuser' => intval(session('id')),				//日志创建者ID
+            'log_cuser' => intval(session('uid')),				//日志创建者ID
             'log_ctime' => date('y-m-d H:i:s'),								//创建时间
             'log_info' =>str_replace(" ","&nbsp;",$content),	//日志内容
         );
@@ -148,7 +149,7 @@ class IndexController extends CommonController {
     public function dellog(){
         $id = (int)$_GET['log_id'];
         $log_info=M('garden_logs')->where(array('log_id'=>$id))->find();
-        if($log_info['log_cuser']==intval(session('id')))
+        if($log_info['log_cuser']==intval(session('uid')))
         {
             if (M('garden_logs')->where(array('log_id' => $id))->save(array('status'=>'2'))) {
                 $this->redirect('/Garden/Index/index/pr_id/'.intval($_GET['pr_id']));
@@ -231,7 +232,7 @@ class IndexController extends CommonController {
         if(isset($_POST['managers_uids'])){
             $managers_input=':'.implode(":",I('managers_uids')).':';
         }else{
-            $managers_input=':'.intval(session('id')).':';
+            $managers_input=':'.intval(session('uid')).':';
         }
 
         //预处理项目成员列表
@@ -269,7 +270,7 @@ class IndexController extends CommonController {
                 'pr_pid' =>I('pr_pid'),
                 'pr_name' =>I('pr_name'), //项目所属ID
                 'pr_ctime' => date('y-m-d H:i:s'),//日志创建者ID
-                'pr_cuser' => intval(session('id')),
+                'pr_cuser' => intval(session('uid')),
                 'pr_muser' => $managers_input,
                 'pr_members' => implode(":",I('members_uids')),
                 'pr_brief' => I('pr_brief'),

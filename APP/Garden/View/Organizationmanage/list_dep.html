@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<title>部门管理-{$dep_name}{:C('SITE_NAME')}后花园</title>
+  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+	<link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
+	<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
+	<script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+	<script type="text/javascript">
+		function del(){
+			if(confirm("确定要删除吗？")){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		</script>
+</head>
+<body>
+	<div class="container">
+	<include file='Common:header'/>
+		<div id="info"></div>
+		<div class="cgx-txt">
+			<h1 ><i class="fa fa-users"></i>部门管理<span class="sha-add"><a href="{:U('/Garden/Organizationmanage/add_institute')}" title="添加学院" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+			<div class="xrz-box">
+				<form action="{:U('/Garden/Organizationmanage/add_dep')}" enctype="multipart/form-data" method="post">
+					<div class="input-append" style="MARGIN-LEFT: 20PX;MARGIN-TOP: 20PX;">
+						<label class="dis-lable">部门名称</label>
+						<input id="dep_name" type="text" name="dep_name" > 
+						<input type="submit" class="btn-box" style="height: 28px" id="back-button" value="新建">
+					</div> 
+				</form>
+			</div>
+			<div class="xrz-box">
+				<table width="100%" class="edit-project-user td">
+					<thead>
+						<tr>
+							<td>序号</td>
+							<td>部门</td>
+							<td>操作</td>
+						</tr>
+					</thead>
+					<tbody>
+						<foreach name="departments" item="v">
+							<tr>
+
+								<td>{$v.did}</td>
+								<td>{$v.dname}</td>
+								<td>
+									<span class="blog-box-ico"><a href="{:U('/Garden/Organizationmanage/del_dep', array('did' => $v['did']))}" onclick='return del();'><i class="fa fa-trash"></i>删除</a></span></td>
+							</tr>
+						</foreach>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+<script src="__PUBLIC__/js/index.js"></script>
+</body>
+</html>

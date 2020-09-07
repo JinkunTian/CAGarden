@@ -52,18 +52,14 @@
                                         <select name="major">
                                             <foreach name="majors" item="z">
                                                 <if condition="$z['mid'] eq $v['major']">
-                                                    <option value ="{$z.mid}" selected="selected">{$z.mname}</option>
+                                                    <option value ="{$z.mid}" selected="selected">{$z.institute} - {$z.mname}</option>
                                                 <else />
-                                                    <option value ="{$z.mid}">{$z.mname}</option>
+                                                <option value ="{$z.mid}" >{$z.institute} - {$z.mname}</option>
                                                 </if>
                                             </foreach>
                                         </select>
                                     </td>
                                 </tr>
-                               <!--  <tr>
-                                    <td class="vip-title">寝室：</td>
-                                    <td class="vip-input"><input type="text" name="room" value="{$v.room}" required/></td>
-                                </tr> -->
                                 <tr></tr>
                                 <tr>
                                     <td></td>

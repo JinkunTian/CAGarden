@@ -1,20 +1,22 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020-8-31
+ * @Update：     2020-9-6
+ * @Description: 社团纳新管理控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:社团纳新管理控制器
-**************************************************/  
 class RecruitController extends AdminController {
     /**
      * index显示纳新年度
      */
     public function index(){
-        $id = (int)session('id');
+        $id = (int)session('uid');
         $recruits = M('recruit_grade')->select();
         $this->assign('recruits',$recruits);
         $this->display();
@@ -107,15 +109,6 @@ class RecruitController extends AdminController {
             $extend_data = array(
                 'uid' => $recruit['uid'],
                 'username' => $recruit['username'],
-                // 'truename' => $recruit['truename'],
-                // 'password' => $recruit['password'],
-                // 'salt' => $recruit['salt'],
-                // 'reg_ip' => $recruit['reg_ip'],
-                // 'addtime' => $recruit['addtime'],
-                // 'qq' => $recruit['qq'],
-                // 'mobile' => $recruit['mobile'],
-                // 'email' => $recruit['email'],
-                // 'major' => $recruit['major'],
                 'position' => '新成员',
                 'dep' =>  I('dep'),
                 'flag' => $recruit['flag'],
@@ -123,56 +116,57 @@ class RecruitController extends AdminController {
 		        'status_info'=>'正常在任',
                 'type' => '1',
                 );
-            /***    社团管理网站基于ProjectTree搭建，将新成员信息添加到ProjectTree数据库user表  ***/
             $checkExis=M('garden_users_extend')->where(array('username' => $recruit['username']))->find();
             if(!$checkExis){
+
+                //LDAP功能暂未测试
 
                 /** 
                  * 启用了LDAP就将密码同时写入LDAP和数据库
                  */
-                if(C('USE_LDAP')){
+                // if(C('USE_LDAP')){
 
-                    $base_data=M('users')->where(array('uid'=>$recruit['uid']))->find();
-                    $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
-                    $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
+                //     $base_data=M('users')->where(array('uid'=>$recruit['uid']))->find();
+                //     $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
+                //     $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
 
-                    $UserInfo['truename']=$base_data['truename'];
-                    $UserInfo['mail']=$base_data['email'];
-                    $UserInfo['telephone']=$base_data['mobile'];
-                    $UserInfo['qq']=$base_data['qq'];
-                    $UserInfo['description']='协会成员';
-                    $UserInfo['department']= $dep['dname'];
-                    $UserInfo['position']=$extend_data['position'];
-                    $UserInfo['company'] = C('SITE_NAME');
-                    $UserInfo['office'] = $major['mname'];
-                    // $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
+                //     $UserInfo['truename']=$base_data['truename'];
+                //     $UserInfo['mail']=$base_data['email'];
+                //     $UserInfo['telephone']=$base_data['mobile'];
+                //     $UserInfo['qq']=$base_data['qq'];
+                //     $UserInfo['description']='协会成员';
+                //     $UserInfo['department']= $dep['dname'];
+                //     $UserInfo['position']=$extend_data['position'];
+                //     $UserInfo['company'] = C('SITE_NAME');
+                //     $UserInfo['office'] = $major['mname'];
+                //     // $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
 
-                    $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                    if($ds['result']){
-                        $res=ldap_add_user_to_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
-                        if($res){
-                            $result=M('garden_users_extend')->add($newuser);
-                            $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
-                            if (!$result===false) {
-                                $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
-                            }else{
-                                $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
-                            }        
-                        }else{
-                            $this->error('纳新失败！将用户添加到LDAP目录时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
-                        }
-                    }else{
-                        $this->error('与LDAP服务器通信失败！');
-                    }
-                }else{
-                    $result=M('garden_users_extend')->add($newuser);
+                //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+                //     if($ds['result']){
+                //         $res=ldap_add_user_to_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+                //         if($res){
+                //             $result=M('garden_users_extend')->add($extend_data);
+                //             $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
+                //             if (!$result===false) {
+                //                 $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                //             }else{
+                //                 $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                //             }        
+                //         }else{
+                //             $this->error('纳新失败！将用户添加到LDAP目录时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
+                //         }
+                //     }else{
+                //         $this->error('与LDAP服务器通信失败！');
+                //     }
+                // }else{
+                    $result=M('garden_users_extend')->add($extend_data);
                     $result=M('users')->where(array('username'=>$recruit['username']))->save(array('userType'=>'garden'));
                     if (!$result===false) {
                         $this->success('纳新成功！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                     }else{
                         $this->error('纳新失败！将用户添加到users数据表时失败！',U('/Garden/Recruit/listrecruit',array('grade'=>$recruit['grade'])));
                     }   
-                }
+                // }
             }else{
                 $this->error('该用户名已存在！');
             }
@@ -188,7 +182,7 @@ class RecruitController extends AdminController {
         $content=str_replace("\n","<br>",I('content')); //去回车
         $data = array(
             'rid' =>intval(I('rid')), //项目所属ID
-            'uid' => intval(session('id')),//日志创建者ID
+            'uid' => intval(session('uid')),//日志创建者ID
             'content' =>str_replace(" ","&nbsp;",$content),    //日志内容
             'addtime' =>date('y-m-d H:i:s'),    //日志内容
         );
@@ -204,7 +198,7 @@ class RecruitController extends AdminController {
      * delcomment删除面试过程中的记录，面试印象
      */
     public function delcomment(){
-        $uid=intval(session('id'));
+        $uid=intval(session('uid'));
         if(isset($_GET['cid'])){
             $cid=I('cid');
             $comment=M('recruit_comment')->where(array('cid'=>$cid,'uid'=>$uid))->find();

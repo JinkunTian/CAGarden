@@ -1,13 +1,15 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Description: 社团电脑义诊预约管理（成员权限）控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:社团电脑义诊预约管理（成员权限）控制器
-**************************************************/  
 class AppointmentController extends CommonController {
 
 	/**
@@ -25,7 +27,7 @@ class AppointmentController extends CommonController {
      */
     public function my(){
 
-        $uid=session('id');
+        $uid=session('uid');
 
         $myAppointment=M('appointment_view');
         $appointments=$myAppointment->where(array('fixer_id'=>$uid))->select();
@@ -62,7 +64,7 @@ class AppointmentController extends CommonController {
 		if(isset($_GET['aid'])){
 
 			$aid=I('aid');
-            $uid=session('id');
+            $uid=session('uid');
 
 	        if($appointment=M('appointment_view')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
 
@@ -91,7 +93,7 @@ class AppointmentController extends CommonController {
      * select社团成员接受预约记录（接单）
      */
     public function select(){
-    	$uid=intval(session('id'));
+    	$uid=intval(session('uid'));
     	$aid=intval(I('aid'));
 
         $data=array('fixer_id'=>$uid,'status'=>'2','edittime'=>date('y-m-d H:i:s'));
@@ -108,7 +110,7 @@ class AppointmentController extends CommonController {
      */
     public function save(){
 
-    	$uid=session('id');
+    	$uid=session('uid');
     	$aid=intval(I('aid'));
 
         if(((I('status')=='2')&&(I('result')!=''))){
@@ -162,7 +164,7 @@ class AppointmentController extends CommonController {
 		if(isset($_GET['aid'])){
 
 			$aid=I('aid');
-            $uid=session('id');
+            $uid=session('uid');
 
 	        if($appointment=M('appointment_view')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find()){
 
@@ -197,7 +199,7 @@ class AppointmentController extends CommonController {
      * del方法删除预约记录
      */
     public function del(){
-        if(M('appointment')->where(array('aid'=>I('aid'),'fixer_id'=>intval(session('id'))))->delete()){
+        if(M('appointment')->where(array('aid'=>I('aid'),'fixer_id'=>intval(session('uid'))))->delete()){
             $this->success('删除成功！',U('/Garden/Appointment/my'));
         }else{
             $this->error('删除失败，目标记录不存在或者你不能删除别人的记录！',U('/Garden/Appointment/my'));

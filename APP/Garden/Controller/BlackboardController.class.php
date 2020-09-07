@@ -1,14 +1,15 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Description: ProjectTree 小黑板控制器，用于公布团队公告
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:ProjectTree 小黑板控制器，用于公布团队公告
-**************************************************/ 
 class BlackBoardController extends CommonController {
 
     /**
@@ -84,7 +85,7 @@ class BlackBoardController extends CommonController {
      */
     public function edit(){
         $id =(int)$_GET['id'];
-        $uid = intval(session('id'));
+        $uid = intval(session('uid'));
         $result = M('garden_blackboard')->where(array('id'=>$id,'author_id'=>$uid))->find();
         if ($result){
             $this->assign('edit',$result);
@@ -104,7 +105,7 @@ class BlackBoardController extends CommonController {
             'content' => I('content'),
             //'time' => date('y-m-d H:i:s'),
         );
-        $uid=intval(session('id'));
+        $uid=intval(session('uid'));
         if(M('garden_blackboard')->where(array('id'=>I('id'),'author_id'=>$uid))->find()){
             if (M('garden_blackboard')->save($data)) {
                 $this->success('保存成功！',U('/Garden/Blackboard/index'));
@@ -123,7 +124,7 @@ class BlackBoardController extends CommonController {
         $data = array(
             'title' =>  I('title'),
             'content' => I('content'),
-            'author_id' => (int)session('id'),
+            'author_id' => (int)session('uid'),
             'addtime' => date('y-m-d H:i:s'),
         );
         //添加数据
@@ -140,7 +141,7 @@ class BlackBoardController extends CommonController {
     public function del(){
         $id = (int)$_GET['id'];
         $rbac = M('garden_blackboard')->where(array('id'=>$id))->field('author_id')->select();
-        if ($rbac[0]['author_id'] == session('id')) {
+        if ($rbac[0]['author_id'] == session('uid')) {
                 if (M('garden_blackboard')->where(array('id' => $id))->delete()) {
                     //删除属于公告的所有评论
                     M('garden_comment')->where(array('bid'=>$id))->delete();
@@ -169,7 +170,7 @@ class BlackBoardController extends CommonController {
             $content=str_replace("\n","<br>",I('content')); //去回车
             $data = array(
                 'content' => str_replace(" ","&nbsp;",$content), //去空格
-                'uid' => (int)session('id'),
+                'uid' => (int)session('uid'),
                 'bid' => I('bid'),
                 'addtime' => date('y-m-d H:i:s'),
             );
@@ -190,7 +191,7 @@ class BlackBoardController extends CommonController {
     public function delcom(){
         if(C('ALLOW_BLACKBOARD_COMMENT')){
             $id = (int)$_GET['id'];
-            $uid=intval(session('id'));
+            $uid=intval(session('uid'));
             if(M('garden_comment')->where(array('id'=>$id,'uid'=>$uid))->find()){
                 if (M('garden_comment')->where(array('id' => $id))->delete()) {
                     $this->success('删除成功');

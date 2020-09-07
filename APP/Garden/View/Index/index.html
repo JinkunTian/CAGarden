@@ -166,7 +166,7 @@
                         <h2><a href="{:U('/Garden/User/look',array('uid' => $v['log_cuser']))}">{$v.truename}</a></h2>
                         <p>{$v.log_info}</p>
                         <div align="right">
-                            <if condition="session('id') eq $v['log_cuser']">
+                            <if condition="session('uid') eq $v['log_cuser']">
                                 <a href="{:U('/Garden/Index/dellog', array('log_id' => $v['log_id'],'pr_id'=>$v['log_prid']))}" onclick='return del();'><i class='fa fa-trash'></i>删除</a>
                             </if>
                             <i class="fa fa-clock-o"></i>{:date_format(date_create($v['log_ctime']),"Y-m-d H:i")}

@@ -60,7 +60,7 @@
                                 
                             </span><i class="fa fa-clock-o"></i>于{:date_format(date_create($v['addtime']),"Y-m-d")}预约
                             <span>
-                                <if condition="$v['status'] eq '1'"><a href="{:U('/Appointment/Index/cancelAppointment', array('aid' => $v['aid']))}" onclick='return del();'><i class="fa fa-trash"></i>取消</a>
+                                <if condition="$v['status'] eq '1'"><a href="{:U('/Appointment/Index/cancelappointment', array('aid' => $v['aid']))}" onclick='return del();'><i class="fa fa-trash"></i>取消</a>
                                 </if></span>
                             </p>
                         </div>

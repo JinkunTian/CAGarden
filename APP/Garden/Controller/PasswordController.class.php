@@ -1,9 +1,22 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020-8-31
+ * @Update：     2020-9-6
+ * @Description: 密码管理控制器
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
 class PasswordController extends CommonController {
+    /**
+     * 查看密码
+     **/
     public function view(){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
     	if(isset($_GET['pw_id']))
         {
             if(intval($_GET['pw_id'])>0)
@@ -34,6 +47,10 @@ class PasswordController extends CommonController {
         $this->assign('addition_password',$pw_addition);
     	$this->display();
     }
+
+    /**
+     * 编辑密码
+     **/
     public function edit(){
         if ( isset($_GET['pw_id']))
         {
@@ -84,6 +101,10 @@ class PasswordController extends CommonController {
         $this->assign('all_project',$all_project);    
         $this->display();
     }
+
+    /**
+     * 删除密码
+     **/
     public function del(){
         if (isset($_GET['pw_id'])) {
             $pw_info=password_manage_right_check(I('pw_id'));
@@ -102,6 +123,10 @@ class PasswordController extends CommonController {
             $this->error('非法参数！');
         }
     }
+
+    /**
+     * 更新密码
+     **/
     public function save(){
 
         $pw_id=intval(I('pw_id'));
@@ -112,12 +137,12 @@ class PasswordController extends CommonController {
         if(isset($_POST['managers_uids'])){
             $managers_input=':'.implode(":",I('managers_uids')).':';
         }else{
-            $managers_input=':'.intval(session('id')).':';
+            $managers_input=':'.intval(session('uid')).':';
         }
         if(isset($_POST['edit'])){
             $data = array(
                 'pw_prid' =>I('pw_prid'),
-                'pw_cuser' => intval(session('id')),
+                'pw_cuser' => intval(session('uid')),
                 'pw_muser' => $managers_input,
                 'pw_name' =>I('pw_name'), 
                 'pw_brief' =>I('pw_brief'), 
@@ -150,7 +175,7 @@ class PasswordController extends CommonController {
         }elseif(isset($_POST['add'])) {
             $data = array(
                 'pw_prid' =>I('pw_prid'),
-                'pw_cuser' => intval(session('id')),
+                'pw_cuser' => intval(session('uid')),
                 'pw_ctime' => date('y-m-d H:i:s'),             
                 'pw_muser' => $managers_input,
                 'pw_name' =>I('pw_name'),

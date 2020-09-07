@@ -23,11 +23,11 @@
                             <li><a href="{:U('/Appointment/User/changgepwd')}">修改密码</a></li>
                         </if>
                         
-                        <li><a href="{:U('/Login/Index/logout')}">退出登录</a></li>
+                        <li><a href="{:U('/Authentication/Index/logout')}">退出登录</a></li>
                 </ul>
             </li>
         </ul>
-        <span class="nav-r-user"><?php echo session('name'); ?>，欢迎你！<a href="{:U('/Login/index/logout')}">退出登录</a></span>
+        <span class="nav-r-user"><?php echo session('truename'); ?>，欢迎你！<a href="{:U('/Authentication/index/logout')}">退出登录</a></span>
     </div>
     </div><!-- /.navbar-collapse -->
 </nav>

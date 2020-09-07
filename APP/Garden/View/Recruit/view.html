@@ -129,7 +129,7 @@ function del(){
                             <p class="msg-content">
                                 {$v.content}
                                 <span>
-                                <if condition="session('id') eq $v['uid']">
+                                <if condition="session('uid') eq $v['uid']">
                                 <a href="{:U('/Garden/Recruit/delcomment', array('cid' => $v['cid']))}" onclick='return del();'><i class='fa fa-trash'></i></a>
                                 </if>
                                 <i class="fa fa-clock-o"></i>{$v.addtime}

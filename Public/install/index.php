@@ -89,12 +89,30 @@ return array(
     'DEFAULT_MODULE'		=>	'Index',
 
     /**
+     * 认证方式，默认数据库密码，后续会考虑LDAP和第三方教务系统对接
+     */
+    'AUTHENTICATION_FUNCTION' => 'by_default_passwd',
+
+    /**
       * URL重写，隐藏index.php,
       * 请保证你的服务器支持伪静态
       */ 
     'URL_MODEL' => '2',
 
     'SHOW_PAGE_TRACE' => false,  //开启调试模式
+
+    /**
+     * 找回密码时限
+     */
+    'Find_Passwd_Time' => 1800,   //找回密码有效时间，单位为秒，1800即为30分钟内有效
+
+    /**
+     * 找回密码E-Mail发送服务器设置
+     */
+    'SMTP_HOST' => '{$data['SMTP_HOST']}', // SMTP 服务器
+    'SMTP_PORT' => '{$data['SMTP_PORT']}', // SMTP服务器的端口号
+    'SMTP_USER' => '{$data['SMTP_USER']}',// SMTP服务器用户名
+    'SMTP_PASS' => '{$data['SMTP_PASS']}',// SMTP服务器密码 
 
     /**
      * 允许/禁止在公告中评论
@@ -108,19 +126,69 @@ return array(
 
     /**
      * GEETEST极验滑动验证码
+     * 在登陆时使用GEETEST极验滑动验证码
+     * 申请API请到http://www.geetest.com/
      */
     'ENABLE_GEETEST'        =>  false,
     'CAPTCHA_ID'            =>  'YOUR_CAPTCHA_ID',
     'PRIVATE_KEY'           =>  'YOUR_PRIVATE_KEY',
-    'ERROR_PAGE' =>'/Public/error.html',
+
     /**
      * iKuai WiFi接入审计
+     * iKuai软路由提供了Web认证接入互联网的功能
+     * 若要使用，请将路由换成iKuai的路由并开启Web认证
+     * 到 https://yun.ikuai8.com 申请API并绑定路由
+     * 设置自定义链接为：
+     * http://www.yourdomain.edu.cn/wifi/index/index
      */
     'iKuai_APPKEY'  =>  '22222222222222222222222222',
+
     /**
      * 是否使用强智教务进行身份认证
+     * 三方教务认证功能尚未完善，请勿使用
      */
     'USE_QIANGZHI_JIAOWU' =>false,
+
+    /**
+     * 是否使用LDAP进行用户登录
+     * LDAP功能尚未完善，请勿使用
+     */
+    'USE_LDAP'  =>  false,
+
+    /**
+     * 如要使用LDAP，请将以下代码取消注释
+     */
+    // 'LOAD_EXT_FILE' => 'function_ldap',
+
+    /**
+     * LDAP 域名配置
+     */
+    // 'DOMAIN'  =>  'ca.cqucc.edu.cn',
+    // 'BASE_DN' =>  'CN=Users,DC=ca,DC=cqucc,DC=edu,DC=cn',
+
+    /**
+     * LDAP服务器地址设置
+     * 可配置为ldap或ldaps
+     * ldap只能认证，无法修改密码以及其他信息
+     * ldap://ip:port(default=389)
+     * ldaps://ip:port(defualt=636)
+     */
+    // 'LDAP_SERVER_HOST'  =>  'ldaps://wds.ca.cqucc.edu.cn:636',
+
+    /**
+     * LDAP 管理员账户
+     */
+    // 'LDAP_ADMIN_ACCOUNT'  =>  'Administrator',
+    // 'LDAP_ADMIN_PASSWD'   =>  'Password',
+
+    /**
+     * LDAP文字编码转换
+     * 由于GBK和UTF-8编码之间的转换问题
+     * 会造成LDAP中用户信息出现乱码，可以
+     * 根据实际情况决定是否启用转换
+     */
+    // 'LDAP_ENCODE_CONV'  =>  false
+
 );
 php;
 

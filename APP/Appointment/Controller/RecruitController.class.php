@@ -4,6 +4,8 @@ use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日16:30:58
  * @Description: 社团纳新控制器
@@ -29,13 +31,13 @@ class RecruitController extends CommonController {
 
         $departments=M('common_departments')->where(array('status'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
-        if(M('garden_users_extend')->where(array('uid'=>session('id')))->find()){
+        if(M('garden_users_extend')->where(array('uid'=>session('uid')))->find()){
             $this->error('你已经加入过计算机协会了！','/Appointment');
         }
 
-        if($recruit_info=M('recruit_view')->where(array('uid'=>session('id'),'grade'=>$Recruit['gid']))->find()){
+        if($recruit_info=M('recruit_view')->where(array('uid'=>session('uid'),'grade'=>$Recruit['gid']))->find()){
             $this->assign('recruit_info',$recruit_info);
-        }elseif($user_info=M('users')->where(array('uid'=>session('id')))->find()){
+        }elseif($user_info=M('users')->where(array('uid'=>session('uid')))->find()){
             $this->assign('recruit_info',$user_info);
         }else{
             $this->assign('recruit_info',NULL);
@@ -54,7 +56,7 @@ class RecruitController extends CommonController {
     public function save_img(){
         $base64_image_content = $_POST['file'];
         $root_path="Public";
-        $sub_path="/Uploads";
+        $sub_path="/Uploads/Profiles";
         
         //匹配出图片的格式
         if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)){
@@ -72,7 +74,7 @@ class RecruitController extends CommonController {
             $new_file = $root_path.$file_url.$file_name;
             if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64_image_content)))){
                 echo 'success';
-                $result2=M('users')->where(array('uid'=>session('id')))->save(array('img'=>$file_url.$file_name));
+                $result2=M('users')->where(array('uid'=>session('uid')))->save(array('img'=>$file_url.$file_name));
             }else{
                 echo false;
             }
@@ -151,7 +153,7 @@ class RecruitController extends CommonController {
                 //'truename' => session('newmember_xm'),
                 //'college' => session('newmember_xy'),
                 'username' => session('username'),
-                'truename' => session('name'),
+                'truename' => session('truename'),
                 'college' => I('college'),
                 'class' => I('class'),
                 'major' => I('major'),
@@ -160,7 +162,7 @@ class RecruitController extends CommonController {
                 'mobile' => I('mobile')
             );
             $recruit_info=array(
-                'uid' => session('id'),
+                'uid' => session('uid'),
                 'username' => session('username'),
                 'dep' => I('dep'),
                 'flag' => I('flag'),
@@ -193,11 +195,11 @@ class RecruitController extends CommonController {
                 $password = I('password','','md5');
                 $data['password']=md5($data['salt'].$password);
                 if($checkExis){
-                    $result1=M('recruit')->where(array('uid'=>session('id')))->save($recruit_info);
-                    $result2=M('users')->where(array('uid'=>session('id')))->save($base_data);
+                    $result1=M('recruit')->where(array('uid'=>session('uid')))->save($recruit_info);
+                    $result2=M('users')->where(array('uid'=>session('uid')))->save($base_data);
                 }else{
                     $result1=M('recruit')->add($recruit_info);
-                    $result2=M('users')->where(array('uid'=>session('id')))->save($base_data);
+                    $result2=M('users')->where(array('uid'=>session('uid')))->save($base_data);
                 }
                 
                 if (!($result===false||$result2===false)) {

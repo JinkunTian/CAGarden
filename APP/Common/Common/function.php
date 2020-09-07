@@ -1,11 +1,37 @@
 <?php
+    /***
+     * @Author:      田津坤
+     * @Email:       me@tianjinkun.com
+     * @GitHub:      https://github.com/JinkunTian
+     * @DateTime:    2020年8月31日
+     * @Description: 应用公共函数
+     ***/
+
     function return_json($return_array){
         header('Content-Type:text/json;charset=utf-8');
         echo json_encode($return_array);
         die();
     }
+    /**
+     * sys_log用于向数据库中记录访问数据
+     */
+    function sys_log($part){
+        if(true){
+            $logs=array(
+                'part'=>$part,
+                'username'=>session('uid'),
+                'truename'=>session('truename'),
+                'username'=>session('username'),
+                'ip'=>get_client_ip(),
+                'agent'=>$_SERVER["HTTP_USER_AGENT"],
+                'url'=>$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
+                'date' => date('y-m-d H:i:s'),
+            );
+            M('system_access_logs')->add($logs);
+        }
+    }
     function project_manage_right_check_by_pr_id($pr_id){
-        $uid=intval(session('id'));
+        $uid=intval(session('uid'));
         $project=D('ProjectView')->where(array('pr_id'=>$pr_id))->find();
         $project['manage_right_check']=false;
 
@@ -25,7 +51,7 @@
         return $project;
     }
     function password_manage_right_check($pw_id){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
         $result=false;
         $password=M('garden_public_password')->where(array('pw_id'=>$pw_id))->find();
         if($password){
@@ -46,7 +72,7 @@
         return $result;
     }
     function password_access_right_check($pw_id){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
         $result=false;
         $temp=M('garden_public_password')->where(array('pw_id'=>$pw_id))->find();
         /**
@@ -128,14 +154,7 @@
         }
         return $addition;
     }
-    function isadmin(){
-        $info=M('garden_users_extend')->where(array('uid'=>intval(session('id'))))->find();
-        if($info['type']=='2'){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    
 /**
  * 简单对称加密算法之加密
  * @param String $string 需要加密的字串

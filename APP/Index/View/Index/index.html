@@ -11,7 +11,7 @@
 		<title>{:C('SITE_NAME')}</title>
 		<!-- Bootstrap core CSS -->
 		<link href="__PUBLIC__/Index/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/Index/css/font-awesome.min.css">
 		<!-- Custom styles for this template -->
 		<link href="__PUBLIC__/Index/css/owl.carousel.css" rel="stylesheet">
 		<link href="__PUBLIC__/Index/css/owl.theme.default.min.css"  rel="stylesheet">
@@ -98,6 +98,7 @@
 								<foreach name='association_news' item='v' key='i'>
 									<li><a href="{:U('/Index/News/look',array('id'=>$v['id']))}">{$v.title}</a></li>
 								</foreach>
+								<li><a href="{:U('/Index/News/')}">查看更多</a></li>
 							</ul>
 						</div>
 					</div>
@@ -306,8 +307,6 @@
 				<p>Copyright TianjinTech.com Allright Reserved</p>
 			</div>
 		</footer>
-
-
 
 		<!-- Bootstrap core JavaScript
 			================================================== -->

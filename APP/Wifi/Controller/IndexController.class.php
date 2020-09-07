@@ -4,6 +4,8 @@ use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
  * @DateTime:    2018年8月21日14:45:47
  * @Description: 计算机协会WiFi接入审计控制器
@@ -36,7 +38,7 @@ class IndexController extends CommonController {
                 'ip'=>I('user_ip'),
                 'timestamp'=>date("Y-m-d H:i:s",I('timestamp')),
                 'username'=>session('username'),
-                'truename'=>session('name')
+                'truename'=>session('truename')
             );
             M('wifi')->add($wifi_log);
             $base_url='https://portal.ikuai8-wifi.com/Action/webauth-up?type=20';
@@ -58,9 +60,4 @@ header('Access-Control-Allow-Origin: *');
         //     $this->error('WiFi接入失败，请暂时访问内网资源！','http://www.mecca.org.cn');
         // }
     }
-    
-    /**
-     * 别看了，没有deleteAppointment方法的，不允许用户单方面删除记录的
-     * 年纪轻轻的，学锤子计算机？有头发不好吗！
-     */
 }

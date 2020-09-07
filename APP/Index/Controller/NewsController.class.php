@@ -1,14 +1,16 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020-8-19
+ * @Update：     2020-9-6
+ * @Description: 新闻控制器，用于发布首页新闻
+ ***/
 namespace Index\Controller;
 use Think\Controller;
-
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:ProjectTree 新闻控制器，用于发布首页新闻
-**************************************************/ 
 class NewsController extends CommonController {
 
     /**

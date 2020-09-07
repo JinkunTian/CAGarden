@@ -1,17 +1,18 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2018-8-19 
+ * @Description: ProjectTree密码派发控制器，用于批量派发个人密码
+ ***/
 namespace Garden\Controller;
 use Think\Controller;
-
-/************************************************* 
-Author: 田津坤
-QQ    : 2961165914
-GitHub: https://github.com/JinkunTian
-Date:2018-8-19 
-Description:ProjectTree密码派发控制器，用于批量派发个人密码
-**************************************************/ 
 class DistributeController extends AdminController {
     public function index(){
-        $my_uid=intval(session('id'));
+        $my_uid=intval(session('uid'));
         $MyDistPass=D('MyDistPassView');
 
         $count = $MyDistPass->where(array('pw_cuser'=>$my_uid,'type'=>'2'))->count();// 查询满足要求的总记录数
@@ -75,7 +76,7 @@ class DistributeController extends AdminController {
             $highestColumn = $sheet->getHighestColumn(); // 取得总列数
 
             $pw_ctime=time();
-            $pw_cuser=intval(session('id'));
+            $pw_cuser=intval(session('uid'));
             $erro_count=0;
             $succ_count=0;
             for($i=4;$i<=$highestRow;$i++){

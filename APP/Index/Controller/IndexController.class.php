@@ -1,14 +1,18 @@
 <?php
+/***
+ * @Author:      田津坤
+ * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
+ * @GitHub:      https://github.com/JinkunTian
+ * @DateTime:    2020-8-19
+ * @Update：     2020-9-6
+ * @Description: 首页信息控制器
+ ***/
 namespace Index\Controller;
 use Think\Controller;
 class IndexController extends CommonController {
-	/************************************************* 
-	Author: 田津坤
-	QQ    : 2961165914
-	GitHub: https://github.com/JinkunTian
-	Date:2018-8-19 
-	Description:首页信息控制器
-	**************************************************/ 
+
 	public function index(){
 		/**
 		 * 获取协会访问量，注册用户数量等统计信息
@@ -16,7 +20,7 @@ class IndexController extends CommonController {
 		$common_count['comment_count']=M('appointment_comment')->count();
       	$common_count['members_count']=M('users')->count();
       	$common_count['fix_count']=M('appointment')->where(array('status'=>3))->count();
-      	$common_count['visit_count']=M('system_logs')->count();    
+      	$common_count['visit_count']=M('system_access_logs')->count();    
 
 		/**	
 		 * 展示协会成员风采 

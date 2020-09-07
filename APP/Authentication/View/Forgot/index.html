@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+	<title>找回密码 - {:C('SITE_NAME')}后花园</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/sweetalert.css"/>
+
+    <script language="javascript">
+        function findpass(){
+            var username=document.getElementById('username').value;
+            var email=document.getElementById('email').value;
+            if( username && email ){
+                var find_data= $("form").serialize();
+                $.ajax({
+                    url:"{:U('/Authentication/Forgot/found_pass_post')}",
+                    type:'post',
+                    dataType:'json',
+                    data:find_data,
+                    success:function (result) {
+                        if(result.result=='success'){
+                            swal({
+                                title:"成功！",
+                                text:result.msg, 
+                                type:"success"
+                                },function(conform) {
+                                    if(conform){
+                                        window.location.href="{:U('/Authentication')}";
+                                    }});
+                        }else if(result.result=='failure'){
+                            swal({
+                                title:"失败！",
+                                text:result.msg, 
+                                type:"warning"
+                            });
+                        }else if(result.result=='error'){
+                            swal({
+                                title:"错误！",
+                                text:result.msg, 
+                                type:"error"
+                            });
+                        }else{
+                            swal("服务器错误！","请稍后再尝试或联系系统管理员", "error");
+                        }
+                    },
+                    error:function () {
+                        swal("服务器错误！","请稍后再尝试或联系系统管理员", "error");
+                    }
+                });
+            }else{
+                swal({
+                    title:"提示",
+                    text:"请将账户信息填写完整！", 
+                    type:"info"
+                },);
+            }
+        }
+        </script>
+</head>
+<body>
+	<div class="login-content-box">
+		<div class="login-input-box">
+			<div class="login-logo">
+				<div class="login-title">
+				<h1>找回密码</h1>
+				</div>
+			</div>
+			<div class="login-input">
+				<form method="POST" action="{:U('/Authentication/Forgot/forgotpost')}" class="login-input-name">
+					<div class="login-user">
+						<span class="login-user-span">
+							<i class="fa fa-user"></i>
+						</span>
+					<input type="text" name="username" id="username" placeholder="请输入学号" required>
+					</div>
+					<div class="login-user">
+						<span class="login-user-span">
+							<i class="fa fa-envelope-open"></i>
+                        </span>
+                        <input type="email" name="email" id="email" placeholder="请输入邮箱" required>
+					</div>
+
+                    <if condition="$ENABLE_GEETEST eq true">
+					<div class="login-user">
+    					    <div id="embed-captcha"></div>
+    					    <p id="wait" class="show">正在加载验证码......</p>
+    					    <p id="notice" class="hide">请先完成验证</p>
+    				    </div>
+                    </if>
+    				<div class="login-btn-box">
+    				    <input type="button" class="subpost" id="embed-submit" onclick="findpass()" value="找回密码">
+                    </div>
+				</form>
+
+			</div>
+			<p class='login-p'><a href="http://www.tianjinkun.com">&copy; TianJinkun</a></p>
+		</div>
+    </div>
+    <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
+    <script src="__PUBLIC__/js/sweetalert.min.js"></script>
+
+    <if condition="$ENABLE_GEETEST eq true">
+        
+        <script src="__PUBLIC__/js/gt.js"></script>
+        <script>
+            var handlerEmbed = function (captchaObj) {
+                $("#embed-submit").click(function (e) {
+                    var validate = captchaObj.getValidate();
+                    if (!validate) {
+                        $("#notice")[0].className = "show";
+                        setTimeout(function () {
+                            $("#notice")[0].className = "hide";
+                        }, 2000);
+                        e.preventDefault();
+                    }
+                });
+                // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+                captchaObj.appendTo("#embed-captcha");
+                captchaObj.onReady(function () {
+                    $("#wait")[0].className = "hide";
+                });
+                // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+            };
+            $.ajax({
+                // 获取id，challenge，success（是否启用failback）
+                url: "{:U('/Authentication/Forgot/StartCaptchaServlet',array('t'=>time()))}", // 加随机数防止缓存
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    // 使用initGeetest接口
+                    // 参数1：配置参数
+                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+                    initGeetest({
+                    	width: '198px',
+                        https: true,
+                        gt: data.gt,
+                        challenge: data.challenge,
+                        new_captcha: data.new_captcha,
+                        product: "popup", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                        offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                    }, handlerEmbed);
+                }
+            });
+        </script>
+    </if>
+</body>
+</html>

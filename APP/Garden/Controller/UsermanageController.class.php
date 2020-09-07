@@ -1,15 +1,17 @@
 <?php
-namespace Garden\Controller;
-use Think\Controller;
 /***
  * @Author:      田津坤
  * @Email:       me@tianjinkun.com
+ * @QQ:          2961165914
+ * @Blog         https://blog.tianjinkun.com
  * @GitHub:      https://github.com/JinkunTian
- * @DateTime:    2018年8月21日23:32:01
+ * @DateTime:    2020-8-31
+ * @Update：     2020-9-6
  * @Description: 用户管理（管理员）控制器
- * @Update：2020/6/16 添加域控支持，可修改密码或其他信息到LDAP域
  ***/
-class UserManageController extends AdminController {
+namespace Garden\Controller;
+use Think\Controller;
+class UsermanageController extends AdminController {
     
     /**
      * index方法列出所有用户
@@ -150,76 +152,76 @@ class UserManageController extends AdminController {
             /** 
              * 启用了LDAP就将密码同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    $res=ldap_change_password($ds['resource'],session('username'),C('BASE_DN'),$newpws);
-                    if($res){
-                        if (M('users')->where(array('uid' => session('id')))->save($base_data)) {
-                            $this->success('修改成功');
-                        }else{
-                            $this->error('修改网站账户失败');
-                        } 
-                    }else{
-                        $this->error('修改域账户失败，密码不够安全，请设置一个安全性较强的密码！');
-                    }
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            // if(C('USE_LDAP')){
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         $res=ldap_change_password($ds['resource'],session('username'),C('BASE_DN'),$newpws);
+            //         if($res){
+            //             if (M('users')->where(array('uid' => session('uid')))->save($base_data)) {
+            //                 $this->success('修改成功');
+            //             }else{
+            //                 $this->error('修改网站账户失败');
+            //             } 
+            //         }else{
+            //             $this->error('修改域账户失败，密码不够安全，请设置一个安全性较强的密码！');
+            //         }
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 //只写入密码到数据库
-                if (M('users')->where(array('uid' => session('id')))->save($base_data)) {
+                if (M('users')->where(array('uid' => session('uid')))->save($base_data)) {
                     $this->success('修改成功');
                 }else{
                     $this->error('修改失败');
                 } 
-            }
+            // }
             //不修改密码
         }else{
             
             /** 
              * 启用了LDAP就将信息同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
+            // if(C('USE_LDAP')){
 
-                $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
-                $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
+            //     $major=M('common_majors')->where(array('mid'=>$base_data['major']))->find();
+            //     $dep=M('common_departments')->where(array('did'=>$extend_data['dep']))->find();
 
-                $UserInfo['truename']=$base_data['truename'];
-                $UserInfo['mail']=$base_data['email'];
-                $UserInfo['telephone']=$base_data['mobile'];
-                $UserInfo['qq']=$base_data['qq'];
-                $UserInfo['description']='协会成员';
-                $UserInfo['department']= $dep['dname'];
-                $UserInfo['position']=$extend_data['position'];
-                $UserInfo['company'] = C('SITE_NAME');
-                $UserInfo['office'] = $major['mname'];
-                // $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
+            //     $UserInfo['truename']=$base_data['truename'];
+            //     $UserInfo['mail']=$base_data['email'];
+            //     $UserInfo['telephone']=$base_data['mobile'];
+            //     $UserInfo['qq']=$base_data['qq'];
+            //     $UserInfo['description']='协会成员';
+            //     $UserInfo['department']= $dep['dname'];
+            //     $UserInfo['position']=$extend_data['position'];
+            //     $UserInfo['company'] = C('SITE_NAME');
+            //     $UserInfo['office'] = $major['mname'];
+            //     // $UserInfo['memberOf'] = "CN=Members,".C('BASE_DN');
 
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    $res=ldap_change_user_info($ds['resource'],session('username'),C('BASE_DN'),$UserInfo);
-                    if($res){
-                        if($extend_data['is_admin']==1){
-                            ldap_add_user_to_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
-                        }else{
-                            ldap_del_user_from_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
-                        }
-                        $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
-                        $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
-                        if ($result1===false||$result2===false) {
-                            $this->error('保存失败！');
-                        }else{
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         $res=ldap_change_user_info($ds['resource'],session('username'),C('BASE_DN'),$UserInfo);
+            //         if($res){
+            //             if($extend_data['is_admin']==1){
+            //                 ldap_add_user_to_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
+            //             }else{
+            //                 ldap_del_user_from_group($ds['resource'],C('BASE_DN'),session('username'),'Managers');
+            //             }
+            //             $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+            //             $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+            //             if ($result1===false||$result2===false) {
+            //                 $this->error('保存失败！');
+            //             }else{
 
-                            $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
-                        }   
-                    }else{
-                        $this->error('保存到LDAP目录失败！');
-                    }
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            //                 $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+            //             }   
+            //         }else{
+            //             $this->error('保存到LDAP目录失败！');
+            //         }
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
                 $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
                 if ($result1===false||$result2===false) {
@@ -228,82 +230,10 @@ class UserManageController extends AdminController {
 
                     $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
                 }  
-            }
-            
+            // }
         }
     }
 
-    // /**
-    //  * adduser方法显示添加用户页面
-    //  */
-    // public function adduser(){
-    //     if (session('admin') == '0') {
-    //             $this->error('没有权限');
-    //         }else{
-    //             $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
-    //             $map['status'] = array('gt',0);
-    //     		$this->departments=M('common_departments')->where($map)->select();
-    //             $this->display();
-    //     }
-    // }
-
-    /**
-     * adduserpost方法处理提交的添加用户表单
-     */
-    // public function adduserpost(){
-    //     if (IS_POST){
-
-    //         $data = array(
-    //             'truename' => I('truename'),
-    //             'username' => I('username'),
-    //             'mobile' => I('mobile'),
-    //             'qq' => I('qq'),
-    //             'email' => I('email'),
-    //             'major' => I('major'),
-    //             'dep' => I('dep'),
-    //             'position' => I('position'),
-    //             'address' => I('address'),
-    //             'flag' => I('flag'),
-    //         );
-
-    //         /**
-    //          * 上传头像
-    //          */
-    //         if(($_FILES['img']['type'])){
-                
-    //             $upload = new \Think\Upload();// 实例化上传类
-    //             $upload->maxSize   =     205800;// 设置附件上传大小
-    //             $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-    //             $upload->rootPath  =     './Public'; // 设置附件上传根目录
-    //             $upload->savePath  =     '/Uploads/'; // 设置附件上传（子）目录
-                
-    //             $info = $upload->uploadOne($_FILES['img']);
-
-    //             if($info) {// 头像上传成功则保存头像
-    //                 $data['img'] = $info['savepath'].$info['savename'];
-    //             }else{
-    //                 //上传失败，显示失败信息
-    //                 $this->error($upload->getError());
-    //             }
-    //         }
-    //         $checkExis=M('garden_users')->where(array('username' => I('username')))->find();
-    //         if(!$checkExis){
-    //             $data['salt']=md5(time());
-    //             $password = I('password','','md5');
-    //             $data['password']=md5($data['salt'].$password);
-    //             $result=M('garden_users')->add($data);
-    //             if (!$result===false) {
-    //                 $this->success('添加用户成功！',U('/Garden/User/look/',array('uid' => $result)));
-    //             }else{
-    //                 $this->error('添加失败！');
-    //             }
-    //         }else{
-    //             $this->error('该用户名已存在！');
-    //         }
-    //     }else{
-    //         $this->error('页面不存在');
-    //     }
-    // }
     /**
      * retire方法将用户设置为干部卸任状态
      */
@@ -318,26 +248,25 @@ class UserManageController extends AdminController {
             /** 
              * 启用了LDAP就将密码同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+            // if(C('USE_LDAP')){
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
 
-                    M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
-                    M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
-                    ldap_close($ds['resource']);
+            //         M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            //         M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
+            //         ldap_close($ds['resource']);
 
-                    $this->success('已将'.$user['truename'].'标记为干部卸任！');
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            //         $this->success('已将'.$user['truename'].'标记为干部卸任！');
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
                 M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
                 $this->success('已将'.$user['truename'].'标记为干部卸任！');
-            }
-            // $this->success('已将'.$user['truename'].'标记为干部卸任！');
+            // }
         }else{
             $this->error('输入非法，没有找到对应用户！');
         }
@@ -356,25 +285,25 @@ class UserManageController extends AdminController {
             /** 
              * 启用了LDAP就将密码同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+            // if(C('USE_LDAP')){
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
 
-                    M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
-                    M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
+            //         M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            //         M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
                     
-                    ldap_close($ds['resource']);
-                    $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            //         ldap_close($ds['resource']);
+            //         $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
                 M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
                 $this->success('已将'.$user['truename'].'标记为中途退会！该用户账号已被封禁！');
-            }
+            // }
         }else{
             $this->error('没有找到对应用户！');
         }
@@ -393,25 +322,25 @@ class UserManageController extends AdminController {
             /** 
              * 启用了LDAP就将密码同时写入LDAP和数据库
              */
-            if(C('USE_LDAP')){
-                $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
-                if($ds['result']){
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
-                    ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
+            // if(C('USE_LDAP')){
+            //     $ds = ldap_create_link_identifier(C('LDAP_SERVER_HOST'),C('LDAP_ADMIN_ACCOUNT'),C('LDAP_ADMIN_PASSWD'),C('DOMAIN'));
+            //     if($ds['result']){
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Members');
+            //         ldap_del_user_from_group($ds['resource'],C('BASE_DN'),$base_data['username'],'Managers');
 
-                    M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
-                    M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
+            //         M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
+            //         M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
                     
-                    ldap_close($ds['resource']);
-                    $this->success('已将'.$user['truename'].'标记为正常退会！');
-                }else{
-                    $this->error('与LDAP服务器通信失败！');
-                }
-            }else{
+            //         ldap_close($ds['resource']);
+            //         $this->success('已将'.$user['truename'].'标记为正常退会！');
+            //     }else{
+            //         $this->error('与LDAP服务器通信失败！');
+            //     }
+            // }else{
                 M('users')->where(array('uid'=>I('uid')))->save(array('userType'=>'guest'));
                 M('garden_users_extend')->where(array('uid'=>I('uid')))->save($user);
                 $this->success('已将'.$user['truename'].'标记为正常退会！');
-            }
+            // }
         }else{
             $this->error('没有找到对应用户！');
         }
