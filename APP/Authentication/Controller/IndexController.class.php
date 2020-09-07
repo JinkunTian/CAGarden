@@ -65,7 +65,7 @@ class IndexController extends Controller {
             $log_data['certify']='password';
             $log_data['last_login']=date('y-m-d H:i:s');
             $log_data['last_ip']=get_client_ip();
-            M('users')->save($log_data);
+            M('users')->where(array('uid'=>$user['uid']))->save($log_data);
             $this->login_success($user['userType']);
 
         }else{

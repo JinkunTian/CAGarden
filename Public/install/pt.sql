@@ -401,7 +401,7 @@ CREATE TABLE `pt_system_access_logs` (
 -- ----------------------------
 DROP TABLE IF EXISTS `pt_system_login_logs`;
 CREATE TABLE `pt_system_login_logs` (
-  `lid` int(11) NOT NULL,
+  `lid` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `certify` varchar(255) DEFAULT NULL,
