@@ -17,7 +17,7 @@ class CommonController extends Controller {
         sys_log('WiFi');
 
         if (!(  isset($_SESSION['username']) && 
-                isset($_SESSION['id']) && 
+                isset($_SESSION['uid']) && 
                 isset($_SESSION['truename']) && 
                 isset($_SESSION[C('PASSWORD_KEY')]) )) 
         {
