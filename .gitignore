@@ -1,5 +1,6 @@
 /Public/install/install.lock
 /APP/Common/Conf/config.php
+/Public/Uploads/*
 /APP/Runtime/*
 ThinkPHP/Runtime/*
 .user.ini
