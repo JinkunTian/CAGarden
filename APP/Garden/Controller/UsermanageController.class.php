@@ -114,9 +114,9 @@ class UsermanageController extends AdminController {
             'flag' => I('flag_'.I('random')),
             );
         if($extend_data['type']=='2'){
-            $extend_data['is_admin']==1;
+            $extend_data['is_admin']=1;
         }else{
-            $extend_data['is_admin']==0;
+            $extend_data['is_admin']=0;
         }
         /**
          * 上传头像
