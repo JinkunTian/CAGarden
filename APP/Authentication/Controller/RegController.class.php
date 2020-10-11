@@ -76,23 +76,24 @@ class RegController extends CommonController {
                     'college'=> I('college'),
                     'userType'=>'guest',
                 );
-                $checkExis=M('users')->where(array('username'=>session('username')))->find();
+                $checkExis=M('users')->where(array('username'=>I('username')))->find();
                 if($checkExis){
-                    $this->error('用户已经存在！');
-                }
-                $data['salt']=md5(time());
-                $password = I('password','','md5');
-                $data['password']=md5($data['salt'].$password);
-
-                //写入信息到数据库
-                $result=M('users')->add($data);
-                if (!($result===false)) {
-                    $reg_result['result']='success';
-                    $reg_result['msg']='注册成功！请登陆系统！';
+                    // $this->error('用户已经存在！');
+                    $reg_result['msg']='用户已经存在！';
                 }else{
-                    $reg_result['msg']='注册失败！请联系管理员';
-                } 
-                
+                    $data['salt']=md5(time());
+                    $password = I('password','','md5');
+                    $data['password']=md5($data['salt'].$password);
+
+                    //写入信息到数据库
+                    $result=M('users')->add($data);
+                    if (!($result===false)) {
+                        $reg_result['result']='success';
+                        $reg_result['msg']='注册成功！请登陆系统！';
+                    }else{
+                        $reg_result['msg']='注册失败！请联系管理员';
+                    } 
+                }
             }else{
                 $reg_result['msg']='验证码错误';
             }
