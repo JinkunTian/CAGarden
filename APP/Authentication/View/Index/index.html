@@ -65,17 +65,18 @@
     function reg(){
         var username=document.getElementById('user').value;
         var password=document.getElementById('pwd').value;
-
-        if( username && password ){
-            document.loginform.action="{:U('/Authentication/Reg')}";
-            document.loginform.submit();
-        }else{
-            swal({
-                title:"提示",
-                text:"请将账户信息填写完整！", 
-                type:"info"
-            },);
-        }
+        document.loginform.action="{:U('/Authentication/Reg')}";
+        document.loginform.submit();
+        // if( username && password ){
+        //     document.loginform.action="{:U('/Authentication/Reg')}";
+        //     document.loginform.submit();
+        // }else{
+        //     swal({
+        //         title:"提示",
+        //         text:"请将账户信息填写完整！", 
+        //         type:"info"
+        //     },);
+        // }
     }
     </script>
 </head>
