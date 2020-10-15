@@ -113,10 +113,10 @@ class UsermanageController extends AdminController {
             'position' =>I('position_'.I('random')),
             'flag' => I('flag_'.I('random')),
             );
-        if($extend_data['type']==2){
-            $extend_data['is_admin']==1;
+        if($extend_data['type']=='2'){
+            $extend_data['is_admin']=1;
         }else{
-            $extend_data['is_admin']==0;
+            $extend_data['is_admin']=0;
         }
         /**
          * 上传头像
@@ -170,7 +170,7 @@ class UsermanageController extends AdminController {
             //     }
             // }else{
                 //只写入密码到数据库
-                if (M('users')->where(array('uid' => session('uid')))->save($base_data)) {
+                if (M('users')->where(array('uid' => I('uid')))->save($base_data)) {
                     $this->success('修改成功');
                 }else{
                     $this->error('修改失败');
@@ -222,14 +222,26 @@ class UsermanageController extends AdminController {
             //         $this->error('与LDAP服务器通信失败！');
             //     }
             // }else{
-                $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
-                $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
-                if ($result1===false||$result2===false) {
-                    $this->error('保存失败！');
-                }else{
+                // $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+                // $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+                // if ($result1===false||$result2===false) {
+                //     $this->error('保存失败！');
+                // }else{
 
-                    $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
-                }  
+                //     $this->success('保存成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+                // }  
+                $newpwd = I('password', '', 'md5');
+                //把要写入的数据转换成数组
+                $salt = md5(time());
+                $data = array(
+                    'password' => md5($salt . $newpwd),
+                    'salt' => $salt,
+                );
+                if (M('users')->where(array('uid' => I('uid')))->save($data)) {
+                    $this->success('修改成功');
+                } else {
+                    $this->error('修改失败');
+                }
             // }
         }
     }

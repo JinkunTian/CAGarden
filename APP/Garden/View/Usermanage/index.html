@@ -21,7 +21,8 @@
 	<include file='Common:header'/>
 		<div id="info"></div>
 		<div class="cgx-txt">
-			<h1 ><i class="fa fa-users"></i>{$dep_name}用户列表<span class="sha-add"><a href="{:U('/Garden/Usermanage/adduser')}" title="添加用户" target="_blank"><i class="fa fa-plus"></i></a></span></h1>
+			<h1 ><i class="fa fa-users"></i>{$dep_name}用户列表</h1>
+			<!-- <h1 ><i class="fa fa-users"></i>{$dep_name}用户列表<span class="sha-add"><a href="{:U('/Garden/Usermanage/adduser')}" title="添加用户" target="_blank"><i class="fa fa-plus"></i></a></span></h1> -->
 			<div class="blog-user">
 				<foreach name='departments' item='v'>
 	                <span  class="randcolor"><a href="{:U('/Garden/Usermanage/index',array('dep'=>$v['did']))}" target="_self"><i class="fa fa-user" style="color:white"></i>{$v.dname}</a></span>
