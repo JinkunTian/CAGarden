@@ -170,11 +170,19 @@ class UsermanageController extends AdminController {
             //     }
             // }else{
                 //只写入密码到数据库
-                if (M('users')->where(array('uid' => session('uid')))->save($base_data)) {
-                    $this->success('修改成功');
+                // if (M('users')->where(array('uid' => session('uid')))->save($base_data)) {
+                //     $this->success('修改成功');
+                // }else{
+                //     $this->error('修改失败');
+                // } 
+                //修改密码和用户数据
+                $result1=M('users')->where(array('uid' => I('uid') ))->save($base_data);
+                $result2=M('garden_users_extend')->where(array('uid' => I('uid') ))->save($extend_data);
+                if ($result1===false||$result2===false) {
+                    $this->error('修改失败！');
                 }else{
-                    $this->error('修改失败');
-                } 
+                    $this->success('修改成功！',U('/Garden/User/look',array('uid'=>I('uid'))));
+                }
             // }
             //不修改密码
         }else{

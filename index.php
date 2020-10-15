@@ -12,6 +12,10 @@
 // 应用入口文件
 // 检测是否是新安装
 if(file_exists("./Public/install") && !file_exists("./Public/install/install.lock")){
+    $dirname = "./Public/Uploads/";
+    if(!is_dir($dirname)){
+        mkdir($dirname,0777);
+    }
     // 组装安装url
     $url=$_SERVER['HTTP_HOST'].trim($_SERVER['SCRIPT_NAME'],'index.php').'Public/install/index.php';
     // 使用http://域名方式访问；避免./Public/install 路径方式的兼容性和其他出错问题
