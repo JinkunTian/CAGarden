@@ -1,60 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0,  maximum-scale=1.0" />
-	<meta content="yes" name="apple-mobile-web-app-capable" />
-	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
-	<meta content="telephone=no" name="format-detection" />
-	<title>用户管理-{$dep_name}{:C('SITE_NAME')}后花园</title>
-  	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
-	<link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
-	<link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
-	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
-	<link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
-	<script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
-	<script type='text/javascript' src='__PUBLIC__/js/bootstrap.js'></script>
-	<script type='text/javascript' src='__PUBLIC__/js/ajax.js'></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>首页配置管理-{:C('SITE_NAME')}后花园</title>
+    <link rel="icon" href="__PUBLIC__/images/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/indexmanage-admin.css?v=20261004-2" />
+    <script src="__PUBLIC__/js/jquery-2.1.1.min.js" defer></script>
+    <script src="__PUBLIC__/js/indexmanage-admin.js?v=20261014-csrf1" defer></script>
 </head>
-<body>
-	<div class="container">
-	<include file='Common:header'/>
-        <div id="info"></div>
-        <div class="cgx-txt">
-            关于首页配置的说明：
-            由于首页配置功能使用频率并不高且我的个人时间较为紧迫，对首页配置的功能暂时没有实现，如需修改首页配置，请在数据库中对index_config表手动修改以实现对首页的配置，现将相关字段含义说明：
-            <h2>首页标语</h2>
-                <p>config_name:association_slogan</br>
-                    config_value_1:对应的标语值</p>
-            <h2>大图按钮功能</h2>
-                <p>config_name:main_button</br>
-                    config_value_1:显示名称</br>
-                    config_value_2:跳转的链接</p> 
-            <h2>社团介绍</h2>
-                <p>config_name:association_info</br>
-                    config_value_1:社团介绍内容</br>
-                    config_value_2:跳转的链接</p> 
-            <h2>首页相册</h2>
-                <p>config_name:association_album</br>
-                    config_value_1:显示名称</br>
-                    config_value_2:图片地址 本地如“/upload/image/a.jpg”或远程“https://cdn.domain.com/xxx.jpg”</br>
-                    config_value_3:点击图片后跳转的链接  本地如“/local/message.html”或远程“https://blgo.tianjinkun.com/xxx.html”</br>
-                    注意：数量为6张</p> 
-            <h2>兄弟社团</h2>
-                <p>config_name:partner_association</br>
-                    config_value_1:兄弟社团Logo图片地址 本地如“/upload/image/a.png”或远程“https://cdn.domain.com/xxx.png”</br>
-            <h2>协会办公地址</h2>
-                <p>config_name:association_address</br>
-                    config_value_1:协会办公地址 本地如“图书馆407”</br>
-            <h2>联系方式</h2>
-                <p>config_name:contact_info</br>
-                    config_value_1:链接 比如加群链接“https://jq.qq.com/?_wv=1027&k=5o26do6”</br>
-                    config_value_1:联系方式 本地如“QQ群1群：303770202”</br>
-            <h2>导航栏</h2>
-                <p>config_name:navbar</br>
-                    config_value_1:跳转链接 比如博客链接“https://blog.tianjinkun.com”</br>
-                    config_value_1:显示名称 本地如“会长博客”</br>
+<body class="homepage-settings">
+    <a class="skip-link" href="#settings-content">跳到设置内容</a>
+    <header class="app-header"><div class="header-inner">
+        <a class="brand" href="{:U('/Garden/')}"><img class="brand-mark brand-icon" id="headerBrandIcon" src="{$admin_brand.config_value_1|htmlspecialchars=###}" alt="协会图标" width="38" height="38" /><span class="brand-name">CA<span>网站管理</span></span></a>
+        <div class="header-actions"><a class="back-link" href="{:U('/Garden/')}"><i class="fa fa-angle-left" aria-hidden="true"></i>返回工作台</a><a class="button button-secondary preview-link" href="/" target="_blank" rel="noopener"><i class="fa fa-external-link" aria-hidden="true"></i>预览首页</a></div>
+    </div></header>
+    <div class="page-heading"><div><span class="breadcrumb">网站管理<span>/</span>首页配置</span><h1>首页配置</h1><p>让协会首页的内容保持清晰、有序。</p></div><span class="page-badge"><i class="fa fa-sliders" aria-hidden="true"></i>内容管理</span></div>
+    <div class="workspace">
+        <aside class="settings-sidebar"><span class="sidebar-label">配置分区</span><nav class="section-nav" role="tablist" aria-label="首页配置分区" aria-orientation="vertical"><a id="tab-basic" href="#basic" role="tab" aria-controls="basic" aria-selected="true" class="section-link active"><i class="fa fa-home" aria-hidden="true"></i><span>基础信息</span><span class="change-dot" aria-label="有未保存修改"></span></a><a id="tab-navigation" href="#navigation" role="tab" aria-controls="navigation" aria-selected="false" class="section-link"><i class="fa fa-bars" aria-hidden="true"></i><span>导航菜单</span><span class="nav-count">{:count((array)$navbar)}</span><span class="change-dot" aria-label="有未保存修改"></span></a><a id="tab-activities" href="#activities" role="tab" aria-controls="activities" aria-selected="false" class="section-link"><i class="fa fa-bolt" aria-hidden="true"></i><span>主要活动</span><span class="nav-count">{:count((array)$major_activities)}</span><span class="change-dot" aria-label="有未保存修改"></span></a><a id="tab-albums" href="#albums" role="tab" aria-controls="albums" aria-selected="false" class="section-link"><i class="fa fa-picture-o" aria-hidden="true"></i><span>首页相册</span><span class="nav-count">{:count((array)$association_album)}</span><span class="change-dot" aria-label="有未保存修改"></span></a><a id="tab-partners" href="#partners" role="tab" aria-controls="partners" aria-selected="false" class="section-link"><i class="fa fa-users" aria-hidden="true"></i><span>兄弟社团</span><span class="nav-count">{:count((array)$partner_association)}</span><span class="change-dot" aria-label="有未保存修改"></span></a><a id="tab-contacts" href="#contacts" role="tab" aria-controls="contacts" aria-selected="false" class="section-link"><i class="fa fa-comment-o" aria-hidden="true"></i><span>联系方式</span><span class="nav-count">{:count((array)$contact_info)}</span><span class="change-dot" aria-label="有未保存修改"></span></a></nav><p class="sidebar-note">修改后点击下方<br />“保存修改”即可应用新配置。</p></aside>
+        <main id="settings-content" class="settings-content" tabindex="-1">
+            <div id="pageNotice" class="notice" role="status" aria-live="polite" hidden></div>
+            <noscript><p class="notice">浏览器未启用 JavaScript，所有分区将依次显示，图片地址可手动填写。</p></noscript>
+            <form id="indexManageSaveForm" action="{:U('/Garden/Indexmanage/save')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /></form>
+            <section id="basic" class="settings-panel active" role="tabpanel" aria-labelledby="tab-basic">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>基础信息</h2><p>首页标语、社团介绍与办公地址</p></div></div>
+        <div class="basic-grid">
+    <div class="editor-card brand-editor">
+        <div class="image-preview logo-preview brand-preview"><img id="brand-icon-preview" src="{$admin_brand.config_value_1|htmlspecialchars=###}" alt="当前后台图标" /></div>
+        <div><div class="card-heading"><h3>后台图标</h3><p>用于页面左上角。支持 JPG、PNG、WebP，最大 4MB，上传时自动压缩。</p></div>
+            <input type="hidden" id="brand-icon-url" class="image-url" name="configs[{$admin_brand.cid}][config_value_1]" value="{$admin_brand.config_value_1|htmlspecialchars=###}" form="indexManageSaveForm" data-config-field />
+            <div class="brand-actions"><label class="button button-secondary file-action"><i class="fa fa-upload" aria-hidden="true"></i>上传新图标<input type="file" class="image-file" data-brand="true" data-url-target="#brand-icon-url" data-preview-target="#brand-icon-preview" accept="image/jpeg,image/png,image/webp" aria-label="上传新图标" /></label><button type="button" class="button button-quiet" id="restoreBrandIcon">恢复默认</button></div>
+            <p class="upload-status" role="status" aria-live="polite"></p>
         </div>
     </div>
+    <div class="editor-card"><div class="card-heading"><h3>首页展示</h3><p>访客进入网站时首先看到的内容。</p></div><div class="field"><label for="association_slogan-config_value_1-{$association_slogan.cid}">首页标语</label><input type="text" id="association_slogan-config_value_1-{$association_slogan.cid}" name="configs[{$association_slogan.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$association_slogan.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div>
+        <div class="field-grid"><div class="field"><label for="main_button-config_value_1-{$main_button.cid}">主按钮名称</label><input type="text" id="main_button-config_value_1-{$main_button.cid}" name="configs[{$main_button.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$main_button.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div><div class="field"><label for="main_button-config_value_2-{$main_button.cid}">主按钮链接</label><input type="text" id="main_button-config_value_2-{$main_button.cid}" name="configs[{$main_button.cid}][config_value_2]" form="indexManageSaveForm" data-config-field value="{$main_button.config_value_2|htmlspecialchars=###}" maxlength="255" placeholder="例如 /Appointment" /></div></div>
+    </div>
+    <div class="editor-card"><div class="card-heading"><h3>协会资料</h3><p>介绍协会与线下办公地点。</p></div><div class="field"><label for="association_info-config_value_1-{$association_info.cid}">协会介绍</label><textarea id="association_info-config_value_1-{$association_info.cid}" name="configs[{$association_info.cid}][config_value_1]" form="indexManageSaveForm" data-config-field rows="4" >{$association_info.config_value_1|htmlspecialchars=###}</textarea></div><div class="field"><label for="association_address-config_value_1-{$association_address.cid}">办公地址</label><input type="text" id="association_address-config_value_1-{$association_address.cid}" name="configs[{$association_address.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$association_address.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div></div>
+</div>
+    </section>
+<section id="navigation" class="settings-panel" role="tabpanel" aria-labelledby="tab-navigation">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>导航菜单</h2><p>管理首页顶部的菜单名称和链接。</p></div></div>
+        <details class="add-disclosure"><summary class="button button-secondary"><i class="fa fa-plus" aria-hidden="true"></i>新增菜单</summary>
+        <form class="add-form editor-card" action="{:U('/Garden/Indexmanage/add_item')}" method="post">
+            <input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" />
+            <div class="card-heading"><h3>新增菜单</h3><p>填写完成后点击“确认新增”。</p></div>
+            <input type="hidden" name="config_name" value="navbar" /><div class="field-grid"><div class="field"><label for="new-nav-name">菜单名称</label><input type="text" id="new-nav-name" name="config_value_2" required value="" maxlength="255"  /></div><div class="field"><label for="new-nav-link">跳转链接</label><input type="text" id="new-nav-link" name="config_value_1" required value="" maxlength="255"  /></div></div>
+            <div class="form-actions"><button type="submit" class="button button-primary">确认新增</button><button type="button" class="button button-quiet cancel-add">取消</button></div>
+        </form>
+    </details>
+    <div class="item-grid navigation-grid">
+        <foreach name="navbar" item="v" key="i">
+            <article class="editor-card item-card"><div class="item-heading"><span class="item-number">菜单 <span><?php echo $i+1; ?></span></span><form class="delete-item-form" action="{:U('/Garden/Indexmanage/delete_item')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /><input type="hidden" name="cid" value="{$v.cid}" /><button type="submit" class="delete-link" style="border:0;background:transparent" data-delete data-confirm="确定删除这个导航项吗？"><i class="fa fa-trash-o" aria-hidden="true"></i><span>删除</span></button></form></div><div class="field-grid"><div class="field"><label for="v-config_value_2-{$v.cid}">菜单名称</label><input type="text" id="v-config_value_2-{$v.cid}" name="configs[{$v.cid}][config_value_2]" form="indexManageSaveForm" data-config-field value="{$v.config_value_2|htmlspecialchars=###}" maxlength="255"  /></div><div class="field"><label for="v-config_value_1-{$v.cid}">跳转链接</label><input type="text" id="v-config_value_1-{$v.cid}" name="configs[{$v.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$v.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div></div></article>
+        </foreach>
+        <empty name="navbar"><div class="empty-state"><i class="fa fa-bars" aria-hidden="true"></i><h3>还没有导航菜单</h3><p>点击上方“新增菜单”添加第一项。</p></div></empty>
+    </div>
+    </section>
+<section id="activities" class="settings-panel" role="tabpanel" aria-labelledby="tab-activities">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>主要活动</h2><p>介绍协会的日常活动，首页展示前 4 条。</p></div></div>
+        <details class="add-disclosure"><summary class="button button-secondary"><i class="fa fa-plus" aria-hidden="true"></i>新增活动</summary>
+        <form class="add-form editor-card" action="{:U('/Garden/Indexmanage/add_item')}" method="post">
+            <input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" />
+            <div class="card-heading"><h3>新增活动</h3><p>填写完成后点击“确认新增”。</p></div>
+            <input type="hidden" name="config_name" value="major_activities" /><div class="field-grid"><div class="field"><label for="new-activity-name">活动名称</label><input type="text" id="new-activity-name" name="config_value_1" required value="" maxlength="255"  /></div><div class="field"><label for="new-activity-description">活动介绍</label><textarea id="new-activity-description" name="config_value_2" rows="4" ></textarea></div></div>
+            <div class="form-actions"><button type="submit" class="button button-primary">确认新增</button><button type="button" class="button button-quiet cancel-add">取消</button></div>
+        </form>
+    </details>
+    <div class="item-grid activities-grid">
+        <foreach name="major_activities" item="v" key="i">
+            <article class="editor-card item-card"><div class="item-heading"><span class="item-number">活动 <span><?php echo $i+1; ?></span></span><form class="delete-item-form" action="{:U('/Garden/Indexmanage/delete_item')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /><input type="hidden" name="cid" value="{$v.cid}" /><button type="submit" class="delete-link" style="border:0;background:transparent" data-delete data-confirm="确定删除这条活动吗？"><i class="fa fa-trash-o" aria-hidden="true"></i><span>删除</span></button></form></div><div class="field"><label for="v-config_value_1-{$v.cid}">活动名称</label><input type="text" id="v-config_value_1-{$v.cid}" name="configs[{$v.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$v.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div><div class="field"><label for="v-config_value_2-{$v.cid}">活动介绍</label><textarea id="v-config_value_2-{$v.cid}" name="configs[{$v.cid}][config_value_2]" form="indexManageSaveForm" data-config-field rows="4" >{$v.config_value_2|htmlspecialchars=###}</textarea></div></article>
+        </foreach>
+        <empty name="major_activities"><div class="empty-state"><i class="fa fa-bolt" aria-hidden="true"></i><h3>还没有主要活动</h3><p>点击上方“新增活动”添加第一项。</p></div></empty>
+    </div>
+    </section>
+<section id="albums" class="settings-panel" role="tabpanel" aria-labelledby="tab-albums">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>首页相册</h2><p>选择展示图片与相册入口，首页展示前 6 张。</p></div></div>
+        <details class="add-disclosure"><summary class="button button-secondary"><i class="fa fa-plus" aria-hidden="true"></i>新增图片</summary>
+        <form class="add-form editor-card" action="{:U('/Garden/Indexmanage/add_item')}" method="post">
+            <input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" />
+            <div class="card-heading"><h3>新增图片</h3><p>填写完成后点击“确认新增”。</p></div>
+            <input type="hidden" name="config_name" value="association_album" /><div class="new-image-grid"><div><div class="image-preview"><img id="new-album-preview" src="" alt="相册图片预览" loading="lazy" /><span class="image-placeholder" aria-hidden="true"><i class="fa fa-picture-o" aria-hidden="true"></i><span>选择一张图片</span></span></div><div class="image-actions">
+        <button type="button" class="button button-secondary image-browse" data-url-target="#new-album-url" data-preview-target="#new-album-preview" data-image-source="photo"><i class="fa fa-picture-o" aria-hidden="true"></i>选择图片</button>
+        <label class="button button-quiet file-action"><i class="fa fa-upload" aria-hidden="true"></i>上传图片<input type="file" class="image-file" data-url-target="#new-album-url" data-preview-target="#new-album-preview" accept="image/jpeg,image/png,image/gif" aria-label="上传相册图片" /></label>
+    </div><p class="upload-status" role="status" aria-live="polite"></p><details class="link-details" open><summary>图片地址与跳转链接</summary><div class="detail-fields"><div class="field"><label for="new-album-url">图片地址</label><input type="text" id="new-album-url" name="config_value_2" required value="" maxlength="255" class="image-url" placeholder="选择图片、上传或粘贴地址" /></div><div class="field"><label for="new-album-link">点击后打开</label><input type="text" id="new-album-link" name="config_value_3" value="#" maxlength="255"  /></div></div></details></div><div><div class="field"><label for="new-album-title">图片标题</label><input type="text" id="new-album-title" name="config_value_1" required value="" maxlength="255"  /></div><p class="field-hint">选择相册图片时，会同时填写相册跳转链接。</p></div></div>
+            <div class="form-actions"><button type="submit" class="button button-primary">确认新增</button><button type="button" class="button button-quiet cancel-add">取消</button></div>
+        </form>
+    </details>
+    <div class="item-grid albums-grid">
+        <foreach name="association_album" item="v" key="i">
+            <article class="editor-card item-card"><div class="item-heading"><span class="item-number">图片 <span><?php echo $i+1; ?></span></span><form class="delete-item-form" action="{:U('/Garden/Indexmanage/delete_item')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /><input type="hidden" name="cid" value="{$v.cid}" /><button type="submit" class="delete-link" style="border:0;background:transparent" data-delete data-confirm="确定删除这张相册图片吗？"><i class="fa fa-trash-o" aria-hidden="true"></i><span>删除</span></button></form></div><div class="image-preview"><img id="album-{$v.cid}-preview" src="{$v.config_value_2|htmlspecialchars=###}" alt="相册图片预览" loading="lazy" /><span class="image-placeholder" aria-hidden="true"><i class="fa fa-picture-o" aria-hidden="true"></i><span>选择一张图片</span></span></div><div class="image-actions">
+        <button type="button" class="button button-secondary image-browse" data-url-target="#album-{$v.cid}-url" data-preview-target="#album-{$v.cid}-preview" data-image-source="photo"><i class="fa fa-picture-o" aria-hidden="true"></i>选择图片</button>
+        <label class="button button-quiet file-action"><i class="fa fa-upload" aria-hidden="true"></i>上传图片<input type="file" class="image-file" data-url-target="#album-{$v.cid}-url" data-preview-target="#album-{$v.cid}-preview" accept="image/jpeg,image/png,image/gif" aria-label="上传相册图片" /></label>
+    </div><p class="upload-status" role="status" aria-live="polite"></p><details class="link-details"><summary>图片地址与跳转链接</summary><div class="detail-fields"><div class="field"><label for="album-{$v.cid}-url">图片地址</label><input type="text" id="album-{$v.cid}-url" name="configs[{$v.cid}][config_value_2]" form="indexManageSaveForm" data-config-field value="{$v.config_value_2|htmlspecialchars=###}" maxlength="255" class="image-url" /></div><div class="field"><label for="album-{$v.cid}-link">点击后打开</label><input type="text" id="album-{$v.cid}-link" name="configs[{$v.cid}][config_value_3]" form="indexManageSaveForm" data-config-field value="{$v.config_value_3|htmlspecialchars=###}" maxlength="255"  /></div></div></details><div class="field"><label for="v-config_value_1-{$v.cid}">图片标题</label><input type="text" id="v-config_value_1-{$v.cid}" name="configs[{$v.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$v.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div></article>
+        </foreach>
+        <empty name="association_album"><div class="empty-state"><i class="fa fa-picture-o" aria-hidden="true"></i><h3>还没有首页相册</h3><p>点击上方“新增图片”添加第一项。</p></div></empty>
+    </div>
+    </section>
+<section id="partners" class="settings-panel" role="tabpanel" aria-labelledby="tab-partners">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>兄弟社团</h2><p>管理合作社团的 Logo。</p></div></div>
+        <details class="add-disclosure"><summary class="button button-secondary"><i class="fa fa-plus" aria-hidden="true"></i>新增社团</summary>
+        <form class="add-form editor-card" action="{:U('/Garden/Indexmanage/add_item')}" method="post">
+            <input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" />
+            <div class="card-heading"><h3>新增社团</h3><p>填写完成后点击“确认新增”。</p></div>
+            <input type="hidden" name="config_name" value="partner_association" /><div class="new-image-grid"><div><div class="image-preview logo-preview"><img id="new-partner-preview" src="" alt="社团 Logo 预览" loading="lazy" /><span class="image-placeholder" aria-hidden="true"><i class="fa fa-picture-o" aria-hidden="true"></i><span>选择一张图片</span></span></div><div class="image-actions">
+        <button type="button" class="button button-secondary image-browse" data-url-target="#new-partner-url" data-preview-target="#new-partner-preview" data-image-source="main" data-allow-photo="false"><i class="fa fa-picture-o" aria-hidden="true"></i>选择图片</button>
+        <label class="button button-quiet file-action"><i class="fa fa-upload" aria-hidden="true"></i>上传图片<input type="file" class="image-file" data-url-target="#new-partner-url" data-preview-target="#new-partner-preview" accept="image/jpeg,image/png,image/gif" aria-label="上传社团 Logo" /></label>
+    </div><p class="upload-status" role="status" aria-live="polite"></p><details class="link-details" open><summary>图片地址</summary><div class="detail-fields"><div class="field"><label for="new-partner-url">图片地址</label><input type="text" id="new-partner-url" name="config_value_1" required value="" maxlength="255" class="image-url" placeholder="选择图片、上传或粘贴地址" /></div></div></details></div><div><h4>社团 Logo</h4><p class="field-hint">从网站图片中选择、上传本地图片，或填写图片地址。</p></div></div>
+            <div class="form-actions"><button type="submit" class="button button-primary">确认新增</button><button type="button" class="button button-quiet cancel-add">取消</button></div>
+        </form>
+    </details>
+    <div class="item-grid partners-grid">
+        <foreach name="partner_association" item="v" key="i">
+            <article class="editor-card item-card"><div class="item-heading"><span class="item-number">社团 Logo <span><?php echo $i+1; ?></span></span><form class="delete-item-form" action="{:U('/Garden/Indexmanage/delete_item')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /><input type="hidden" name="cid" value="{$v.cid}" /><button type="submit" class="delete-link" style="border:0;background:transparent" data-delete data-confirm="确定删除这个社团 Logo吗？"><i class="fa fa-trash-o" aria-hidden="true"></i><span>删除</span></button></form></div><div class="image-preview logo-preview"><img id="partner-{$v.cid}-preview" src="{$v.config_value_1|htmlspecialchars=###}" alt="社团 Logo 预览" loading="lazy" /><span class="image-placeholder" aria-hidden="true"><i class="fa fa-picture-o" aria-hidden="true"></i><span>选择一张图片</span></span></div><div class="image-actions">
+        <button type="button" class="button button-secondary image-browse" data-url-target="#partner-{$v.cid}-url" data-preview-target="#partner-{$v.cid}-preview" data-image-source="main" data-allow-photo="false"><i class="fa fa-picture-o" aria-hidden="true"></i>选择图片</button>
+        <label class="button button-quiet file-action"><i class="fa fa-upload" aria-hidden="true"></i>上传图片<input type="file" class="image-file" data-url-target="#partner-{$v.cid}-url" data-preview-target="#partner-{$v.cid}-preview" accept="image/jpeg,image/png,image/gif" aria-label="上传社团 Logo" /></label>
+    </div><p class="upload-status" role="status" aria-live="polite"></p><details class="link-details"><summary>图片地址</summary><div class="detail-fields"><div class="field"><label for="partner-{$v.cid}-url">图片地址</label><input type="text" id="partner-{$v.cid}-url" name="configs[{$v.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$v.config_value_1|htmlspecialchars=###}" maxlength="255" class="image-url" /></div></div></details></article>
+        </foreach>
+        <empty name="partner_association"><div class="empty-state"><i class="fa fa-users" aria-hidden="true"></i><h3>还没有兄弟社团</h3><p>点击上方“新增社团”添加第一项。</p></div></empty>
+    </div>
+    </section>
+<section id="contacts" class="settings-panel" role="tabpanel" aria-labelledby="tab-contacts">
+        <div class="section-heading"><div><span class="eyebrow">首页设置</span><h2>联系方式</h2><p>管理首页的联系文字与跳转链接。</p></div></div>
+        <details class="add-disclosure"><summary class="button button-secondary"><i class="fa fa-plus" aria-hidden="true"></i>新增联系方式</summary>
+        <form class="add-form editor-card" action="{:U('/Garden/Indexmanage/add_item')}" method="post">
+            <input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" />
+            <div class="card-heading"><h3>新增联系方式</h3><p>填写完成后点击“确认新增”。</p></div>
+            <input type="hidden" name="config_name" value="contact_info" /><div class="field-grid"><div class="field"><label for="new-contact-text">显示文字</label><input type="text" id="new-contact-text" name="config_value_2" required value="" maxlength="255"  /></div><div class="field"><label for="new-contact-link">链接地址</label><input type="text" id="new-contact-link" name="config_value_1" value="" maxlength="255"  /></div></div>
+            <div class="form-actions"><button type="submit" class="button button-primary">确认新增</button><button type="button" class="button button-quiet cancel-add">取消</button></div>
+        </form>
+    </details>
+    <div class="item-grid contacts-grid">
+        <foreach name="contact_info" item="v" key="i">
+            <article class="editor-card item-card"><div class="item-heading"><span class="item-number">联系方式 <span><?php echo $i+1; ?></span></span><form class="delete-item-form" action="{:U('/Garden/Indexmanage/delete_item')}" method="post"><input type="hidden" name="csrf_token" value="{$csrf_token|htmlspecialchars=###,ENT_QUOTES,'UTF-8'}" /><input type="hidden" name="cid" value="{$v.cid}" /><button type="submit" class="delete-link" style="border:0;background:transparent" data-delete data-confirm="确定删除这条联系方式吗？"><i class="fa fa-trash-o" aria-hidden="true"></i><span>删除</span></button></form></div><div class="field-grid"><div class="field"><label for="v-config_value_2-{$v.cid}">显示文字</label><input type="text" id="v-config_value_2-{$v.cid}" name="configs[{$v.cid}][config_value_2]" form="indexManageSaveForm" data-config-field value="{$v.config_value_2|htmlspecialchars=###}" maxlength="255"  /></div><div class="field"><label for="v-config_value_1-{$v.cid}">链接地址</label><input type="text" id="v-config_value_1-{$v.cid}" name="configs[{$v.cid}][config_value_1]" form="indexManageSaveForm" data-config-field value="{$v.config_value_1|htmlspecialchars=###}" maxlength="255"  /></div></div></article>
+        </foreach>
+        <empty name="contact_info"><div class="empty-state"><i class="fa fa-comment-o" aria-hidden="true"></i><h3>还没有联系方式</h3><p>点击上方“新增联系方式”添加第一项。</p></div></empty>
+    </div>
+    </section>
+        </main>
+    </div>
+    <footer class="save-bar"><div class="save-bar-inner"><div class="save-state"><span id="saveStateDot" class="state-dot"></span><div><strong id="saveStateText">内容已同步</strong><span id="saveStateHint">修改后，保存即可应用新配置。</span></div></div><div class="save-actions"><button type="button" class="button button-quiet" id="resetChanges">撤销修改</button><button type="submit" form="indexManageSaveForm" class="button button-primary" id="saveChanges"><i class="fa fa-check" aria-hidden="true"></i>保存修改</button></div></div></footer>
+    <div id="indexImageBrowser" class="gallery-modal" hidden><section class="gallery-panel" role="dialog" aria-modal="true" aria-labelledby="galleryTitle" tabindex="-1">
+        <div class="gallery-heading"><div><span class="eyebrow">图片选择</span><h2 id="galleryTitle">选择展示图片</h2></div><button type="button" class="icon-button" id="galleryClose" aria-label="关闭图片选择"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        <div class="gallery-toolbar"><div class="source-switch" role="group" aria-label="图片来源"><button type="button" data-source="photo" aria-pressed="true" class="active">协会相册</button><button type="button" data-source="main" aria-pressed="false">网站图片</button></div><div class="gallery-search"><input id="galleryKeyword" type="search" aria-label="搜索图片" placeholder="搜索图片名称" /><button id="gallerySearch" type="button" class="button button-secondary"><i class="fa fa-search" aria-hidden="true"></i>搜索</button></div></div>
+        <p id="gallerySummary" class="gallery-summary" aria-live="polite">正在加载图片…</p><div id="galleryGrid" class="gallery-grid" aria-busy="false"></div><div id="galleryPages" class="gallery-pages"></div>
+    </section></div>
+    <div id="settingsConfirm" class="gallery-modal" hidden><section class="confirm-panel" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage"><h2 id="confirmTitle">确认操作</h2><p id="confirmMessage"></p><div class="form-actions"><button type="button" class="button button-secondary" id="confirmCancel">取消</button><button type="button" class="button button-primary" id="confirmAccept">确认</button></div></section></div>
+    <div id="settingsEndpoints" hidden data-csrf="{$csrf_token}" data-upload="{:U('/Garden/Indexmanage/upload_image')}" data-brand="{:U('/Garden/Indexmanage/upload_brand_icon')}" data-photo="{:U('/Garden/Indexmanage/browse_photo_images')}" data-main="{:U('/Garden/Indexmanage/browse_images')}"></div>
 </body>
 </html>
