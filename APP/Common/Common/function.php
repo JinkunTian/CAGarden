@@ -260,3 +260,65 @@ function ca_auth_redirect($default_url){
     }
     return U($default_url);
 }
+
+/** Read Word package metadata only; never extract uploaded archives. */
+function ca_workstudy_valid_word_file($path, $extension){
+    $header = @file_get_contents($path, false, null, 0, 8);
+    if ($extension === 'doc') {
+        return $header === "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1";
+    }
+    if ($extension !== 'docx' || substr((string)$header, 0, 2) !== 'PK' || !class_exists('ZipArchive')) {
+        return false;
+    }
+    $archive = new \ZipArchive();
+    if ($archive->open($path, \ZipArchive::CHECKCONS) !== true) { return false; }
+    try {
+        return ca_workstudy_valid_docx_package($archive);
+    } finally {
+        $archive->close();
+    }
+}
+
+/** Validate required DOCX parts without inflating the document itself. */
+function ca_workstudy_valid_docx_package($archive){
+    foreach (array('[Content_Types].xml', '_rels/.rels', 'word/document.xml') as $entry) {
+        $stat = $archive->statName($entry);
+        if (!$stat || !isset($stat['size']) || $stat['size'] < 1) { return false; }
+        // Only the small metadata parts are read, regardless of document expansion size.
+        if ($entry !== 'word/document.xml' && $stat['size'] > 1048576) { return false; }
+    }
+    $types = ca_workstudy_package_xml($archive->getFromName('[Content_Types].xml', 1048577));
+    $relationships = ca_workstudy_package_xml($archive->getFromName('_rels/.rels', 1048577));
+    if (!$types || !$relationships) { return false; }
+    $xpath = new \DOMXPath($types);
+    $xpath->registerNamespace('ct', 'http://schemas.openxmlformats.org/package/2006/content-types');
+    $parts = $xpath->query('/ct:Types/ct:Override[@PartName="/word/document.xml"]');
+    if ($parts->length !== 1 || $parts->item(0)->getAttribute('ContentType') !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml') {
+        return false;
+    }
+    $xpath = new \DOMXPath($relationships);
+    $xpath->registerNamespace('r', 'http://schemas.openxmlformats.org/package/2006/relationships');
+    $parts = $xpath->query('/r:Relationships/r:Relationship[@Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" or @Type="http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument"]');
+    if ($parts->length !== 1) { return false; }
+    $part = $parts->item(0);
+    return in_array($part->getAttribute('Target'), array('word/document.xml', '/word/document.xml'), true)
+        && (!$part->hasAttribute('TargetMode') || $part->getAttribute('TargetMode') === 'Internal');
+}
+
+function ca_workstudy_package_xml($text){
+    if (!is_string($text) || $text === '' || strlen($text) > 1048576 || !class_exists('DOMDocument')) { return null; }
+    // Package metadata needs no DTD. Reject declarations before parsing, including UTF-16 XML.
+    $declarations = str_replace("\x00", '', $text);
+    if (stripos($declarations, '<!DOCTYPE') !== false || stripos($declarations, '<!ENTITY') !== false) { return null; }
+    $previous = libxml_use_internal_errors(true);
+    try {
+        $xml = new \DOMDocument();
+        $xml->resolveExternals = false;
+        $xml->substituteEntities = false;
+        if (!$xml->loadXML($text, LIBXML_NONET) || $xml->doctype) { return null; }
+        return $xml;
+    } finally {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+    }
+}

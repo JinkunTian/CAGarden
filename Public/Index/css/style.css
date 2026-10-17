@@ -841,3 +841,11 @@ and (max-width : 480px) {
 	font-size: 20px;
 }
 }
+
+/* Keep collapsed mobile navigation links at a touch-friendly height. */
+@media (max-width: 767px) {
+	.navbar-default .navbar-nav > li > a {
+		padding-top: 12px;
+		padding-bottom: 12px;
+	}
+}

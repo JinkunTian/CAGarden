@@ -1,0 +1,19 @@
+/* Styles for the application list only. */
+.workstudy-applications .ws-table-resize-help{margin:0 0 8px;color:#536d82;font-size:13px}
+.workstudy-applications .ws-table-resize-help .fa{color:#27628d;margin-right:5px}
+.workstudy-applications .ws-table-wrap{position:relative}
+.workstudy-applications .ws-applications-table{table-layout:fixed;width:100%;min-width:1168px}
+.workstudy-applications .ws-applications-table .ws-name-heading{position:relative;padding-right:42px;white-space:nowrap}
+.workstudy-applications .ws-applications-table .ws-name-resizer{display:none;position:absolute;z-index:2;top:0;right:0;bottom:0;width:38px;touch-action:none;user-select:none;cursor:col-resize}
+.workstudy-applications.ws-table-resize-ready .ws-applications-table .ws-name-resizer{display:block}
+.workstudy-applications .ws-applications-table .ws-name-resizer:before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:#b7cad9;transition:background-color .15s,box-shadow .15s}
+.workstudy-applications .ws-applications-table .ws-name-resizer:after{content:"";position:absolute;left:14px;top:50%;width:12px;height:18px;transform:translateY(-50%);background:linear-gradient(90deg,transparent 0 3px,#5e7d96 3px 5px,transparent 5px 8px,#5e7d96 8px 10px,transparent 10px)}
+.workstudy-applications .ws-applications-table .ws-name-resizer:hover:before,.workstudy-applications .ws-applications-table .ws-name-resizer:focus-visible:before,.workstudy-applications .ws-applications-table .ws-name-resizer.is-dragging:before{background:#176caa;box-shadow:0 0 0 2px rgba(23,108,170,.16)}
+.workstudy-applications .ws-applications-table .ws-name-resizer:focus-visible{outline:2px solid #176caa;outline-offset:-3px}
+.workstudy-applications .ws-applications-table .ws-name-cell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.workstudy-applications .ws-applications-table tbody tr:nth-child(even) td{background:#f0f5f9}
+.workstudy-applications .ws-applications-table tbody tr:nth-child(odd) td{background:#fff}
+.workstudy-applications .ws-applications-table tbody tr:hover td{background:#e7f1f8}
+.workstudy-applications .ws-applications-table tbody td{transition:background-color .12s}
+@media(max-width:767px){.workstudy-applications .ws-applications-table{min-width:0;table-layout:auto}.workstudy-applications .ws-applications-table .ws-name-resizer{display:none!important}.workstudy-applications .ws-applications-table .ws-name-cell{white-space:normal;text-overflow:clip;overflow:visible}.workstudy-applications .ws-applications-table tbody tr:nth-child(even) td{background:#f4f7fa}.workstudy-applications .ws-applications-table tbody tr:nth-child(odd) td{background:#fff}.workstudy-applications .ws-applications-table tbody tr:hover td{background:inherit}}
+@media(prefers-reduced-motion:reduce){.workstudy-applications .ws-applications-table tbody td,.workstudy-applications .ws-applications-table .ws-name-resizer:before{transition:none}}
