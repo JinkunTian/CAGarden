@@ -139,18 +139,23 @@
                             <tr>
                                 <td class="vip-title">意向：</td>
                                 <td class="vip-input">
-                                    <select name=dep>
-                                        <foreach name='departments' item='v'>
-                                            <notempty name='recruit_info.dep'>
+                                    <select name="dep" required>
+                                        <notempty name="legacy_department">
+                                            <option value="{$legacy_department.did}" selected="selected">{$legacy_department.dname}（暂停纳新，保留原意向）</option>
+                                        </notempty>
+                                        <empty name="departments">
+                                            <empty name="legacy_department">
+                                                <option value="">当前暂无开放纳新的部门</option>
+                                            </empty>
+                                        <else />
+                                            <foreach name="departments" item="v">
                                                 <if condition="$v['did'] eq $recruit_info['dep']">
-                                                    <option value ="{$v.did}" selected="selected">{$v.dname}</option>
+                                                    <option value="{$v.did}" selected="selected">{$v.dname}</option>
                                                 <else />
-                                                    <option value ="{$v.did}" >{$v.dname}</option>
+                                                    <option value="{$v.did}">{$v.dname}</option>
                                                 </if>
-                                                <else />
-                                                <option value ="{$v.did}" >{$v.dname}</option>
-                                                </notempty>
-                                        </foreach>
+                                            </foreach>
+                                        </empty>
                                     </select>
                                 </td>
                             </tr>

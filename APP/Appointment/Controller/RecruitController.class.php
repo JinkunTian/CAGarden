@@ -29,7 +29,7 @@ class RecruitController extends CommonController {
             }
         }
 
-        $departments=M('common_departments')->where(array('status'=>'1'))->select();
+        $departments=M('common_departments')->where(array('status'=>'1','recruit_visible'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
         $this->political_statuses=ca_political_status_options();
         if(M('garden_users_extend')->where(array('uid'=>session('uid')))->find()){
@@ -51,8 +51,16 @@ class RecruitController extends CommonController {
             $this->assign('recruit_info',NULL);
         }
 
+        $legacy_department=NULL;
+        if(!empty($recruit_info['dep'])){
+            $previous_department=M('common_departments')->where(array('did'=>(int)$recruit_info['dep']))->find();
+            if($previous_department && ($previous_department['status']!='1' || $previous_department['recruit_visible']!='1')){
+                $legacy_department=$previous_department;
+            }
+        }
+        $this->assign('legacy_department',$legacy_department);
         
-        $institute=M('common_majors')->distinct(true)->field('institute')->select();
+        $institute=M('common_majors')->where(array('status'=>1))->distinct(true)->field('institute')->select();
         $this->assign('institute',$institute);
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->assign('departments',$departments);
@@ -161,6 +169,12 @@ class RecruitController extends CommonController {
             }
 
             $checkExis=M('recruit')->where(array('username'=>session('username'),'grade'=>$Recruit['gid']))->find();
+            $dep_id=(int)I('dep');
+            $visible_department=M('common_departments')->where(array('did'=>$dep_id,'status'=>'1','recruit_visible'=>'1'))->find();
+            $keep_existing_department=$checkExis && (int)$checkExis['dep']===$dep_id;
+            if($dep_id<=0 || (!$visible_department && !$keep_existing_department)){
+                return_json(array('result'=>'warning','msg'=>'请选择当前开放纳新的部门！'));
+            }
             /**
              * 基础信息
              */
@@ -182,7 +196,7 @@ class RecruitController extends CommonController {
             $recruit_info=array(
                 'uid' => session('uid'),
                 'username' => session('username'),
-                'dep' => I('dep'),
+                'dep' => $dep_id,
                 'flag' => I('flag'),
                 'github' => I('github'),
                 'website' => I('website'),

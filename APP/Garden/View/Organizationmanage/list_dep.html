@@ -47,6 +47,7 @@
 						<tr>
 							<td>序号</td>
 							<td>部门</td>
+							<td>新生纳新可见</td>
 							<td>操作</td>
 						</tr>
 					</thead>
@@ -56,6 +57,17 @@
 
 								<td>{$v.did}</td>
 								<td>{$v.dname}</td>
+								<td>
+									<form action="{:U('/Garden/Organizationmanage/set_dep_recruit_visibility')}" method="post">
+										<input type="hidden" name="csrf_token" value="{$department_visibility_csrf_token}" />
+										<input type="hidden" name="did" value="{$v.did}" />
+										<select name="recruit_visible" required>
+											<option value="1" <if condition="$v['recruit_visible'] eq 1">selected="selected"</if>>显示</option>
+											<option value="0" <if condition="$v['recruit_visible'] eq 0">selected="selected"</if>>暂不显示</option>
+										</select>
+										<button type="submit" class="btn-box">保存</button>
+									</form>
+								</td>
 								<td>
 									<span class="blog-box-ico"><a href="{:U('/Garden/Organizationmanage/del_dep', array('did' => $v['did']))}" onclick='return del();'><i class="fa fa-trash"></i>删除</a></span></td>
 							</tr>
