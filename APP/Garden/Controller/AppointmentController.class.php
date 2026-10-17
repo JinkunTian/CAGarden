@@ -12,6 +12,15 @@ namespace Garden\Controller;
 use Think\Controller;
 class AppointmentController extends CommonController {
 
+    private function notifyCsrfToken(){
+        $token=session('appointment_notify_csrf_token');
+        if(!is_string($token) || $token===''){
+            $token=bin2hex(random_bytes(24));
+            session('appointment_notify_csrf_token',$token);
+        }
+        return $token;
+    }
+
 	/**
 	 * index显示已预约的记录
 	 */
@@ -86,6 +95,7 @@ class AppointmentController extends CommonController {
 			$this->error('参数错误');
 		}
 
+        $this->assign('notify_csrf_token',$this->notifyCsrfToken());
         $this->display();
     }
 
@@ -108,7 +118,7 @@ class AppointmentController extends CommonController {
     /**
      * save保存预约记录
      */
-    public function save(){
+	public function save(){
 
     	$uid=session('uid');
     	$aid=intval(I('aid'));
@@ -155,6 +165,106 @@ class AppointmentController extends CommonController {
             $this->error('记录不存在或着你不能编辑别人的记录');            
         }
 	}
+
+    /**
+     * notify向当前维修人员负责的预约发送到场维修通知
+     * 仅在本人明确提交并勾选确认后发送，不会随保存维修记录自动发送。
+     */
+    public function notify(){
+
+        if($_SERVER['REQUEST_METHOD']!=='POST'){
+            $this->error('请求方式不正确！');
+        }
+        $token=isset($_POST['csrf_token']) ? $_POST['csrf_token'] : null;
+        $expected=session('appointment_notify_csrf_token');
+        if(!is_string($token) || $token==='' || !is_string($expected) || $expected==='' || !hash_equals($expected,$token)){
+            $this->error('页面已失效，请刷新后重新提交。');
+        }
+        if(I('post.confirm_notify')!=='1'){
+            $this->error('请核对邮箱和到场时间，并勾选确认发送。');
+        }
+
+        $aid = intval(I('post.aid'));
+        $visit_time = trim((string)I('post.visit_time'));
+        // Validate raw POST text here and escape exactly once when building the email.
+        $visit_location = isset($_POST['visit_location']) && is_string($_POST['visit_location']) ? trim($_POST['visit_location']) : '';
+        $uid = intval(session('uid'));
+
+        if(!$aid || !$uid || $visit_time === ''){
+            $this->error('请填写预约到场时间！');
+        }
+
+        $appointment = M('appointment_view')->where(array('aid'=>$aid,'fixer_id'=>$uid))->find();
+        if(!$appointment){
+            $this->error('记录不存在或你不能通知别人的预约！');
+        }
+
+        if((string)$appointment['status'] === '4'){
+            $this->error('已取消的预约不能发送到场通知！');
+        }
+
+        $address = trim((string)$appointment['guest_email']);
+        if(!filter_var($address, FILTER_VALIDATE_EMAIL)){
+            $this->error('该预约没有有效的邮箱地址，请先补充用户邮箱！');
+        }
+
+        $visit_datetime = \DateTime::createFromFormat('Y-m-d\\TH:i', $visit_time);
+        $datetime_errors = \DateTime::getLastErrors();
+        if(!$visit_datetime || ($datetime_errors !== false && ($datetime_errors['warning_count'] || $datetime_errors['error_count']))){
+            $this->error('到场时间格式不正确！');
+        }
+
+        $escape = function($value){
+            return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+        };
+        if($visit_location === '' || mb_strlen($visit_location, 'UTF-8') > 255 || preg_match('/[\x00-\x1f\x7f]/', $visit_location)){
+            $this->error('请填写有效的到场地点，最多255个字符！');
+        }
+        $guest_name = $escape($appointment['guest_name']);
+        $model = $escape($appointment['model']);
+        $issues = nl2br($escape($appointment['issues']));
+        $time_text = $visit_datetime->format('Y年m月d日 H:i');
+
+        require_once './ThinkPHP/Library/Vendor/phpmailer/phpmailer/src/PHPMailer.php';
+        require_once './ThinkPHP/Library/Vendor/phpmailer/phpmailer/src/SMTP.php';
+
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
+        $mail->CharSet = 'UTF-8';
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'ssl';
+        $mail->Host = C('SMTP_HOST');
+        $mail->Port = C('SMTP_PORT');
+        $mail->Username = C('SMTP_USER');
+        $mail->Password = C('SMTP_PASS');
+        $fromEmail = C('SMTP_FROM') ?: C('SMTP_USER');
+        $fromName = C('SMTP_FROM_NAME') ?: '管理员';
+        $replyEmail = C('SMTP_REPLY_TO') ?: $fromEmail;
+        $mail->SetFrom($fromEmail, $fromName);
+        $mail->AddReplyTo($replyEmail, $fromName);
+        $mail->Subject = '个人维修预约到场通知';
+        $signature = C('APPOINTMENT_MAIL_SIGNATURE') ?: (C('SITE_NAME') ?: '计算机协会');
+        $mail->MsgHTML(
+            '<p>'.$guest_name.'，您好：</p>'
+            .'<p>您提交的个人维修预约已安排，请于以下时间到场：</p>'
+            .'<p><strong>到场时间：</strong>'.$escape($time_text).'<br>'
+            .'<strong>到场地点：</strong>'.$escape($visit_location).'<br>'
+            .'<strong>设备型号：</strong>'.$model.'</p>'
+            .'<p><strong>故障描述：</strong><br>'.$issues.'</p>'
+            .'<p><strong>重要提醒：</strong>请带好电脑和电源，电源一定要携带。</p>'
+            .'<p>请按时到场。如时间不便，请直接回复此邮件与我们联系。</p>'
+            .'<p>—— '.$escape($signature).'</p>'
+        );
+        $mail->AddAddress($address, (string)$appointment['guest_name']);
+
+        if($mail->send()){
+            $this->success('预约通知邮件已发送！', U('/Garden/Appointment/edit', array('aid'=>$aid)));
+        }else{
+            error_log('[appointment-mail] send failed for aid '.$aid);
+            $this->error('邮件发送失败，请稍后重试或检查邮件配置！');
+        }
+    }
 
 	/**
 	 * print打印预约信息
