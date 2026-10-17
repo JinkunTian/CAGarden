@@ -203,3 +203,27 @@ function decode_addition_password($addition_password){
     }
     return $addition_password;
 }
+
+function ca_set_auth_session($user){
+    if($user['userType']=='garden'){
+        $user_extend=M('garden_users_extend')->where(array('uid'=>$user['uid']))->find();
+        session('admin',$user_extend['is_admin']);
+    }else{
+        session('admin',null);
+    }
+
+    session('userType',$user['userType']);
+    session(C('PASSWORD_KEY'),true);
+    session('username',$user['username']);
+    session('truename',$user['truename']);
+    session('uid',$user['uid']);
+}
+
+function ca_auth_redirect($default_url){
+    $url=session('req_url');
+    session('req_url',null);
+    if($url && substr($url,0,1)=='/' && strpos($url,'//')===false){
+        return $url;
+    }
+    return U($default_url);
+}
