@@ -8,7 +8,7 @@
     <meta content="telephone=no" name="format-detection" />
     <title>欢迎加入我们！ - {:C('SITE_NAME')}</title>
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
-    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css?v=20260918-ui2" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
     <link rel="stylesheet" href="__PUBLIC__/cropper/cropper.min.css" type="text/css">
     <link rel="stylesheet" href="__PUBLIC__/cropper/ImgCropping.css" type="text/css">
@@ -93,7 +93,7 @@
                             </tr>
                             <tr>
                                 <td class="vip-title">网站：</td>
-                                <td class="vip-input"><input type="text" name="website" value="<notempty name='recruit_info.website'>{$recruit_info.website}</notempty>" placeholder="[选填]你的个人网站，格式为网址http://www.mecca.org.cn"/></td>
+                                <td class="vip-input"><input type="text" name="website" value="<notempty name='recruit_info.website'>{$recruit_info.website}</notempty>" placeholder="[选填]你的个人网站，格式为网址http://association.example.test"/></td>
                             </tr>
                             <tr>
                                 <td class="vip-title">专业：</td>
@@ -106,6 +106,29 @@
                                                 <option value ="{$v.mid}" >{$v.institute} - {$v.mname}</option>
                                             </if>
                                         </foreach>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title profile-field-label">政治面貌：</td>
+                                <td class="vip-input">
+                                    <select name="political_status" required>
+                                        <foreach name="political_statuses" item="p">
+                                            <if condition="$p eq $recruit_info['political_status']">
+                                                <option value="{$p}" selected="selected">{$p}</option>
+                                            <else />
+                                                <option value="{$p}">{$p}</option>
+                                            </if>
+                                        </foreach>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vip-title profile-field-label">是否参与<br>勤工助学：</td>
+                                <td class="vip-input">
+                                    <select name="is_work_study" required>
+                                        <option value="0" <if condition="$recruit_info['is_work_study'] eq 0">selected="selected"</if>>否</option>
+                                        <option value="1" <if condition="$recruit_info['is_work_study'] eq 1">selected="selected"</if>>是</option>
                                     </select>
                                 </td>
                             </tr>
@@ -139,6 +162,7 @@
                             <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)" />
                             <label title="上传图片" for="chooseImg" class="l-btn choose-btn">上传本人照片</label>
                         </span>
+                        <p id="photo-upload-tip" style="clear: both; margin: 8px 0 0; color: #333; font-size: 14px; line-height: 1.5;">请使用本人真实照片（生活照、自拍照、大头照都可以），照片将用于学校社团管理处信息收集。</p>
                     </div>
                     <!--图片裁剪框 start-->
                     <div style="display: none" class="tailoring-container">

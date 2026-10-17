@@ -17,6 +17,8 @@ class RegController extends CommonController {
         $this->assign('username',I('username'));
         $this->assign('password',I('password'));
         $this->assign('majors',$majors);
+        $this->assign('political_statuses',ca_political_status_options());
+        $this->assign('work_study_options',ca_work_study_options());
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->display();
     }
@@ -63,6 +65,12 @@ class RegController extends CommonController {
                 $validate_response=true;
             }
             if($validate_response){
+                $political_status=I('political_status');
+                $is_work_study=I('is_work_study');
+                if(!ca_validate_personal_fields($political_status,$is_work_study)){
+                    $reg_result['msg']='请选择有效的政治面貌和勤工助学选项';
+                    return_json($reg_result);
+                }
                 $data = array(
                     'truename' => I('truename'),
                     'username' => I('username'),
@@ -71,6 +79,8 @@ class RegController extends CommonController {
                     'qq' => I('qq'),
                     'email' => I('email'),
                     'major' => I('major'),
+                    'political_status' => $political_status,
+                    'is_work_study' => intval($is_work_study),
                     'reg_ip' => get_client_ip(),
                     'addtime'   =>  date('y-m-d H:i:s'),
                     'college'=> I('college'),
@@ -88,8 +98,30 @@ class RegController extends CommonController {
                     //写入信息到数据库
                     $result=M('users')->add($data);
                     if (!($result===false)) {
+                        $new_user=M('users')->where(array('uid'=>$result))->find();
+                        if(!$new_user){
+                            $reg_result['msg']='注册成功但登录状态建立失败，请联系管理员';
+                            return_json($reg_result);
+                        }
+
+                        //注册成功后直接建立登录会话，避免前端再次提交密码登录
+                        ca_set_auth_session($new_user);
+                        M('system_login_logs')->add(array(
+                            'uid'=>$new_user['uid'],
+                            'username'=>$new_user['username'],
+                            'certify'=>'register',
+                            'ip'=>get_client_ip(),
+                            'datetime'=>date('y-m-d H:i:s'),
+                            'result'=>'Success'
+                        ));
+                        M('users')->where(array('uid'=>$new_user['uid']))->save(array(
+                            'certify'=>'register',
+                            'last_login'=>date('y-m-d H:i:s'),
+                            'last_ip'=>get_client_ip()
+                        ));
                         $reg_result['result']='success';
-                        $reg_result['msg']='注册成功！请登陆系统！';
+                        $reg_result['msg']='注册成功，已自动登录！';
+                        $reg_result['url']=ca_auth_redirect('/Appointment/Index');
                     }else{
                         $reg_result['msg']='注册失败！请联系管理员';
                     } 

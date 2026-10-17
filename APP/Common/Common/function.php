@@ -204,6 +204,39 @@ function decode_addition_password($addition_password){
     return $addition_password;
 }
 
+/**
+ * 用户资料可选项及认证会话公共方法。
+ */
+function ca_political_status_options(){
+    return array(
+        '群众',
+        '共青团员',
+        '中共党员',
+        '中共预备党员',
+        '民革党员',
+        '民盟盟员',
+        '民建会员',
+        '民进会员',
+        '农工党党员',
+        '致公党党员',
+        '九三学社社员',
+        '台盟盟员',
+        '无党派人士'
+    );
+}
+
+function ca_work_study_options(){
+    return array(
+        '0' => '否',
+        '1' => '是'
+    );
+}
+
+function ca_validate_personal_fields($political_status, $is_work_study){
+    return in_array($political_status, ca_political_status_options(), true)
+        && in_array((string)$is_work_study, array('0', '1'), true);
+}
+
 function ca_set_auth_session($user){
     if($user['userType']=='garden'){
         $user_extend=M('garden_users_extend')->where(array('uid'=>$user['uid']))->find();

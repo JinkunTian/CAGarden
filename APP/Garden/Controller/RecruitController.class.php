@@ -12,6 +12,25 @@
 namespace Garden\Controller;
 use Think\Controller;
 class RecruitController extends AdminController {
+    /** Read new submission fields directly; legacy SQL views omit these columns. */
+    private function withPersonalFields($records){
+        if(!$records) return array();
+        $ids=array();
+        foreach($records as $record) $ids[]=(int)$record['rid'];
+        $snapshots=M('recruit')->where(array('rid'=>array('in',$ids)))
+            ->field('rid,political_status,is_work_study')->select();
+        $byId=array();
+        foreach((array)$snapshots as $snapshot) $byId[(int)$snapshot['rid']]=$snapshot;
+        foreach($records as &$record){
+            $id=(int)$record['rid'];
+            if(isset($byId[$id])){
+                $record['political_status']=$byId[$id]['political_status'];
+                $record['is_work_study']=$byId[$id]['is_work_study'];
+            }
+        }
+        unset($record);
+        return $records;
+    }
     /**
      * index显示纳新年度
      */
@@ -79,6 +98,8 @@ class RecruitController extends AdminController {
         if(!$recruit){
             $this->error('找不到对象');
         }
+        $records=$this->withPersonalFields(array($recruit));
+        $recruit=$records[0];
         if($recruit['status']!='0'){
         	$garden_info=M('garden_users_extend')->where(array('username' => $recruit['username']))->find();
 
@@ -239,6 +260,7 @@ class RecruitController extends AdminController {
 
         $RecruitView=M('recruit_view');
         $users=$RecruitView->where(array('grade'=>$grade))->order('addtime DESC')->limit($limit)->select();
+        $users=$this->withPersonalFields($users);
 
         $this->assign('page',$show);// 赋值分页输出
         $this->assign('gname',$Recruit['gname']);

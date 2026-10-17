@@ -7,7 +7,7 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
 	<title>注册 - {:C('SITE_NAME')}</title>
-	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css?v=20260918-ui2"/>
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/sweetalert.css"/>
 
@@ -120,12 +120,13 @@
                         swal({
                             title:"成功！",
                             text:result.msg, 
-                            type:"success"
-                        },function(conform) {
-                            if(conform){
-                                window.location.href="{:U('/Authentication')}";
-                            }
+                            type:"success",
+                            showConfirmButton:false,
+                            timer:1000
                         });
+                        setTimeout(function(){
+                            window.location.href=result.url || "{:U('/Appointment/Index')}";
+                        },1000);
                     
                     }else if(result.result=='error'){
                         swal({
@@ -146,7 +147,7 @@
     </script>
 </head>
 <body>
-	<div class="login-content-box">
+	<div class="login-content-box register-page">
 		<div class="login-input-box" style="height: auto">
 			<div class="login-logo">
 				<div class="login-title">
@@ -209,6 +210,32 @@
                                 <option value ="{$v.mid}" >{$v.institute} - {$v.mname}</option>
                             </foreach>
                         </select>
+                    </div>
+                    <div class="login-user login-select-user">
+                        <span class="login-user-span">
+                            <i class="fa fa-flag"></i>
+                        </span>
+                        <div class="login-select-control">
+                            <label class="login-select-label" for="political_status">政治面貌：</label>
+                            <select name="political_status" id="political_status" required>
+                                <foreach name="political_statuses" item="p">
+                                    <option value="{$p}" <if condition="$p eq '群众'">selected="selected"</if>>{$p}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="login-user login-select-user">
+                        <span class="login-user-span">
+                            <i class="fa fa-graduation-cap"></i>
+                        </span>
+                        <div class="login-select-control">
+                            <label class="login-select-label" for="is_work_study">是否参与勤工助学：</label>
+                            <select name="is_work_study" id="is_work_study" required>
+                                <foreach name="work_study_options" item="label" key="value">
+                                    <option value="{$value}" <if condition="$value eq '0'">selected="selected"</if>>{$label}</option>
+                                </foreach>
+                            </select>
+                        </div>
                     </div>
                     <if condition="$ENABLE_GEETEST eq true">
 					<div class="login-user">

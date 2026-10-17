@@ -8,8 +8,10 @@
     <meta content="telephone=no" name="format-detection" />
     <title>我的资料 - {:C('SITE_NAME')}</title>
   	<link rel="Shortcut Icon" type="image/x-icon" href="__PUBLIC__/images/favicon.ico" />
-    <link rel="stylesheet" href="__PUBLIC__/css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css?v=20260918-ui2" media="screen" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__/css/public.css" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/cropper/cropper.min.css?v=20260918-photo" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/cropper/ImgCropping.css?v=20260918-photo" type="text/css">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/font-awesome.min.css"/>
     <link rel='stylesheet' href='__PUBLIC__/css/bootstrap.css' type='text/css' media='all' />
     <script type='text/javascript' src='__PUBLIC__/js/jquery-2.1.1.min.js'></script>
@@ -23,6 +25,14 @@
             <div class="appointment-content">
                 <form action="{:U('/Appointment/User/datapost')}"  enctype="multipart/form-data" method="post">
                     <foreach name="user_data" item="v">
+                        <div class="vip-img-box profile-photo-box">
+                            <span class="vip-img">
+                                <img id="profileFinalImg" src="<notempty name='v.img'>__PUBLIC__{$v.img}</notempty>" alt="当前头像" style="max-width:150px;max-height:200px;" />
+                                <input type="file" accept="image/jpg,image/jpeg,image/png" name="profile_file" id="profileChooseImg" class="hidden" onchange="profileSelectImg(this)" />
+                                <label title="上传或更换头像" for="profileChooseImg" class="l-btn choose-btn">上传或更换头像</label>
+                            </span>
+                            <p id="profile-photo-tip" style="clear: both; margin: 8px 0 0; color: #333; font-size: 14px; line-height: 1.5;">支持 JPG、PNG，最大 4MB。</p>
+                        </div>
                         <div class="vip-txt-box">
                             <table>
                                 <tr>
@@ -60,6 +70,29 @@
                                         </select>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td class="vip-title profile-field-label">政治面貌：</td>
+                                    <td class="vip-input">
+                                        <select name="political_status" required>
+                                            <foreach name="political_statuses" item="p">
+                                                <if condition="$p eq $v['political_status']">
+                                                    <option value="{$p}" selected="selected">{$p}</option>
+                                                <else />
+                                                    <option value="{$p}">{$p}</option>
+                                                </if>
+                                            </foreach>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="vip-title profile-field-label">是否参与<br>勤工助学：</td>
+                                    <td class="vip-input">
+                                        <select name="is_work_study" required>
+                                            <option value="0" <if condition="$v['is_work_study'] eq 0">selected="selected"</if>>否</option>
+                                            <option value="1" <if condition="$v['is_work_study'] eq 1">selected="selected"</if>>是</option>
+                                        </select>
+                                    </td>
+                                </tr>
                                 <tr></tr>
                                 <tr>
                                     <td></td>
@@ -70,10 +103,111 @@
                         </div>
                     </foreach>
                 </form>
+                <div id="profileTailoringContainer" class="tailoring-container" style="display:none;">
+                    <div class="black-cloth" onclick="profileCloseTailor()"></div>
+                    <div class="tailoring-content">
+                        <div class="tailoring-content-one">
+                            <div class="close-tailoring" onclick="profileCloseTailor()">×</div>
+                        </div>
+                        <div class="tailoring-content-two">
+                            <div class="tailoring-box-parcel">
+                                <img id="profileTailoringImg" alt="头像裁剪预览" />
+                            </div>
+                            <div class="preview-box-parcel">
+                                <p>图片预览：</p>
+                                <div class="square previewImg"></div>
+                            </div>
+                        </div>
+                        <div class="tailoring-content-three">
+                            <button type="button" class="l-btn profile-cropper-reset">复位</button>
+                            <button type="button" class="l-btn profile-cropper-rotate">旋转</button>
+                            <button type="button" class="l-btn profile-cropper-scaleX">换向</button>
+                            <button type="button" class="l-btn profile-sure-cut" id="profileSureCut">确定</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div style="height: 90px"></div>
     <script src="__PUBLIC__/js/index.js"></script>
+    <script src="__PUBLIC__/cropper/cropper.min.js?v=20260918-photo"></script>
+    <script type="text/javascript">
+        var profileCropperReady = false;
+
+        function profileSelectImg(file) {
+            if (!file.files || !file.files[0]) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                $("#profileTailoringContainer").show();
+                $("#profileTailoringImg").cropper('replace', evt.target.result, false);
+            };
+            reader.readAsDataURL(file.files[0]);
+        }
+
+        function profileCloseTailor() {
+            $("#profileTailoringContainer").hide();
+        }
+
+        $(function() {
+            $("#profileTailoringImg").cropper({
+                aspectRatio: 3 / 4,
+                preview: '.previewImg',
+                guides: false,
+                autoCropArea: 0.5,
+                movable: true,
+                dragCrop: true,
+                resizable: true,
+                zoomable: false,
+                mouseWheelZoom: false,
+                touchDragZoom: true,
+                rotatable: true,
+                crop: function() {}
+            });
+            profileCropperReady = true;
+
+            $(".profile-cropper-rotate").on("click", function() {
+                $("#profileTailoringImg").cropper("rotate", 45);
+            });
+            $(".profile-cropper-reset").on("click", function() {
+                $("#profileTailoringImg").cropper("reset");
+            });
+
+            var profileFlagX = true;
+            $(".profile-cropper-scaleX").on("click", function() {
+                $("#profileTailoringImg").cropper("scaleX", profileFlagX ? -1 : 1);
+                profileFlagX = !profileFlagX;
+            });
+
+            $("#profileSureCut").on("click", function() {
+                if(!profileCropperReady || !$("#profileTailoringImg").attr("src")) {
+                    return false;
+                }
+                var canvas=$("#profileTailoringImg").cropper('getCroppedCanvas');
+                var base64=canvas.toDataURL('image/jpeg');
+                $("#profileFinalImg").prop("src",base64);
+                $("#profile-photo-tip").text("正在上传头像……");
+                $.ajax({
+                    url: "{:U('/Appointment/User/save_img')}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {file: base64},
+                    success: function(result) {
+                        if(result.result=='success') {
+                            $("#profile-photo-tip").text("头像上传成功！");
+                            profileCloseTailor();
+                        } else {
+                            $("#profile-photo-tip").text(result.msg || "头像上传失败，请重试！");
+                        }
+                    },
+                    error: function() {
+                        $("#profile-photo-tip").text("头像上传失败，请检查网络后重试！");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
