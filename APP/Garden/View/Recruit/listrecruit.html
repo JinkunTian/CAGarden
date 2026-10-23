@@ -32,6 +32,8 @@
 							<td>QQ</td>
 							<td>电邮</td>
 							<td>专业</td>
+							<td>政治面貌</td>
+							<td>勤工助学</td>
 							<td>部门</td>
 							<td>状态</td>
 							<td>印象</td>
@@ -47,6 +49,8 @@
 								<td>{$v.qq}</td>
 								<td>{$v.email}</td>
 								<td>{$v.mname}</td>
+								<td>{$v.political_status}</td>
+								<td><if condition="$v['is_work_study'] eq 1">是<else />否</if></td>
 								<td>{$v.dname}</td>
 								<td><if condition="$v['status'] eq '1'">已纳<else /><font color="red">未纳</font></if></td>
 								<td>{$v.comment_count}</td>

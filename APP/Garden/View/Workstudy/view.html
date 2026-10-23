@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="format-detection" content="telephone=no"><title>勤工助学报名详情 - {:C('SITE_NAME')}</title><include file="Workstudy:assets" /></head>
+<body class="workstudy-page"><div class="container"><include file="Common:header" /></div>
+<main class="ws-main ws-narrow"><header class="ws-header"><div><h1>勤工助学报名详情</h1><p class="ws-sub">{$project.wname|htmlspecialchars}</p></div><span class="ws-badge <if condition="$project['status'] eq 1">ws-open<else /><if condition="$project['status'] eq 3">ws-archived<else />ws-ended</if></if>"><if condition="$project['status'] eq 1">报名开放<else /><if condition="$project['status'] eq 3">已归档<else />报名已结束</if></if></span></header><section class="ws-card"><p class="ws-muted">详细申请内容请查看该同学上传的 Word 报名表。</p><table class="ws-details"><tr><th scope="row">学号</th><td>{$application.username|htmlspecialchars}</td></tr>
+<tr><th scope="row">姓名</th><td>{$application.truename|htmlspecialchars}</td></tr>
+<tr><th scope="row">学院与专业</th><td>{$application.college|htmlspecialchars} · {$application.major|htmlspecialchars}</td></tr>
+<tr><th scope="row">班级</th><td>{$application.class|htmlspecialchars}</td></tr>
+<tr><th scope="row">联系方式</th><td>电话：{$application.mobile|htmlspecialchars}<br>QQ：{$application.qq|htmlspecialchars}<br>邮箱：{$application.email|htmlspecialchars}</td></tr>
+<tr><th scope="row">政治面貌</th><td>{$application.political_status|htmlspecialchars}</td></tr>
+<tr><th scope="row">Word 报名表</th><td>{$application.file_name|htmlspecialchars}</td></tr>
+<tr><th scope="row">提交时间</th><td>{$application.addtime|htmlspecialchars}</td></tr>
+<tr><th scope="row">最近更新</th><td>{$application.update_time|htmlspecialchars}</td></tr></table><div class="ws-actions" style="margin-top:24px"><a class="btn btn-primary" href="{:U('/Garden/Workstudy/download',array('aid'=>$application['aid']))}">下载报名表</a><a class="btn btn-default" href="{:U('/Garden/Workstudy/applications',array('wid'=>$project['wid']))}">返回报名列表</a></div></section></main><script src="__PUBLIC__/js/index.js"></script><script src="__PUBLIC__/js/workstudy.js?v=20261004-fix1"></script></body></html>

@@ -29,21 +29,38 @@ class RecruitController extends CommonController {
             }
         }
 
-        $departments=M('common_departments')->where(array('status'=>'1'))->select();
+        $departments=M('common_departments')->where(array('status'=>'1','recruit_visible'=>'1'))->select();
         $majors=M('common_majors')->where(array('status'=>'1'))->select();
+        $this->political_statuses=ca_political_status_options();
         if(M('garden_users_extend')->where(array('uid'=>session('uid')))->find()){
             $this->error('你已经加入过计算机协会了！','/Appointment');
         }
 
         if($recruit_info=M('recruit_view')->where(array('uid'=>session('uid'),'grade'=>$Recruit['gid']))->find()){
+            //数据库视图可能未包含新增字段，直接从本届申请记录补齐快照值
+            $recruit_record=M('recruit')->where(array('uid'=>session('uid'),'grade'=>$Recruit['gid']))->find();
+            if($recruit_record){
+                $recruit_info['political_status']=$recruit_record['political_status'];
+                $recruit_info['is_work_study']=$recruit_record['is_work_study'];
+            }
             $this->assign('recruit_info',$recruit_info);
         }elseif($user_info=M('users')->where(array('uid'=>session('uid')))->find()){
             $this->assign('recruit_info',$user_info);
         }else{
+            $recruit_info=NULL;
             $this->assign('recruit_info',NULL);
         }
+
+        $legacy_department=NULL;
+        if(!empty($recruit_info['dep'])){
+            $previous_department=M('common_departments')->where(array('did'=>(int)$recruit_info['dep']))->find();
+            if($previous_department && ($previous_department['status']!='1' || $previous_department['recruit_visible']!='1')){
+                $legacy_department=$previous_department;
+            }
+        }
+        $this->assign('legacy_department',$legacy_department);
         
-        $institute=M('common_majors')->distinct(true)->field('institute')->select();
+        $institute=M('common_majors')->where(array('status'=>1))->distinct(true)->field('institute')->select();
         $this->assign('institute',$institute);
         $this->assign('ENABLE_GEETEST',C('ENABLE_GEETEST'));
         $this->assign('departments',$departments);
@@ -145,6 +162,19 @@ class RecruitController extends CommonController {
             }else if(I('apply')==''){
                 return_json(array('result'=>'warning','msg'=>'入会申请是一定要填写的哦！'));
             }
+            $political_status=I('political_status');
+            $is_work_study=I('is_work_study');
+            if(!ca_validate_personal_fields($political_status,$is_work_study)){
+                return_json(array('result'=>'warning','msg'=>'请选择有效的政治面貌和勤工助学选项！'));
+            }
+
+            $checkExis=M('recruit')->where(array('username'=>session('username'),'grade'=>$Recruit['gid']))->find();
+            $dep_id=(int)I('dep');
+            $visible_department=M('common_departments')->where(array('did'=>$dep_id,'status'=>'1','recruit_visible'=>'1'))->find();
+            $keep_existing_department=$checkExis && (int)$checkExis['dep']===$dep_id;
+            if($dep_id<=0 || (!$visible_department && !$keep_existing_department)){
+                return_json(array('result'=>'warning','msg'=>'请选择当前开放纳新的部门！'));
+            }
             /**
              * 基础信息
              */
@@ -159,17 +189,21 @@ class RecruitController extends CommonController {
                 'major' => I('major'),
                 'qq' => I('qq'),
                 'email' => I('email'),
-                'mobile' => I('mobile')
+                'mobile' => I('mobile'),
+                'political_status' => $political_status,
+                'is_work_study' => intval($is_work_study)
             );
             $recruit_info=array(
                 'uid' => session('uid'),
                 'username' => session('username'),
-                'dep' => I('dep'),
+                'dep' => $dep_id,
                 'flag' => I('flag'),
                 'github' => I('github'),
                 'website' => I('website'),
                 'apply' => I('apply'),
                 'info' => I('info'),
+                'political_status' => $political_status,
+                'is_work_study' => intval($is_work_study),
                 'grade' => $Recruit['gid'],
                 'reg_ip' => get_client_ip(),
                 'addtime' =>date('y-m-d H:i:s'),
@@ -187,8 +221,6 @@ class RecruitController extends CommonController {
             /**
              * 检查本届纳新中该用户是否提交了申请
              */
-            $checkExis=M('recruit')->where(array('username' => session('username'),'grade'=>$Recruit['gid']))->find();
-            
             $checkExis_garden=M('garden_users_extend')->where(array('username' => session('username')))->find();
             if(!($checkExis_garden)){
                 $data['salt']=md5(time());
@@ -202,7 +234,7 @@ class RecruitController extends CommonController {
                     $result2=M('users')->where(array('uid'=>session('uid')))->save($base_data);
                 }
                 
-                if (!($result===false||$result2===false)) {
+                if (!($result1===false||$result2===false)) {
                     return_json(array('result'=>'success','msg'=>$Recruit['message']));
                 }else{
                     return_json(array('result'=>'failure','msg'=>'提交失败（CODE1），请联系管理员解决！'));

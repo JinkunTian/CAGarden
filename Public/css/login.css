@@ -329,3 +329,44 @@ a:link, a:visited {
         box-shadow: 0px 0px 0px #fff;
     }
 }
+
+/* 注册页内容较长时，让背景和白色表单随页面内容延伸。 */
+.login-content-box.register-page {
+    min-height: 100vh;
+    height: auto;
+    padding: 40px 0 80px;
+    box-sizing: border-box;
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.login-content-box.register-page .login-input-box {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0 auto;
+    height: auto !important;
+    min-height: 400px;
+}
+.login-content-box.register-page .login-p {
+    position: static;
+    margin-top: 20px;
+}
+.login-select-user {
+    height: auto;
+    min-height: 40px;
+}
+.login-select-control {
+    margin-left: 40px;
+}
+.login-select-label {
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    color: #555;
+    font-size: 14px;
+}
+.login-select-user select {
+    width: 198px !important;
+    height: 32px !important;
+}

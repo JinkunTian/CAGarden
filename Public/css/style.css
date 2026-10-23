@@ -214,6 +214,20 @@ a{
 	width: auto;
 	height: auto;
 }
+.cgx-txt .profile-field-label{
+	width: 100px !important;
+	min-width: 100px;
+	display: table-cell !important;
+	height: 40px;
+	line-height: 20px;
+	white-space: nowrap;
+	vertical-align: middle;
+	padding-right: 10px;
+	box-sizing: border-box;
+}
+.cgx-txt .profile-field-label + .vip-input{
+	vertical-align: middle;
+}
 .vip-img-box{
 	width: 25%;
 	float: right;

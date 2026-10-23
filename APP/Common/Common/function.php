@@ -203,3 +203,122 @@ function decode_addition_password($addition_password){
     }
     return $addition_password;
 }
+
+/**
+ * 用户资料可选项及认证会话公共方法。
+ */
+function ca_political_status_options(){
+    return array(
+        '群众',
+        '共青团员',
+        '中共党员',
+        '中共预备党员',
+        '民革党员',
+        '民盟盟员',
+        '民建会员',
+        '民进会员',
+        '农工党党员',
+        '致公党党员',
+        '九三学社社员',
+        '台盟盟员',
+        '无党派人士'
+    );
+}
+
+function ca_work_study_options(){
+    return array(
+        '0' => '否',
+        '1' => '是'
+    );
+}
+
+function ca_validate_personal_fields($political_status, $is_work_study){
+    return in_array($political_status, ca_political_status_options(), true)
+        && in_array((string)$is_work_study, array('0', '1'), true);
+}
+
+function ca_set_auth_session($user){
+    if($user['userType']=='garden'){
+        $user_extend=M('garden_users_extend')->where(array('uid'=>$user['uid']))->find();
+        session('admin',$user_extend['is_admin']);
+    }else{
+        session('admin',null);
+    }
+
+    session('userType',$user['userType']);
+    session(C('PASSWORD_KEY'),true);
+    session('username',$user['username']);
+    session('truename',$user['truename']);
+    session('uid',$user['uid']);
+}
+
+function ca_auth_redirect($default_url){
+    $url=session('req_url');
+    session('req_url',null);
+    if($url && substr($url,0,1)=='/' && strpos($url,'//')===false){
+        return $url;
+    }
+    return U($default_url);
+}
+
+/** Read Word package metadata only; never extract uploaded archives. */
+function ca_workstudy_valid_word_file($path, $extension){
+    $header = @file_get_contents($path, false, null, 0, 8);
+    if ($extension === 'doc') {
+        return $header === "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1";
+    }
+    if ($extension !== 'docx' || substr((string)$header, 0, 2) !== 'PK' || !class_exists('ZipArchive')) {
+        return false;
+    }
+    $archive = new \ZipArchive();
+    if ($archive->open($path, \ZipArchive::CHECKCONS) !== true) { return false; }
+    try {
+        return ca_workstudy_valid_docx_package($archive);
+    } finally {
+        $archive->close();
+    }
+}
+
+/** Validate required DOCX parts without inflating the document itself. */
+function ca_workstudy_valid_docx_package($archive){
+    foreach (array('[Content_Types].xml', '_rels/.rels', 'word/document.xml') as $entry) {
+        $stat = $archive->statName($entry);
+        if (!$stat || !isset($stat['size']) || $stat['size'] < 1) { return false; }
+        // Only the small metadata parts are read, regardless of document expansion size.
+        if ($entry !== 'word/document.xml' && $stat['size'] > 1048576) { return false; }
+    }
+    $types = ca_workstudy_package_xml($archive->getFromName('[Content_Types].xml', 1048577));
+    $relationships = ca_workstudy_package_xml($archive->getFromName('_rels/.rels', 1048577));
+    if (!$types || !$relationships) { return false; }
+    $xpath = new \DOMXPath($types);
+    $xpath->registerNamespace('ct', 'http://schemas.openxmlformats.org/package/2006/content-types');
+    $parts = $xpath->query('/ct:Types/ct:Override[@PartName="/word/document.xml"]');
+    if ($parts->length !== 1 || $parts->item(0)->getAttribute('ContentType') !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml') {
+        return false;
+    }
+    $xpath = new \DOMXPath($relationships);
+    $xpath->registerNamespace('r', 'http://schemas.openxmlformats.org/package/2006/relationships');
+    $parts = $xpath->query('/r:Relationships/r:Relationship[@Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" or @Type="http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument"]');
+    if ($parts->length !== 1) { return false; }
+    $part = $parts->item(0);
+    return in_array($part->getAttribute('Target'), array('word/document.xml', '/word/document.xml'), true)
+        && (!$part->hasAttribute('TargetMode') || $part->getAttribute('TargetMode') === 'Internal');
+}
+
+function ca_workstudy_package_xml($text){
+    if (!is_string($text) || $text === '' || strlen($text) > 1048576 || !class_exists('DOMDocument')) { return null; }
+    // Package metadata needs no DTD. Reject declarations before parsing, including UTF-16 XML.
+    $declarations = str_replace("\x00", '', $text);
+    if (stripos($declarations, '<!DOCTYPE') !== false || stripos($declarations, '<!ENTITY') !== false) { return null; }
+    $previous = libxml_use_internal_errors(true);
+    try {
+        $xml = new \DOMDocument();
+        $xml->resolveExternals = false;
+        $xml->substituteEntities = false;
+        if (!$xml->loadXML($text, LIBXML_NONET) || $xml->doctype) { return null; }
+        return $xml;
+    } finally {
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+    }
+}

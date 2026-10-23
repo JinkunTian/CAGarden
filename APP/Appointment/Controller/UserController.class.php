@@ -17,8 +17,63 @@ class UserController extends CommonController {
     public function index(){
         $uid = session('uid');
         $this->majors=M('common_majors')->where(array('status'=>'1'))->select();
+        $this->political_statuses=ca_political_status_options();
         $this->user_data = M('users')->where(array('uid'=>$uid))->select();
         $this->display();
+    }
+
+    /**
+     * save_img方法保存已登录用户的头像。
+     */
+    public function save_img(){
+        $uid=session('uid');
+        if(!$uid){
+            return_json(array('result'=>'failure','msg'=>'请先登录后再上传头像！'));
+        }
+
+        $base64_image_content=isset($_POST['file']) ? $_POST['file'] : '';
+        if(strpos($base64_image_content,'data%3A')===0){
+            $base64_image_content=urldecode($base64_image_content);
+        }
+
+        if(!preg_match('/^data:image\/(jpeg|jpg|png);base64,/i',$base64_image_content,$result)){
+            return_json(array('result'=>'failure','msg'=>'只支持 JPG 或 PNG 图片！'));
+        }
+
+        $image_data=base64_decode(str_replace($result[0],'',$base64_image_content),true);
+        $max_size=intval(C('MAX_PHOTO_POST_SIZE'));
+        if($max_size<=0){
+            $max_size=4194304;
+        }
+        if($image_data===false || strlen($image_data)==0 || strlen($image_data)>$max_size){
+            return_json(array('result'=>'failure','msg'=>'图片不能为空且大小不能超过4MB！'));
+        }
+
+        $image_info=getimagesizefromstring($image_data);
+        if(!$image_info || !in_array($image_info['mime'],array('image/jpeg','image/png'),true)){
+            return_json(array('result'=>'failure','msg'=>'图片格式校验失败！'));
+        }
+
+        $file_url='/Uploads/Profiles/'.date('Y-m-d').'/';
+        $site_root=dirname(dirname(dirname(dirname(__FILE__))));
+        $upload_dir=$site_root.'/Public'.$file_url;
+        if(!is_dir($upload_dir) && !mkdir($upload_dir,0755,true)){
+            return_json(array('result'=>'failure','msg'=>'头像目录不可写！'));
+        }
+
+        $file_type=$image_info['mime']=='image/png' ? 'png' : 'jpg';
+        $file_name=substr(sha1($image_data),0,20).'.'.$file_type;
+        $new_file=$upload_dir.$file_name;
+        if(file_put_contents($new_file,$image_data,LOCK_EX)===false){
+            return_json(array('result'=>'failure','msg'=>'头像保存失败，请稍后重试！'));
+        }
+
+        if(M('users')->where(array('uid'=>$uid))->save(array('img'=>$file_url.$file_name))===false){
+            @unlink($new_file);
+            return_json(array('result'=>'failure','msg'=>'头像资料保存失败，请稍后重试！'));
+        }
+
+        return_json(array('result'=>'success','url'=>$file_url.$file_name,'msg'=>'头像上传成功！'));
     }
 
     /**
@@ -26,6 +81,11 @@ class UserController extends CommonController {
      */
     public function datapost(){
         $uid = session('uid');
+        $political_status=I('political_status');
+        $is_work_study=I('is_work_study');
+        if(!ca_validate_personal_fields($political_status,$is_work_study)){
+            $this->error('请选择有效的政治面貌和勤工助学选项！');
+        }
         $data = array(
             'uid' => $uid,
             'username' => I('username'),
@@ -34,6 +94,8 @@ class UserController extends CommonController {
             'qq' => I('qq'),
             'email' => I('email'),
             'major' => I('major'),
+            'political_status' => $political_status,
+            'is_work_study' => intval($is_work_study),
         );
         if(I('uid')==$uid){
             $result=M('users')->where(array('uid' => I('uid') ))->save($data);

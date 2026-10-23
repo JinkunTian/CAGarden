@@ -29,10 +29,11 @@ class ForgotController extends Controller {
         $mail->Port = C('SMTP_PORT');                  // SMTP服务器的端口号
         $mail->Username = C('SMTP_USER');    // SMTP服务器用户名
         $mail->Password = C('SMTP_PASS');     // SMTP服务器密码
-        $mail->SetFrom(C('SMTP_USER'), '管理员');
-        $replyEmail = C('SMTP_USER');                   //留空则为发件人EMAIL
-        $replyName = '管理员';                    //回复名称（留空则为发件人名称）
-        $mail->AddReplyTo($replyEmail, $replyName);
+        $fromEmail = C('SMTP_FROM') ?: C('SMTP_USER');
+        $fromName = C('SMTP_FROM_NAME') ?: '管理员';
+        $replyEmail = C('SMTP_REPLY_TO') ?: $fromEmail;
+        $mail->SetFrom($fromEmail, $fromName);
+        $mail->AddReplyTo($replyEmail, $fromName);
         $mail->Subject = $title;
         $mail->MsgHTML($context);
         $mail->AddAddress($address,$name);
@@ -96,22 +97,26 @@ class ForgotController extends Controller {
         }
         if($validate_response){
             if($user=M('users')->where(array('username'=>$username,'email'=>$email))->find()){
-                $user['FINDPASS_HASH']=md5(md5(time()).md5($uid).rand()).md5(rand());
+                $user['FINDPASS_HASH']=md5(md5(time()).md5($user['uid']).rand()).md5(rand());
                 $user['FINDPASS_TIME']=time();
 
                 M('users')->where(array('username'=>I('username')))->save($user);
 
+                $resetUrl = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']
+                    . U('/authentication/forgot/reset',array('rid'=>$user['FINDPASS_HASH']));
+                $resetUrl = htmlspecialchars($resetUrl, ENT_QUOTES, 'UTF-8');
                 $text='你好，'.$user['truename'].'！<br>点击链接以重新设置你在['.C('SITE_NAME').']的密码，<b>如果不是你操作的，请忽视这封邮件</b><br>
-                        <a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].U('/authentication/forgot/reset',array('rid'=>$user['FINDPASS_HASH'])).'">'.
-                        $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].U('/authentication/forgot/reset',array('rid'=>$user['FINDPASS_HASH'])).'</a></br>
+                        <a href="'.$resetUrl.'">'.$resetUrl.'</a></br>
                         有效时间为'.(C('Find_Passwd_Time')/60).'分钟';
 
                 $mail=$this->send_mail($user['email'],$user['truename'],C('SITE_NAME').' - 找回密码',$text);
                 if($mail->Send()){
                     return_json(array('result'=>'success','msg'=>'密码重置链接已发送至 '.$user['email'].'，请登录你的邮箱以重置密码！'));
                 }else{
+                    $mailError = preg_replace('/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}/i', '<redacted-email>', $mail->ErrorInfo);
+                    $mailError = preg_replace('/re_[A-Za-z0-9_-]+/', '<redacted-key>', $mailError);
+                    error_log('[forgot-mail] send failed: '.substr($mailError, 0, 500));
                     return_json(array('result'=>'failure','msg'=>'发送邮件至'.$user['email'].'时失败，请稍后重试或联系管理员！'));
-                    // $mail->ErrorInfo;
                 }
             }else{
                 return_json(array('result'=>'failure','msg'=>'用户名与邮箱不匹配，请重试！'));

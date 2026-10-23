@@ -57,6 +57,12 @@ function del(){
                     <label id="xrz-tit">专业： {$recruit.mname}</label>
                 </div>
                 <div class="xrz-input-box">
+                    <label id="xrz-tit">政治面貌： {$recruit.political_status}</label>
+                </div>
+                <div class="xrz-input-box">
+                    <label id="xrz-tit">是否参与勤工助学： <if condition="$recruit['is_work_study'] eq 1">是<else />否</if></label>
+                </div>
+                <div class="xrz-input-box">
                     <label id="xrz-tit">意向： {$recruit.dname}</label>
                 </div>
                 <div class="xrz-input-box">

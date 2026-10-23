@@ -12,6 +12,22 @@
 namespace Garden\Controller;
 use Think\Controller;
 class OrganizationmanageController extends AdminController {
+
+    private function departmentVisibilityCsrfToken(){
+        $token=session('department_visibility_csrf_token');
+        if(!$token){
+            $token=bin2hex(openssl_random_pseudo_bytes(24));
+            session('department_visibility_csrf_token',$token);
+        }
+        return $token;
+    }
+
+    private function checkDepartmentVisibilityCsrf(){
+        $token=(string)I('post.csrf_token');
+        if(!$token || !hash_equals((string)session('department_visibility_csrf_token'),$token)){
+            $this->error('页面已失效，请刷新后重新提交。');
+        }
+    }
     
     /**
      * index方法列出所有用户
@@ -26,7 +42,7 @@ class OrganizationmanageController extends AdminController {
      * 列出学院
      **/
     public function list_institutes(){
-        $institutes=M('common_institutes')->select();
+        $institutes=M('common_institutes')->where(array('status'=>1))->select();
         $this->assign('institutes',$institutes);
         $this->display();
     }
@@ -70,8 +86,8 @@ class OrganizationmanageController extends AdminController {
      * 列出专业
      **/
     public function list_majors(){
-        $institutes=M('common_institutes')->select();
-        $majors=M('common_majors')->select();
+        $institutes=M('common_institutes')->where(array('status'=>1))->select();
+        $majors=M('common_majors')->where(array('status'=>1))->select();
         $this->assign('institutes',$institutes);
         $this->assign('majors',$majors);
         $this->display();
@@ -126,6 +142,7 @@ class OrganizationmanageController extends AdminController {
     public function list_dep(){
         $institutes=M('common_departments')->select();
         $this->assign('departments',$institutes);
+        $this->assign('department_visibility_csrf_token',$this->departmentVisibilityCsrfToken());
         $this->display();
     }
 
@@ -136,11 +153,39 @@ class OrganizationmanageController extends AdminController {
         if(I('dep_name')){
             $new_dep['dname']=I('dep_name');
             $new_dep['status']=1;
+            $new_dep['recruit_visible']=1;
             M('common_departments')->add($new_dep);
             $this->success('添加成功！');
         }else{
             $this->error('非法输入');
         }
+    }
+
+    /**
+     * 设置部门是否显示在新生纳新表单中
+     **/
+    public function set_dep_recruit_visibility(){
+        if($_SERVER['REQUEST_METHOD']!='POST'){
+            $this->error('非法请求');
+        }
+        $this->checkDepartmentVisibilityCsrf();
+
+        $did=(int)I('post.did');
+        $recruit_visible=I('post.recruit_visible');
+        if($did<=0 || !in_array((string)$recruit_visible,array('0','1'),true)){
+            $this->error('非法输入');
+        }
+
+        $department=M('common_departments')->where(array('did'=>$did))->find();
+        if(!$department){
+            $this->error('部门不存在！');
+        }
+
+        $result=M('common_departments')->where(array('did'=>$did))->save(array('recruit_visible'=>(int)$recruit_visible));
+        if($result===false){
+            $this->error('保存失败！');
+        }
+        $this->success('纳新显示设置已保存！',U('/Garden/Organizationmanage/list_dep'));
     }
 
     /**

@@ -1,0 +1,22 @@
+<a class="ws-skip" href="#main-content">跳到主要内容</a>
+<nav class="ws-nav navbar navbar-default" aria-label="学生端导航">
+  <div class="ws-nav-inner">
+    <div class="navbar-header">
+      <a class="ws-brand" href="{:U('/Appointment/Workstudy')}"><i class="fa fa-briefcase" aria-hidden="true"></i><span>CA <b>勤工助学</b></span></a>
+      <button type="button" class="navbar-toggle collapsed" data-workstudy-menu aria-controls="workstudy-navigation" aria-expanded="false" aria-label="展开导航菜单"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+    </div>
+    <div class="collapse navbar-collapse" id="workstudy-navigation">
+      <ul class="nav navbar-nav">
+        <li><a href="/">协会首页</a></li>
+        <li class="active"><a href="{:U('/Appointment/Workstudy')}" aria-current="page">勤工助学</a></li>
+        <li><a href="{:U('/Appointment/Recruit')}">加入计协</a></li>
+        <li><a href="{:U('/Appointment/Index/index')}">我的预约</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right"><li class="dropdown"><a href="#" class="dropdown-toggle ws-account" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {:htmlspecialchars(session('truename'), ENT_QUOTES, 'UTF-8')} <span class="caret"></span></a><ul class="dropdown-menu">
+        <if condition="session('userType') eq 'garden'"><li><a href="{:U('/Garden/')}">后花园管理</a></li></if>
+        <if condition="session('userType') eq 'guest'"><li><a href="{:U('/Appointment/User/index')}">个人资料</a></li><li><a href="{:U('/Appointment/User/changgepwd')}">修改密码</a></li></if>
+        <li><a href="{:U('/Authentication/Index/logout')}">退出登录</a></li>
+      </ul></li></ul>
+    </div>
+  </div>
+</nav>

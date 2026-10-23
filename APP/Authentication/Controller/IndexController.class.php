@@ -47,17 +47,8 @@ class IndexController extends Controller {
         );
 
         if ($user['password'] == md5($user['salt'].$password)) {
-            if($user['userType']=='garden'){
-                $user_extend=M('garden_users_extend')->where(array('uid'=>$user['uid']))->find();
-                session('admin',$user_extend['is_admin']);
-            }
-            
             //存储Session
-            session('userType',$user['userType']);
-            session(C('PASSWORD_KEY'),true);//防止跨站
-            session('username',$user['username']);
-            session('truename',$user['truename']);
-            session('uid',$user['uid']);
+            ca_set_auth_session($user);
 
             //存储日志
             $login_log['result']='Success';

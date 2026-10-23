@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="format-detection" content="telephone=no"><title>勤工助学 - {:C('SITE_NAME')}</title><include file="Workstudy:assets" /></head>
+<body class="workstudy-page workstudy-student"><include file="Workstudy:nav" />
+<main class="ws-main" id="main-content" tabindex="-1">
+  <header class="ws-hero"><div class="ws-hero-content"><p class="ws-eyebrow">CA · 学生服务</p><h1>勤工助学</h1><p class="ws-hero-intro">在实践中积累经验，<br class="ws-mobile-break">从这里找到你的下一次机会。</p><div class="ws-hero-meta"><span><i class="fa fa-file-word-o" aria-hidden="true"></i> Word 表格报名</span><span><i class="fa fa-folder-open-o" aria-hidden="true"></i> 历史资料保留</span></div></div></header>
+  <div class="ws-portal-layout">
+    <section class="ws-project-section" aria-labelledby="project-list-title">
+      <div class="ws-list-heading"><h2 id="project-list-title">招募项目</h2><span class="ws-list-count" data-project-total></span></div>
+      <if condition="$open_count eq 0"><div class="ws-status-note"><i class="fa fa-info-circle" aria-hidden="true"></i><div><strong>当前暂无开放报名</strong><p>新的招募开放后会在这里显示。下方可查看已结束项目和自己的报名记录。</p></div></div></if>
+      <div class="ws-project-filter" role="group" aria-label="筛选招募项目" hidden data-project-filters>
+        <button type="button" class="is-active" aria-pressed="true" data-project-filter="all">全部项目 <span data-filter-count="all"></span></button>
+        <button type="button" aria-pressed="false" data-project-filter="open">报名中 <span data-filter-count="open"></span></button>
+        <button type="button" aria-pressed="false" data-project-filter="mine">我的报名 <span data-filter-count="mine"></span></button>
+      </div>
+      <p class="ws-sr-only" data-filter-status aria-live="polite" aria-atomic="true"></p>
+      <div class="ws-project-list" id="project-list">
+        <empty name="projects"><section class="ws-card ws-empty"><i class="fa fa-folder-open-o ws-empty-icon" aria-hidden="true"></i><h3>暂无勤工助学项目</h3><p>新的招募信息发布后会在这里展示。</p></section><else />
+        <volist name="projects" id="project"><article class="ws-card ws-project" id="project-{$project.wid}" data-project-card data-status="{$project.status}" data-applied="{$project.has_application}">
+          <div class="ws-project-top"><span class="ws-badge <if condition="$project['status'] eq 1">ws-open<else /><if condition="$project['status'] eq 3">ws-archived<else />ws-ended</if></if>"><if condition="$project['status'] eq 1">报名中<else /><if condition="$project['status'] eq 3">已归档<else />报名已结束</if></if></span><if condition="$project['has_application']"><span class="ws-applied"><i class="fa fa-check-circle" aria-hidden="true"></i> 已提交报名</span></if></div>
+          <h3>{$project.wname|htmlspecialchars}</h3><p class="ws-project-period"><i class="fa fa-calendar-o" aria-hidden="true"></i> 招募批次：{$project.year|htmlspecialchars}</p>
+          <notempty name="project.description"><div class="ws-project-description">{$project.description|htmlspecialchars}</div><else /><p class="ws-project-description ws-muted">详细报名要求请查看本项目 Word 模板。</p></notempty>
+          <div class="ws-project-footer"><div class="ws-project-hint"><if condition="$project['status'] eq 1"><if condition="$project['has_application']">报名开放期间可修改已提交资料。<else /><if condition="$project['has_template']">下载模板并填写后，进入报名页面提交。<else />报名模板正在准备中，请稍后再来。</if></if><else /><if condition="$project['has_application']">报名已结束，你的报名资料仍可查看和下载。<else />本批次已结束，暂不接受新的报名。</if></if></div>
+            <div class="ws-actions">
+              <if condition="$project['has_application']"><a class="btn btn-primary" href="{:U('/Appointment/Workstudy/view',array('wid'=>$project['wid']))}">查看我的报名 <i class="fa fa-angle-right" aria-hidden="true"></i></a><if condition="$project['status'] eq 1"><if condition="$project['has_template']"><a class="btn btn-default" href="{:U('/Appointment/Workstudy/form',array('wid'=>$project['wid']))}">修改报名</a></if></if><else /><if condition="$project['status'] eq 1"><if condition="$project['has_template']"><a class="btn btn-primary" href="{:U('/Appointment/Workstudy/form',array('wid'=>$project['wid']))}">立即报名 <i class="fa fa-angle-right" aria-hidden="true"></i></a></if></if></if>
+              <if condition="$project['has_template']"><a class="ws-text-link" href="{:U('/Appointment/Workstudy/templateDownload',array('wid'=>$project['wid']))}"><i class="fa fa-download" aria-hidden="true"></i> <if condition="$project['status'] eq 1">下载报名模板<else />下载往期模板</if></a></if>
+            </div>
+          </div>
+        </article></volist></empty>
+      </div>
+      <section class="ws-card ws-empty" data-filter-empty hidden><i class="fa fa-folder-open-o ws-empty-icon" aria-hidden="true"></i><h3 data-filter-empty-title></h3><p data-filter-empty-description></p><button type="button" class="btn btn-default" data-reset-filter>查看全部项目</button></section>
+    </section>
+    <aside class="ws-guide ws-card" aria-labelledby="guide-title"><p class="ws-eyebrow">报名指南</p><h2 id="guide-title">准备好，再提交</h2><ol class="ws-steps"><li><span class="ws-step-number">1</span><div><h3>选择项目</h3><p>查看招募说明，确认项目正在开放报名。</p></div></li><li><span class="ws-step-number">2</span><div><h3>填写报名表</h3><p>下载对应项目的 Word 模板，按要求填写完整。</p></div></li><li><span class="ws-step-number">3</span><div><h3>上传并提交</h3><p>核对联系方式，上传 DOC 或 DOCX 文件，大小不超过 10MB。</p></div></li></ol><div class="ws-guide-note"><i class="fa fa-bookmark-o" aria-hidden="true"></i><p>提交后可在“我的报名”中查看资料。项目结束后，报名表仍可下载留存。</p></div></aside>
+  </div>
+  <footer class="ws-page-footer">CA 计算机协会 · 勤工助学</footer>
+</main><script src="__PUBLIC__/js/workstudy-student.js?v=20261004-front1"></script><script src="__PUBLIC__/js/workstudy.js?v=20261004-fix1"></script></body></html>
